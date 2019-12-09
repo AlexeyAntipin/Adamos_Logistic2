@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Adamos_Logistic</string>
+        <string-array name="WhoAreYou">
+            <item>Водитель</item>
+            <item>Заказчик</item>
+            <item>Исполнитель</item>
+        </string-array>
 </resources>
