@@ -12,32 +12,59 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/email"
+            android:id="@+id/Surname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="250dp"
+            android:layout_marginTop="150dp"
             android:ems="10"
-            android:hint="Введите e-mail"
+            android:hint="Фамилия"
             android:inputType="textPersonName" />
 
         <EditText
-            android:id="@+id/password"
+            android:id="@+id/Name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Введите пароль"
+            android:hint="Имя"
             android:inputType="textPersonName" />
 
-        <Button
-            android:id="@+id/enter"
+        <EditText
+            android:id="@+id/Second name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Вход" />
+            android:ems="10"
+            android:hint="Отчество"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/Email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Email"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:id="@+id/Password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Пароль"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:id="@+id/PassRight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Подтвердите пароль"
+            android:inputType="textPassword" />
 
         <Button
             android:id="@+id/registration"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Регистрация" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
