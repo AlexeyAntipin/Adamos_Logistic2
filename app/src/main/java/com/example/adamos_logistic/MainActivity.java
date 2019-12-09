@@ -13,4 +13,5 @@ public class MainActivity extends AppCompatActivity {
     }
 
     String Lexa = "ya.eblan.pomogi";
+    boolean LexaSoset = true;
 }
