@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class Login extends AppCompatActivity {
 
@@ -18,7 +19,7 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         enter = (Button) findViewById(R.id.enter);
-        registration = (Button) findViewById(R.id.registration);
+        registration = (Button) findViewById(R.id.registr);
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
         View.OnClickListener listener = new View.OnClickListener() {
@@ -26,7 +27,7 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i;
                 switch (v.getId()) {
-                    case R.id.registration:
+                    case R.id.registr:
                         i = new Intent(Login.this, Registration.class);
                         startActivity(i);
                         break;

@@ -67,15 +67,15 @@
             android:layout_height="wrap_content" />
 
         <Button
-            android:id="@+id/registration"
+            android:id="@+id/registr"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Регистрация" />
+            android:text="Зарегитрироваться" />
 
         <TextView
             android:id="@+id/check"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="105dp" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
