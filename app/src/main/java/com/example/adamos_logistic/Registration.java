@@ -41,6 +41,6 @@ public class Registration extends AppCompatActivity {
                 }
             }
         };
-        registration.setOnClickListener(listener);
+        //registration.setOnClickListener(listener);
     }
 }
