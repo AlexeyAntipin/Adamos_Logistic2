@@ -1,5 +1,6 @@
 package com.example.adamos_logistic;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import org.json.JSONObject;
 
@@ -47,13 +49,13 @@ public class Registration extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (v.getId() == R.id.registr && !password.getText().toString().equals(PassRight.getText().toString())) {
-                    //Toast.makeText(getApplicationContext(), "Andrey soset", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Пароли не совпадают", Toast.LENGTH_LONG).show();
                     //check.setTextColor(RED);
                     //check.setText("Пароли не совпадают");
                 }
                 else if (v.getId() == R.id.registr) {
                     try {
-                        URL urlRegistration = new URL("http://192.168.43.202/adamos/hs/MAPI/newUser");
+                        URL urlRegistration = new URL("http://10.192.209.114/adamos/hs/MAPI/newUser");
                         HttpURLConnection urlConRegistration = (HttpURLConnection) urlRegistration.openConnection();
                         urlConRegistration.setRequestMethod("POST");
                         urlConRegistration.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -87,6 +89,8 @@ public class Registration extends AppCompatActivity {
                         urlConRegistration.disconnect();
                     }
                     catch(Exception e) {
+                        //int permissionStatus = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS);
+                        //Toast.makeText(getApplicationContext(), permissionStatus.toString(), Toast.LENGTH_LONG).show();
                         e.printStackTrace();
                         Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
                     }
