@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONObject;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -46,13 +47,13 @@ public class Registration extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (v.getId() == R.id.registr && !password.getText().toString().equals(PassRight.getText().toString())) {
-                    Toast.makeText(getApplicationContext(), "Andrey soset", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), "Andrey soset", Toast.LENGTH_LONG).show();
                     //check.setTextColor(RED);
                     //check.setText("Пароли не совпадают");
                 }
                 else if (v.getId() == R.id.registr) {
                     try {
-                        URL urlRegistration = new URL("http://192.168.137.1/adamos/hs/MAPI/test");
+                        URL urlRegistration = new URL("http://192.168.43.202/adamos/hs/MAPI/newUser");
                         HttpURLConnection urlConRegistration = (HttpURLConnection) urlRegistration.openConnection();
                         urlConRegistration.setRequestMethod("POST");
                         urlConRegistration.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -70,6 +71,13 @@ public class Registration extends AppCompatActivity {
                         DataOutputStream os = new DataOutputStream(urlConRegistration.getOutputStream());
                         os.writeBytes(jsonParam.toString());
 
+                        DataInputStream is = new DataInputStream(urlConRegistration.getInputStream());
+                        byte[] buff = new byte[2048];
+                        is.readFully(buff);
+
+                        String str = buff.toString();
+                        Toast.makeText(getApplicationContext(), str, Toast.LENGTH_LONG).show();
+
                         os.flush();
                         os.close();
 
@@ -80,6 +88,7 @@ public class Registration extends AppCompatActivity {
                     }
                     catch(Exception e) {
                         e.printStackTrace();
+                        Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
                     }
                 }
                 //Toast.makeText(getApplicationContext(), pidor, Toast.LENGTH_LONG).show();
