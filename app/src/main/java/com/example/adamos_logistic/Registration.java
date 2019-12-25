@@ -1,6 +1,8 @@
 package com.example.adamos_logistic;
 
+import android.Manifest;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -8,9 +10,18 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import org.json.JSONObject;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 import retrofit2.Call;
@@ -18,6 +29,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static android.hardware.camera2.params.RggbChannelVector.RED;
 
 public class Registration extends AppCompatActivity {
 
@@ -40,30 +53,31 @@ public class Registration extends AppCompatActivity {
         PassRight = (EditText) findViewById(R.id.PassRight);
         registration = (Button) findViewById(R.id.registr) ;
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.120/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-
-        createPost();
 
         final LinearLayout linear = (LinearLayout) findViewById(R.id.Linear);
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (v.getId() == R.id.registr && !password.getText().toString().equals(PassRight.getText().toString())) {
+                    //Toast.makeText(getApplicationContext(), "Пароли не совпадают", Toast.LENGTH_LONG).show();
                     check.setText("Пароли не совпадают");
                 }
                 else if (v.getId() == R.id.registr && password.getText().toString().equals(PassRight.getText().toString())) {
                     check.setText("");
+                    try {
+                        Retrofit retrofit = new Retrofit.Builder()
+                                .baseUrl("https://jsonplaceholder.typicode.com/")
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .build();
 
+                        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
+                        //getPosts();
+                        //getComments();
+                        createPost();
 
-
-                        Call<List<Post>> call = jsonPlaceHolderApi.getPosts();
+                        /*Call<List<Post>> call = jsonPlaceHolderApi.getPosts();
 
                         call.enqueue(new Callback<List<Post>>() {
                             @Override
@@ -78,7 +92,7 @@ public class Registration extends AppCompatActivity {
 
                                 for (Post post : posts) {
                                     String content = "";
-                                    //content += "id: " + post.getId() + "\n";
+                                    content += "ID: " + post.getId() + "\n";
 
                                     check.append(content);
                                 }
@@ -89,45 +103,49 @@ public class Registration extends AppCompatActivity {
                             public void onFailure(Call<List<Post>> call, Throwable t) {
                                 check.setText(t.getMessage());
                             }
-                        });
-
-
-
-                }
+                        });*/
                     }
-                };
+                    catch(Exception e) {
+                        //int permissionStatus = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS);
+                        //Toast.makeText(getApplicationContext(), permissionStatus.toString(), Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                        //Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
+                    }
+
+                    }
+                }
+                //Toast.makeText(getApplicationContext(), pidor, Toast.LENGTH_LONG).show();
+            };
         registration.setOnClickListener(listener);
     }
-
     private void createPost() {
-        Post post = new Post("a", "b", "c", "d", "e");
+        Post post = new Post(23, "New Title", "New Text");
 
         Call<Post> call = jsonPlaceHolderApi.createPost(post);
 
         call.enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
+
                 if (!response.isSuccessful()) {
                     check.setText("Code: " + response.code());
                     return;
                 }
 
                 Post postResponse = response.body();
-
                 String content = "";
                 content += "Code: " + response.code() + "\n";
-                content += "NAME: " + postResponse.getNAME() + "\n";
-                content += "SURNAME: " + postResponse.getSURNAME() + "\n";
-                content += "SECONDNAME: " + postResponse.getSECONDNAME() + "\n";
-                content += "PASSWORD: " + postResponse.getPASSWORD() + "\n";
-                content += "EMAIL: " + postResponse.getEMAIL() + "\n\n";
+                content += "ID: " + postResponse.getId() + "\n";
+                content += "User ID: " + postResponse.getUserId() + "\n";
+                content += "Title: " + postResponse.getTitle() + "\n";
+                content += "Text: " + postResponse.getText() + "\n\n";
 
                 check.setText(content);
             }
 
             @Override
             public void onFailure(Call<Post> call, Throwable t) {
-
+                check.setText(t.getMessage());
             }
         });
     }
