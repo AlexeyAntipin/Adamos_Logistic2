@@ -22,6 +22,13 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.hardware.camera2.params.RggbChannelVector.RED;
 
@@ -44,60 +51,68 @@ public class Registration extends AppCompatActivity {
         password = (EditText) findViewById(R.id.Password);
         PassRight = (EditText) findViewById(R.id.PassRight);
         registration = (Button) findViewById(R.id.registr) ;
+
+
         final LinearLayout linear = (LinearLayout) findViewById(R.id.Linear);
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (v.getId() == R.id.registr && !password.getText().toString().equals(PassRight.getText().toString())) {
-                    Toast.makeText(getApplicationContext(), "Пароли не совпадают", Toast.LENGTH_LONG).show();
-                    //check.setTextColor(RED);
-                    //check.setText("Пароли не совпадают");
+                    //Toast.makeText(getApplicationContext(), "Пароли не совпадают", Toast.LENGTH_LONG).show();
+                    check.setText("Пароли не совпадают");
                 }
-                else if (v.getId() == R.id.registr) {
+                else if (v.getId() == R.id.registr && password.getText().toString().equals(PassRight.getText().toString())) {
+                    check.setText("");
                     try {
-                        URL urlRegistration = new URL("http://10.192.209.114/adamos/hs/MAPI/newUser");
-                        HttpURLConnection urlConRegistration = (HttpURLConnection) urlRegistration.openConnection();
-                        urlConRegistration.setRequestMethod("POST");
-                        urlConRegistration.setRequestProperty("Content-Type", "application/json; utf-8");
-                        urlConRegistration.setRequestProperty("Accept","application/json");
-                        urlConRegistration.setDoOutput(true);
-                        urlConRegistration.setDoInput(true);
-                        urlConRegistration.connect();
+                        Retrofit retrofit = new Retrofit.Builder()
+                                .baseUrl("https://jsonplaceholder.typicode.com/")
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .build();
 
-                        JSONObject jsonParam = new JSONObject();
-                        jsonParam.put("e-mail", email.getText());
-                        jsonParam.put("password", password.getText().hashCode());
-                        jsonParam.put("surname", SurName.getText());
-                        jsonParam.put("second name", SecondName.getText());
+                        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-                        DataOutputStream os = new DataOutputStream(urlConRegistration.getOutputStream());
-                        os.writeBytes(jsonParam.toString());
+                        Call<List<Post>> call = jsonPlaceHolderApi.getPosts();
 
-                        DataInputStream is = new DataInputStream(urlConRegistration.getInputStream());
-                        byte[] buff = new byte[2048];
-                        is.readFully(buff);
+                        call.enqueue(new Callback<List<Post>>() {
+                            @Override
+                            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
 
-                        String str = buff.toString();
-                        Toast.makeText(getApplicationContext(), str, Toast.LENGTH_LONG).show();
+                                if (!response.isSuccessful()) {
+                                    check.setText("Code: " + response.code());
+                                    return;
+                                }
 
-                        os.flush();
-                        os.close();
+                                List<Post> posts = response.body();
 
-                        Log.i("STATUS", String.valueOf(urlConRegistration.getResponseCode()));
-                        Log.i("MSG" , urlConRegistration.getResponseMessage());
+                                for (Post post : posts) {
+                                    String content = "";
+                                    content += "ID: " + post.getId() + "\n";
+                                    content += "User ID: " + post.getUserId() + "\n";
+                                    content += "Title: " + post.getTitle() + "\n";
+                                    content += "Text: " + post.getBody() + "\n\n";
 
-                        urlConRegistration.disconnect();
+                                    check.append(content);
+                                }
+                            }
+
+
+                            @Override
+                            public void onFailure(Call<List<Post>> call, Throwable t) {
+                                check.setText(t.getMessage());
+                            }
+                        });
                     }
                     catch(Exception e) {
                         //int permissionStatus = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS);
                         //Toast.makeText(getApplicationContext(), permissionStatus.toString(), Toast.LENGTH_LONG).show();
                         e.printStackTrace();
-                        Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
+                    }
+
                     }
                 }
                 //Toast.makeText(getApplicationContext(), pidor, Toast.LENGTH_LONG).show();
-            }
-        };
+            };
         registration.setOnClickListener(listener);
     }
 }

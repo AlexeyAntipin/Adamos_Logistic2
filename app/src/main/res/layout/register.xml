@@ -72,10 +72,17 @@
             android:layout_height="wrap_content"
             android:text="Зарегистрироваться" />
 
+        <!--<android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">-->
+
         <TextView
             android:id="@+id/check"
             android:layout_width="match_parent"
-            android:layout_height="105dp" />
+            android:layout_height="105dp"
+            android:textColor="#000"
+            />
+        <!--</android.support.v4.widget.NestedScrollView>-->
 
 
     </LinearLayout>
