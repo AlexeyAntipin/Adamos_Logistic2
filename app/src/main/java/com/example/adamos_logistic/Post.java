@@ -2,27 +2,44 @@ package com.example.adamos_logistic;
 
 public class Post {
 
-    private int id;
 
-    private int userId;
+    private String SURNAME;
 
-    private String title;
+    private String NAME;
 
-    private String body;
+    private String SECONDNAME;
 
-    public int getId() {
-        return id;
+    private String EMAIL;
+
+    private String PASSWORD;
+
+
+    public Post(String SURNAME, String NAME, String SECONDNAME, String EMAIL, String PASSWORD) {
+        this.SURNAME = SURNAME;
+        this.NAME = NAME;
+        this.SECONDNAME = SECONDNAME;
+        this.EMAIL = EMAIL;
+        this.PASSWORD = PASSWORD;
     }
 
-    public int getUserId() {
-        return userId;
+    public String getSURNAME() {
+        return SURNAME;
     }
 
-    public String getTitle() {
-        return title;
+    public String getNAME() {
+        return NAME;
     }
 
-    public String getBody() {
-        return body;
+    public String getSECONDNAME() {
+        return SECONDNAME;
     }
+
+    public String getEMAIL() {
+        return EMAIL;
+    }
+
+    public String getPASSWORD() {
+        return PASSWORD;
+    }
+
 }
