@@ -17,9 +17,28 @@ import retrofit2.http.Url;
 
 public interface JsonPlaceHolderApi {
 
-    @GET("adamos/hs/MAPI/newUser")
-    Call<List<Post>> getPosts();
+    @GET("posts")
+    Call<List<Post>> getPosts(
+            @Query("userId") Integer[] userId,
+            @Query("_sort") String sort,
+            @Query("_order") String order
+    );
 
-    @POST("adamos/hs/MAPI/newUser")
+    @GET("posts")
+    Call<List<Post>> getPosts(@QueryMap Map<String, String> parameters);
+
+    @POST("posts")
     Call<Post> createPost(@Body Post post);
+
+    @FormUrlEncoded
+    @POST("posts")
+    Call<Post> createPost(
+            @Field("userId") int userId,
+            @Field("title") String title,
+            @Field("body") String text
+    );
+
+    @FormUrlEncoded
+    @POST("posts")
+    Call<Post> createPost(@FieldMap Map<String, String> fields);
 }
