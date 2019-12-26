@@ -67,7 +67,7 @@ public class Registration extends AppCompatActivity {
                     check.setText("");
                     try {
                         Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl("https://jsonplaceholder.typicode.com/")
+                                .baseUrl("http://192.168.43.202/")
                                 .addConverterFactory(GsonConverterFactory.create())
                                 .build();
 
@@ -75,9 +75,9 @@ public class Registration extends AppCompatActivity {
 
                         //getPosts();
                         //getComments();
-                        createPost();
+                        /*createPost();
 
-                        /*Call<List<Post>> call = jsonPlaceHolderApi.getPosts();
+                        Call<List<Post>> call = jsonPlaceHolderApi.getPosts();
 
                         call.enqueue(new Callback<List<Post>>() {
                             @Override
@@ -103,7 +103,11 @@ public class Registration extends AppCompatActivity {
                             public void onFailure(Call<List<Post>> call, Throwable t) {
                                 check.setText(t.getMessage());
                             }
-                        });*/
+
+
+                        });
+
+                         */
                     }
                     catch(Exception e) {
                         //int permissionStatus = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS);
@@ -119,7 +123,7 @@ public class Registration extends AppCompatActivity {
         registration.setOnClickListener(listener);
     }
     private void createPost() {
-        Post post = new Post(23, "New Title", "New Text");
+        Post post = new Post("a", "b", "c", "d", "e");
 
         Call<Post> call = jsonPlaceHolderApi.createPost(post);
 
@@ -134,11 +138,11 @@ public class Registration extends AppCompatActivity {
 
                 Post postResponse = response.body();
                 String content = "";
-                content += "Code: " + response.code() + "\n";
-                content += "ID: " + postResponse.getId() + "\n";
-                content += "User ID: " + postResponse.getUserId() + "\n";
-                content += "Title: " + postResponse.getTitle() + "\n";
-                content += "Text: " + postResponse.getText() + "\n\n";
+                content += "NAME: " + postResponse.getNAME() + "\n";
+                content += "SURNAME: " + postResponse.getSURNAME() + "\n";
+                content += "SECONDNAME: " + postResponse.getSECONDNAME() + "\n";
+                content += "PASSWORD: " + postResponse.getPASSWORD() + "\n";
+                content += "EMAIL: " + postResponse.getEMAIL() + "\n\n";
 
                 check.setText(content);
             }

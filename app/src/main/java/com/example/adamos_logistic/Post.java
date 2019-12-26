@@ -4,34 +4,45 @@ import com.google.gson.annotations.SerializedName;
 
 public class Post {
 
-    private int userId;
 
-    private Integer id;
+    public String NAME;
 
-    private String title;
+    public String SURNAME;
 
-    @SerializedName("body")
-    private String text;
+    public String SECONDNAME;
 
-    public Post(int userId, String title, String text) {
-        this.userId = userId;
-        this.title = title;
-        this.text = text;
+    public String EMAIL;
+
+    public String PASSWORD;
+
+    //@SerializedName("body")
+
+
+    public Post(String NAME, String SURNAME, String SECONDNAME, String EMAIL, String PASSWORD) {
+        this.NAME = NAME;
+        this.SURNAME = SURNAME;
+        this.SECONDNAME = SECONDNAME;
+        this.EMAIL = EMAIL;
+        this.PASSWORD = PASSWORD;
     }
 
-    public int getUserId() {
-        return userId;
+    public String getNAME() {
+        return NAME;
     }
 
-    public int getId() {
-        return id;
+    public String getSURNAME() {
+        return SURNAME;
     }
 
-    public String getTitle() {
-        return title;
+    public String getSECONDNAME() {
+        return SECONDNAME;
     }
 
-    public String getText() {
-        return text;
+    public String getEMAIL() {
+        return EMAIL;
+    }
+
+    public String getPASSWORD() {
+        return PASSWORD;
     }
 }
