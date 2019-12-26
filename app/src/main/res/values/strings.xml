@@ -4,4 +4,5 @@
             <item>Заказчик</item>
             <item>Исполнитель</item>
         </string-array>
+    <string name="input_placeholder">Write a message</string>
 </resources>

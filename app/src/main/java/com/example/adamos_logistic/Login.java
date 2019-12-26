@@ -40,5 +40,14 @@ public class Login extends AppCompatActivity {
             }
         };
         registration.setOnClickListener(reg);
+        View.OnClickListener login = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i;
+                i = new Intent(Login.this, ChatActivity.class);
+                startActivity(i);
+            }
+        };
+        enter.setOnClickListener(login);
     }
 }
