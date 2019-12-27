@@ -45,7 +45,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onOpen() {
                 System.out.println("Scaledrone connection open");
-                scaledrone.subscribe(roomName, ChatActivity.this);
+                scaledrone.subscribe(roomName, (RoomListener) ChatActivity.this);
             }
 
             @Override
@@ -73,23 +73,20 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    @Override
     public void onOpen(Room room) {
-        System.out.println("Conneted to room");
+        System.out.println("Connected to room");
     }
 
-    @Override
     public void onOpenFailure(Room room, Exception ex) {
         System.err.println(ex);
     }
 
-    @Override
     public void onMessage(Room room, com.scaledrone.lib.Message receivedMessage) {
         final ObjectMapper mapper = new ObjectMapper();
         try {
             final MemberData data = mapper.treeToValue(receivedMessage.getMember().getClientData(), MemberData.class);
             boolean belongsToCurrentUser = receivedMessage.getClientID().equals(scaledrone.getClientID());
-            final Message message = new Message(receivedMessage.getData().asText(), data, belongsToCurrentUser);
+            final com.example.adamos_logistic.Message message = new Message(receivedMessage.getData().asText(), data, belongsToCurrentUser);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

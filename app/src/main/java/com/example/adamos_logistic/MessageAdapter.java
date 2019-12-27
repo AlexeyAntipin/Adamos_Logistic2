@@ -10,8 +10,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.scaledrone.lib.Message;
-
 import java.util.ArrayList;
 import java.util.List;
 
