@@ -122,7 +122,9 @@ public class Registration extends AppCompatActivity {
         registration.setOnClickListener(listener);
     }
     private void createPost() {
-        Post post = new Post("a", "b", "c", "d", "e");
+        Post post = new Post(name.getText().toString(), SurName.getText().toString(),
+                SecondName.getText().toString(), email.getText().toString(), password.getText().toString());
+
 
         Call<Post> call = jsonPlaceHolderApi.createPost(post);
 

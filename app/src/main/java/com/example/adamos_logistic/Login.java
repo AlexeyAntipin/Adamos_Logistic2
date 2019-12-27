@@ -69,6 +69,9 @@ public class Login extends AppCompatActivity {
                     e.printStackTrace();
                     //Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
                 }
+                Intent i;
+                i = new Intent(Login.this, ChatActivity.class);
+                startActivity(i);
 
             }
         };
@@ -77,7 +80,7 @@ public class Login extends AppCompatActivity {
     }
 
     private void createPost() {
-        PostLogin post = new PostLogin("d", "e");
+        PostLogin post = new PostLogin(email.getText().toString(), password.getText().toString());
 
         Call<Post> call = jsonPlaceHolderApi.createPostLogin(post);
 
@@ -92,12 +95,6 @@ public class Login extends AppCompatActivity {
 
                 Post postResponse = response.body();
                 String content = "";
-                /*content += "NAME: " + postResponse.getNAME() + "\n";
-                content += "SURNAME: " + postResponse.getSURNAME() + "\n";
-                content += "SECONDNAME: " + postResponse.getSECONDNAME() + "\n";
-                content += "PASSWORD: " + postResponse.getPASSWORD() + "\n";
-                content += "EMAIL: " + postResponse.getEMAIL() + "\n\n";
-                 */
 
                 content += "SUCCESS: " + postResponse.getSUCCESS() + "\n";
                 content += "USER_ID: " + postResponse.getUSER_ID() + "\n";

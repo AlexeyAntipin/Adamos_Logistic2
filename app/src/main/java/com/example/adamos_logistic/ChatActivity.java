@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scaledrone.lib.Listener;
 import com.scaledrone.lib.Member;
-import com.scaledrone.lib.Message;
+
 import com.scaledrone.lib.Room;
 import com.scaledrone.lib.RoomListener;
 import com.scaledrone.lib.Scaledrone;
@@ -81,12 +81,13 @@ public class ChatActivity extends AppCompatActivity {
         System.err.println(ex);
     }
 
+
     public void onMessage(Room room, com.scaledrone.lib.Message receivedMessage) {
         final ObjectMapper mapper = new ObjectMapper();
         try {
             final MemberData data = mapper.treeToValue(receivedMessage.getMember().getClientData(), MemberData.class);
             boolean belongsToCurrentUser = receivedMessage.getClientID().equals(scaledrone.getClientID());
-            final com.example.adamos_logistic.Message message = new Message(receivedMessage.getData().asText(), data, belongsToCurrentUser);
+            final Message message = new Message(receivedMessage.getData().asText(), data, belongsToCurrentUser);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
