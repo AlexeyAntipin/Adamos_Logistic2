@@ -67,7 +67,7 @@ public class Registration extends AppCompatActivity {
                     check.setText("");
                     try {
                         Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl("http://192.168.43.202/")
+                                .baseUrl("http://192.168.1.121/")
                                 .addConverterFactory(GsonConverterFactory.create())
                                 .build();
 
@@ -75,9 +75,9 @@ public class Registration extends AppCompatActivity {
 
                         //getPosts();
                         //getComments();
-                        /*createPost();
+                        createPost();
 
-                        Call<List<Post>> call = jsonPlaceHolderApi.getPosts();
+                        /*Call<List<Post>> call = jsonPlaceHolderApi.getPosts();
 
                         call.enqueue(new Callback<List<Post>>() {
                             @Override
@@ -118,7 +118,6 @@ public class Registration extends AppCompatActivity {
 
                     }
                 }
-                //Toast.makeText(getApplicationContext(), pidor, Toast.LENGTH_LONG).show();
             };
         registration.setOnClickListener(listener);
     }
@@ -132,17 +131,22 @@ public class Registration extends AppCompatActivity {
             public void onResponse(Call<Post> call, Response<Post> response) {
 
                 if (!response.isSuccessful()) {
-                    check.setText("Code: " + response.code());
+                    check.setText("Code: " + response.code() + " " + response.raw());
                     return;
                 }
 
                 Post postResponse = response.body();
                 String content = "";
-                content += "NAME: " + postResponse.getNAME() + "\n";
+                /*content += "NAME: " + postResponse.getNAME() + "\n";
                 content += "SURNAME: " + postResponse.getSURNAME() + "\n";
                 content += "SECONDNAME: " + postResponse.getSECONDNAME() + "\n";
                 content += "PASSWORD: " + postResponse.getPASSWORD() + "\n";
                 content += "EMAIL: " + postResponse.getEMAIL() + "\n\n";
+                 */
+
+                content += "SUCCESS: " + postResponse.getSUCCESS() + "\n";
+                content += "USER_ID: " + postResponse.getUSER_ID() + "\n";
+                content += "ERROR: " + postResponse.getERROR() + "\n\n";
 
                 check.setText(content);
             }

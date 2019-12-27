@@ -39,5 +39,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Регистрация" />
+
+        <TextView
+            android:id="@+id/check"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

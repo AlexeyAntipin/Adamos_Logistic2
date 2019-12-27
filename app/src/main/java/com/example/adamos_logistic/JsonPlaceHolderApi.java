@@ -30,12 +30,22 @@ public interface JsonPlaceHolderApi {
     @POST("adamos/hs/MAPI/newUser")
     Call<Post> createPost(@Body Post post);
 
+    @POST("adamos/hs/MAPI/login")
+    Call<Post> createPostLogin(@Body PostLogin post);
+
     @FormUrlEncoded
     @POST("adamos/hs/MAPI/newUser")
     Call<Post> createPost(
             @Field("NAME") String NAME,
             @Field("SECONDNAME") String SECONDNAME,
             @Field("SURNAME") String SURNAME,
+            @Field("PASSWORD") String PASSWORD,
+            @Field("EMAIL") String EMAIL
+    );
+
+    @FormUrlEncoded
+    @POST("adamos/hs/MAPI/login")
+    Call<Post> createPostLogin(
             @Field("PASSWORD") String PASSWORD,
             @Field("EMAIL") String EMAIL
     );

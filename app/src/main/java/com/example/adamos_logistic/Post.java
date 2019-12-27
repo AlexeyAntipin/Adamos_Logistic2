@@ -15,6 +15,12 @@ public class Post {
 
     public String PASSWORD;
 
+    public String SUCCESS;
+
+    public String USER_ID;
+
+    public String ERROR;
+
     //@SerializedName("body")
 
 
@@ -44,5 +50,17 @@ public class Post {
 
     public String getPASSWORD() {
         return PASSWORD;
+    }
+
+    public String getSUCCESS() {
+        return SUCCESS;
+    }
+
+    public String getUSER_ID() {
+        return USER_ID;
+    }
+
+    public String getERROR() {
+        return ERROR;
     }
 }
