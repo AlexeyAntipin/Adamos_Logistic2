@@ -4,7 +4,9 @@ buildscript {
     repositories {
         google()
         jcenter()
-        
+        flatDir {
+            dirs 'aarlibs' // инициализируем папку, хранящую aar-архивы как репозиторий
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.2'
@@ -18,7 +20,6 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
     }
 }
 

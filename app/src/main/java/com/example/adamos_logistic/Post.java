@@ -1,33 +1,43 @@
 package com.example.adamos_logistic;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Post {
 
 
-    private String SURNAME;
+    public String NAME;
 
-    private String NAME;
+    public String SURNAME;
 
-    private String SECONDNAME;
+    public String SECONDNAME;
 
-    private String EMAIL;
+    public String EMAIL;
 
-    private String PASSWORD;
+    public String PASSWORD;
+
+    public String SUCCESS;
+
+    public String USER_ID;
+
+    public String ERROR;
+
+    //@SerializedName("body")
 
 
-    public Post(String SURNAME, String NAME, String SECONDNAME, String EMAIL, String PASSWORD) {
-        this.SURNAME = SURNAME;
+    public Post(String NAME, String SURNAME, String SECONDNAME, String EMAIL, String PASSWORD) {
         this.NAME = NAME;
+        this.SURNAME = SURNAME;
         this.SECONDNAME = SECONDNAME;
         this.EMAIL = EMAIL;
         this.PASSWORD = PASSWORD;
     }
 
-    public String getSURNAME() {
-        return SURNAME;
-    }
-
     public String getNAME() {
         return NAME;
+    }
+
+    public String getSURNAME() {
+        return SURNAME;
     }
 
     public String getSECONDNAME() {
@@ -42,4 +52,15 @@ public class Post {
         return PASSWORD;
     }
 
+    public String getSUCCESS() {
+        return SUCCESS;
+    }
+
+    public String getUSER_ID() {
+        return USER_ID;
+    }
+
+    public String getERROR() {
+        return ERROR;
+    }
 }
