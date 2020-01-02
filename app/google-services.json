@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "768790515371",
+    "firebase_url": "https://chatapp-a4a38.firebaseio.com",
+    "project_id": "chatapp-a4a38",
+    "storage_bucket": "chatapp-a4a38.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768790515371:android:90d84559149eb2428531ee",
+        "android_client_info": {
+          "package_name": "com.example.adamos_logistic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "768790515371-3uuif95i3hovq0lubqoe06cp16q05fl4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.adamos_logistic",
+            "certificate_hash": "882ee1add862b0e35faa7d608cfdfd4bed527236"
+          }
+        },
+        {
+          "client_id": "768790515371-7liloe8qpj4scq8i6r1r0h0sa96c6m9p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVsWEMKOZYNZG5WIc8w62OiWMDnzONc6c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "768790515371-7liloe8qpj4scq8i6r1r0h0sa96c6m9p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
