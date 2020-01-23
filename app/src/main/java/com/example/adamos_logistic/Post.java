@@ -13,6 +13,12 @@ public class Post {
 
     private String PASSWORD;
 
+    private String SUCCESS;
+
+    private String USER_ID;
+
+    private String ERROR;
+
 
     public Post(String SURNAME, String NAME, String SECONDNAME, String EMAIL, String PASSWORD) {
         this.SURNAME = SURNAME;
@@ -42,4 +48,15 @@ public class Post {
         return PASSWORD;
     }
 
+    public String getSUCCESS() {
+        return SUCCESS;
+    }
+
+    public String getUSER_ID() {
+        return USER_ID;
+    }
+
+    public String getERROR() {
+        return ERROR;
+    }
 }
