@@ -10,27 +10,26 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
+class DataAdapter2 extends RecyclerView.Adapter<DataAdapter2.ViewHolder> {
 
     private LayoutInflater inflater;
     private List<Messages> message;
 
-    DataAdapter(Context context, List<Messages> message) {
+    DataAdapter2(Context context, List<Messages> message) {
         this.message = message;
         this.inflater = LayoutInflater.from(context);
     }
     @Override
-    public DataAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public DataAdapter2.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = inflater.inflate(R.layout.list_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(DataAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(DataAdapter2.ViewHolder holder, int position) {
         Messages messages = message.get(position);
-        if(message.size() % 2 == 0) holder.messageView.setText(messages.getMessage());
-        else holder.messageView2.setText(messages.getMessage());
+        holder.messageView.setText(messages.getMessage());
     }
 
     @Override
@@ -40,12 +39,10 @@ class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         final TextView messageView;
-        final TextView messageView2;
 
         ViewHolder(View view){
             super(view);
-            messageView = (TextView) view.findViewById(R.id.message);
-            messageView2 = (TextView) view.findViewById(R.id.message2);
+            messageView = (TextView) view.findViewById(R.id.message2);
         }
     }
 }
