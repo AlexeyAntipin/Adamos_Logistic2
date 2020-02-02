@@ -31,7 +31,10 @@ public interface JsonPlaceHolderApi {
     Call<Post> createPost(@Body Post post);
 
     @POST("adamos/hs/MAPI/login")
-    Call<Post> createPostLogin(@Body PostLogin post);
+    Call<Post> createPostLogin(@Body PostLogin postLogim);
+
+    @POST("adamos/hs/MAPI/login")
+    Call<Post> createPostChat(@Body PostChat postChat);
 
     @FormUrlEncoded
     @POST("adamos/hs/MAPI/newUser")
@@ -48,6 +51,13 @@ public interface JsonPlaceHolderApi {
     Call<Post> createPostLogin(
             @Field("PASSWORD") String PASSWORD,
             @Field("EMAIL") String EMAIL
+    );
+
+    @FormUrlEncoded
+    @POST("adamos/hs/MAPI/login")
+    Call<Post> createPostChat(
+            @Field("ID") String ID,
+            @Field("MESSAGE") String MESSAGE
     );
 
     @FormUrlEncoded

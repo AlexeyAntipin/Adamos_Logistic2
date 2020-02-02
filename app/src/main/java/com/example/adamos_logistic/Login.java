@@ -79,9 +79,9 @@ public class Login extends AppCompatActivity {
     }
 
     private void createPost() {
-        PostLogin post = new PostLogin("d", "e");
+        PostLogin postLogin = new PostLogin("d", "e");
 
-        Call<Post> call = jsonPlaceHolderApi.createPostLogin(post);
+        Call<Post> call = jsonPlaceHolderApi.createPostLogin(postLogin);
 
         call.enqueue(new Callback<Post>() {
             @Override
