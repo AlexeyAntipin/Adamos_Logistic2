@@ -13,19 +13,24 @@ public class Post {
 
     private String PASSWORD;
 
+    private boolean IS_REG;
+
     private String SUCCESS;
 
     private String USER_ID;
 
     private String ERROR;
 
+    private String ORDER_ID;
 
-    public Post(String SURNAME, String NAME, String SECONDNAME, String EMAIL, String PASSWORD) {
+
+    public Post(String SURNAME, String NAME, String SECONDNAME, String EMAIL, String PASSWORD, boolean IS_REG) {
         this.SURNAME = SURNAME;
         this.NAME = NAME;
         this.SECONDNAME = SECONDNAME;
         this.EMAIL = EMAIL;
         this.PASSWORD = PASSWORD;
+        this.IS_REG = IS_REG;
     }
 
     public String getSURNAME() {
@@ -58,5 +63,9 @@ public class Post {
 
     public String getERROR() {
         return ERROR;
+    }
+
+    public String getORDER_ID() {
+        return ORDER_ID;
     }
 }

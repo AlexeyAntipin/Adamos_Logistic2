@@ -13,7 +13,6 @@ import java.util.List;
 class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
 
     private LayoutInflater inflater;
-    //private List<Messages> message;
     private List<Messages> message;
 
     DataAdapter(Context context, List<Messages> message) {
@@ -30,14 +29,11 @@ class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
     public void onBindViewHolder(DataAdapter.ViewHolder holder, int position) {
         Messages messages = message.get(position);
         if(position % 2 == 0) {
-            for(int i = 0; i < message.size(); i++) {
                 holder.messageView.setText(message.get(position).getMessage());
-            }
+
         }
         else {
-            for(int i = 0; i < message.size(); i++) {
                 holder.messageView2.setText(message.get(position).getMessage());
-            }
         }
     }
 

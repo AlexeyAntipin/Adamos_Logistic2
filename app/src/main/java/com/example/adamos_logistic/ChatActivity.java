@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,9 +44,10 @@ public class ChatActivity extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mes = yourMessage.getText().toString() + "\n";
                 try {
                     Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl("http://192.168.1.121/")
+                            .baseUrl("http://10.192.210.110/newMessage")
                             .addConverterFactory(GsonConverterFactory.create())
                             .build();
 
@@ -57,7 +59,6 @@ public class ChatActivity extends AppCompatActivity {
                     e.printStackTrace();
                     //Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
                 }
-                mes = yourMessage.getText().toString() + "\n";
                 setInitialData();
                 recyclerView.setAdapter(adapter);
                 yourMessage.setText("");
@@ -71,7 +72,10 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void createPost() {
-        PostChat postChat = new PostChat("d", "e");
+
+        TextView check = (TextView) findViewById(R.id.check);
+
+        PostChat postChat = new PostChat("d", mes, false);
 
         Call<Post> call = jsonPlaceHolderApi.createPostChat(postChat);
 
@@ -87,16 +91,14 @@ public class ChatActivity extends AppCompatActivity {
                 Post postResponse = response.body();
                 String content = "";
 
-                content += "SUCCESS: " + postResponse.getSUCCESS() + "\n";
-                content += "USER_ID: " + postResponse.getUSER_ID() + "\n";
-                content += "ERROR: " + postResponse.getERROR() + "\n\n";
+                content += "SUCCESS: " + postResponse.getSUCCESS() + "\n\n";
 
-                //check.setText(content);
+                check.setText(content);
             }
 
             @Override
             public void onFailure(Call<Post> call, Throwable t) {
-                //check.setText(t.getMessage());
+                check.setText(t.getMessage());
             }
         });
     }

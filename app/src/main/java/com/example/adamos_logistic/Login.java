@@ -57,7 +57,7 @@ public class Login extends AppCompatActivity {
                 //check.setText("");
                 try {
                     Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl("http://192.168.1.121/")
+                            .baseUrl("http://192.168.43.202/")
                             .addConverterFactory(GsonConverterFactory.create())
                             .build();
 
@@ -69,9 +69,9 @@ public class Login extends AppCompatActivity {
                     e.printStackTrace();
                     //Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
                 }
-                Intent i;
-                i = new Intent(Login.this, ChatActivity.class);
-                startActivity(i);
+                //Intent i;
+                //i = new Intent(Login.this, ChatActivity.class);
+                //startActivity(i);
             }
         };
         enter.setOnClickListener(login);
@@ -79,7 +79,7 @@ public class Login extends AppCompatActivity {
     }
 
     private void createPost() {
-        PostLogin postLogin = new PostLogin("d", "e");
+        PostLogin postLogin = new PostLogin("absdava", "jafnksjfdsfaasnafja");
 
         Call<Post> call = jsonPlaceHolderApi.createPostLogin(postLogin);
 
@@ -94,23 +94,18 @@ public class Login extends AppCompatActivity {
 
                 Post postResponse = response.body();
                 String content = "";
-                /*content += "NAME: " + postResponse.getNAME() + "\n";
-                content += "SURNAME: " + postResponse.getSURNAME() + "\n";
-                content += "SECONDNAME: " + postResponse.getSECONDNAME() + "\n";
-                content += "PASSWORD: " + postResponse.getPASSWORD() + "\n";
-                content += "EMAIL: " + postResponse.getEMAIL() + "\n\n";
-                 */
 
                 content += "SUCCESS: " + postResponse.getSUCCESS() + "\n";
                 content += "USER_ID: " + postResponse.getUSER_ID() + "\n";
+                content += "ORDER_ID: " + postResponse.getORDER_ID() + "\n";
                 content += "ERROR: " + postResponse.getERROR() + "\n\n";
 
-                //check.setText(content);
+                check.setText(content);
             }
 
             @Override
             public void onFailure(Call<Post> call, Throwable t) {
-                //check.setText(t.getMessage());
+                check.setText(t.getMessage());
             }
         });
     }

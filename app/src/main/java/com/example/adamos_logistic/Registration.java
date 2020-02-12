@@ -67,7 +67,7 @@ public class Registration extends AppCompatActivity {
                     check.setText("");
                     try {
                         Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl("http://192.168.1.121/")
+                                .baseUrl("http://192.168.43.202/")
                                 .addConverterFactory(GsonConverterFactory.create())
                                 .build();
 
@@ -122,7 +122,7 @@ public class Registration extends AppCompatActivity {
         registration.setOnClickListener(listener);
     }
     private void createPost() {
-        Post post = new Post("a", "b", "c", "d", "e");
+        Post post = new Post("PrOcenkoa", "Ivavna", "Ivavnovicha", "absdava", "jafnksjfdsfaasnafja", true);
 
         Call<Post> call = jsonPlaceHolderApi.createPost(post);
 
@@ -146,6 +146,7 @@ public class Registration extends AppCompatActivity {
 
                 content += "SUCCESS: " + postResponse.getSUCCESS() + "\n";
                 content += "USER_ID: " + postResponse.getUSER_ID() + "\n";
+                content += "ORDER_ID: " + postResponse.getORDER_ID() + "\n";
                 content += "ERROR: " + postResponse.getERROR() + "\n\n";
 
                 check.setText(content);

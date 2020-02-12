@@ -2,20 +2,23 @@ package com.example.adamos_logistic;
 
 public class PostChat {
 
-    private String ID;
+    private String ORDER_ID;
 
-    private String Message;
+    private String MESSAGE;
 
-    public PostChat(String ID, String Message) {
-        this.ID = ID;
-        this.Message = Message;
+    private boolean IS_REG;
+
+    public PostChat(String ORDER_ID, String MESSAGE, boolean IS_REG) {
+        this.ORDER_ID = ORDER_ID;
+        this.MESSAGE = MESSAGE;
+        this.IS_REG = IS_REG;
     }
 
-    public String getID() {
-        return ID;
+    public String getORDER_ID() {
+        return ORDER_ID;
     }
 
     public String getMessage() {
-        return Message;
+        return MESSAGE;
     }
 }
