@@ -9,11 +9,13 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.Timer;
 
 class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
 
     private LayoutInflater inflater;
     private List<Messages> message;
+
 
     DataAdapter(Context context, List<Messages> message) {
         this.message = message;
@@ -30,7 +32,6 @@ class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
         Messages messages = message.get(position);
         if(position % 2 == 0) {
                 holder.messageView.setText(message.get(position).getMessage());
-
         }
         else {
                 holder.messageView2.setText(message.get(position).getMessage());

@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,6 +25,9 @@ public class ChatActivity extends AppCompatActivity {
 
     private JsonPlaceHolderApi jsonPlaceHolderApi;
 
+    private Timer mTimer;
+    private TimerTask mMyTimerTask;
+
     String mes;
 
     Date date = new Date();
@@ -31,6 +36,26 @@ public class ChatActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
+
+        // re-schedule timer here
+        // otherwise, IllegalStateException of
+        // "TimerTask is scheduled already"
+        // will be thrown
+        mTimer = new Timer();
+        mMyTimerTask = new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println("hello");
+            }
+        };
+        //mMyTimerTask = new TimerTask();
+
+        mTimer.schedule(mMyTimerTask, 10000);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_activity);
 
