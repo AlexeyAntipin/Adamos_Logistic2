@@ -69,9 +69,9 @@ public class Login extends AppCompatActivity {
                     e.printStackTrace();
                     //Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
                 }
-                //Intent i;
-                //i = new Intent(Login.this, ChatActivity.class);
-                //startActivity(i);
+                Intent i;
+                i = new Intent(Login.this, MainMenu.class);
+                startActivity(i);
             }
         };
         enter.setOnClickListener(login);

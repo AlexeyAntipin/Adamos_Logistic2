@@ -2,7 +2,6 @@ package com.example.adamos_logistic;
 
 public class Post {
 
-
     private String SURNAME;
 
     private String NAME;
