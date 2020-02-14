@@ -54,7 +54,7 @@ public class ChatActivity extends AppCompatActivity {
         };
         //mMyTimerTask = new TimerTask();
 
-        mTimer.schedule(mMyTimerTask, 10000);
+        mTimer.schedule(mMyTimerTask, 1000, 5000);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_activity);

@@ -20,7 +20,7 @@ public class MainMenu extends AppCompatActivity {
 
             public void onSwipeLeft() {
                 Intent i;
-                i = new Intent(MainMenu.this, SwipeMenu.class);
+                i = new Intent(MainMenu.this, MainMenuActivity.class);
                 startActivity(i);
             }
         });
