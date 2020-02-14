@@ -70,7 +70,7 @@ public class Login extends AppCompatActivity {
                     //Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
                 }
                 Intent i;
-                i = new Intent(Login.this, MainMenu.class);
+                i = new Intent(Login.this, MainMenuActivity.class);
                 startActivity(i);
             }
         };

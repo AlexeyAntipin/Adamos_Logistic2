@@ -1,16 +1,16 @@
-package com.example.adamos_logistic.ui.send;
+package com.example.adamos_logistic.ui.Orders;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class SendViewModel extends ViewModel {
+public class OrdersViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public SendViewModel() {
+    public OrdersViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is send fragment");
+        mText.setValue("This is gallery fragment");
     }
 
     public LiveData<String> getText() {

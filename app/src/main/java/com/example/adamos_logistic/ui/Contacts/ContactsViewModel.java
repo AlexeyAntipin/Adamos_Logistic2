@@ -1,16 +1,16 @@
-package com.example.adamos_logistic.ui.home;
+package com.example.adamos_logistic.ui.Contacts;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class HomeViewModel extends ViewModel {
+public class ContactsViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public HomeViewModel() {
+    public ContactsViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        mText.setValue("This is share fragment");
     }
 
     public LiveData<String> getText() {

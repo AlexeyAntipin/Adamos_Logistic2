@@ -1,4 +1,4 @@
-package com.example.adamos_logistic.ui.send;
+package com.example.adamos_logistic.ui.Orders;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.adamos_logistic.R;
 
-public class SendFragment extends Fragment {
+public class OrdersFragment extends Fragment {
 
-    private SendViewModel sendViewModel;
+    private OrdersViewModel ordersViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        sendViewModel =
-                ViewModelProviders.of(this).get(SendViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_send, container, false);
-        final TextView textView = root.findViewById(R.id.text_send);
-        sendViewModel.getText().observe(this, new Observer<String>() {
+        ordersViewModel =
+                ViewModelProviders.of(this).get(OrdersViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_orders, container, false);
+        final TextView textView = root.findViewById(R.id.text_gallery);
+        ordersViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

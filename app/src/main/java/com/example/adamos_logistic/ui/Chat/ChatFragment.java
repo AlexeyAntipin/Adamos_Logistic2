@@ -1,4 +1,4 @@
-package com.example.adamos_logistic.ui.share;
+package com.example.adamos_logistic.ui.Chat;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.adamos_logistic.R;
 
-public class ShareFragment extends Fragment {
+public class ChatFragment extends Fragment {
 
-    private ShareViewModel shareViewModel;
+    private ChatViewModel chatViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        shareViewModel =
-                ViewModelProviders.of(this).get(ShareViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_share, container, false);
-        final TextView textView = root.findViewById(R.id.text_share);
-        shareViewModel.getText().observe(this, new Observer<String>() {
+        chatViewModel =
+                ViewModelProviders.of(this).get(ChatViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_chat, container, false);
+        final TextView textView = root.findViewById(R.id.text_chat);
+        chatViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
