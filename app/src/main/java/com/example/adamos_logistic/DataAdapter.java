@@ -11,13 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import java.util.Timer;
 
-class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
+public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
 
     private LayoutInflater inflater;
     private List<Messages> message;
 
 
-    DataAdapter(Context context, List<Messages> message) {
+    public DataAdapter(Context context, List<Messages> message) {
         this.message = message;
         this.inflater = LayoutInflater.from(context);
     }
