@@ -1,4 +1,4 @@
-package com.example.adamos_logistic;
+package com.example.adamos_logistic.Posts;
 
 public class PostLogin {
 

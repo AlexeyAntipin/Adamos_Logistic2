@@ -4,20 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import org.json.JSONObject;
-
-import java.io.DataOutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
+import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
+import com.example.adamos_logistic.Posts.Post;
+import com.example.adamos_logistic.Posts.PostLogin;
 
 import retrofit2.Call;
 import retrofit2.Callback;

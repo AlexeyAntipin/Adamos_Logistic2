@@ -1,6 +1,5 @@
 package com.example.adamos_logistic.ui.Chat;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,23 +7,16 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.adamos_logistic.ChatActivity;
 import com.example.adamos_logistic.DataAdapter;
-import com.example.adamos_logistic.JsonPlaceHolderApi;
-import com.example.adamos_logistic.MainMenuActivity;
+import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
 import com.example.adamos_logistic.Messages;
-import com.example.adamos_logistic.Post;
-import com.example.adamos_logistic.PostChat;
+import com.example.adamos_logistic.Posts.Post;
+import com.example.adamos_logistic.Posts.PostChat;
 import com.example.adamos_logistic.R;
 
 import java.util.ArrayList;
@@ -54,12 +46,10 @@ public class ChatFragment extends Fragment {
 
     List<Messages> message = new ArrayList<>();
 
-    private ChatViewModel chatViewModel;
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        root = inflater.inflate(R.layout.chat_activity, container, false);
+        root = inflater.inflate(R.layout.fragment_chat, container, false);
         ImageButton send = (ImageButton) root.findViewById(R.id.Send);
         EditText chatSendingWindow = (EditText) root.findViewById(R.id.your_message);
         RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.message_view);
