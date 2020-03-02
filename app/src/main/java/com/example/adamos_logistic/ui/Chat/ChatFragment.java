@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.adamos_logistic.DataAdapter;
+import com.example.adamos_logistic.Adapters.DataAdapter;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
 import com.example.adamos_logistic.Messages;
 import com.example.adamos_logistic.Posts.Post;

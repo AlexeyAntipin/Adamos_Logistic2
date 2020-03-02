@@ -1,4 +1,4 @@
-package com.example.adamos_logistic;
+package com.example.adamos_logistic.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.adamos_logistic.Messages;
+import com.example.adamos_logistic.R;
 
 import java.util.List;
 
