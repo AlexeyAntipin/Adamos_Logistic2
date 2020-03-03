@@ -1,8 +1,11 @@
 package com.example.adamos_logistic.Posts;
 
+import com.example.adamos_logistic.TestQueryPackage.TestQueryString;
+
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -13,6 +16,21 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface JsonPlaceHolderApi {
+
+    String HOST = "http://192.168.43.202/";
+
+
+    // Тестовый GET запрос
+    @GET("adamos2/php/process.php?command=test")
+    Call<TestQueryString> getTestQuery();
+
+    // POST-запрос для отправки сообщения в чат
+    @POST("adamos2/php/process.php?command=new_message")
+    Call<PostChat> createPostChat(@Body PostChat postChat);
+
+
+
+    // Неразобранные запросы
 
     @GET("adamos/hs/MAPI/newUser")
     Call<List<Post>> getPosts(
@@ -30,8 +48,6 @@ public interface JsonPlaceHolderApi {
     @POST("adamos/hs/MAPI/login")
     Call<Post> createPostLogin(@Body PostLogin postLogim);
 
-    @POST("adamos/hs/MAPI/login")
-    Call<Post> createPostChat(@Body PostChat postChat);
 
     @FormUrlEncoded
     @POST("adamos/hs/MAPI/newUser")

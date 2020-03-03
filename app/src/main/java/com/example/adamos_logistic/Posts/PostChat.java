@@ -2,23 +2,47 @@ package com.example.adamos_logistic.Posts;
 
 public class PostChat {
 
-    private String ORDER_ID;
+    private String USER_UID;
+
+    private String ORDER_UID;
 
     private String MESSAGE;
 
+    private String FILE_NAME;
+
     private boolean IS_REG;
 
-    public PostChat(String ORDER_ID, String MESSAGE, boolean IS_REG) {
-        this.ORDER_ID = ORDER_ID;
+    public PostChat(
+            String USER_UID,
+            String ORDER_UID,
+            String MESSAGE,
+            String FILE_NAME,
+            boolean IS_REG) {
+
+        this.USER_UID = USER_UID;
+        this.ORDER_UID = ORDER_UID;
         this.MESSAGE = MESSAGE;
+        this.FILE_NAME = FILE_NAME;
         this.IS_REG = IS_REG;
     }
 
-    public String getORDER_ID() {
-        return ORDER_ID;
+    public String getUSER_UID() {
+        return USER_UID;
     }
 
-    public String getMessage() {
+    public String getORDER_UID() {
+        return ORDER_UID;
+    }
+
+    public String getMESSAGE() {
         return MESSAGE;
+    }
+
+    public String getFILE_NAME() {
+        return FILE_NAME;
+    }
+
+    public boolean getIS_REG() {
+        return IS_REG;
     }
 }
