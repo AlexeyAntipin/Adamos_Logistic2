@@ -1,6 +1,7 @@
 package com.example.adamos_logistic.ui.Chat;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,13 +15,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adamos_logistic.Adapters.DataAdapter;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
-import com.example.adamos_logistic.Messages;
+import com.example.adamos_logistic.Message;
 import com.example.adamos_logistic.Posts.PostChat;
 import com.example.adamos_logistic.R;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -40,17 +39,17 @@ public class ChatFragment extends Fragment {
 
     private String mes;
 
-    private Date date = new Date();
+    private boolean testUserBool = false;
 
-    private List<Messages> message = new ArrayList<>();
+    private ArrayList<Message> message = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_chat, container, false);
-        ImageButton send = (ImageButton) root.findViewById(R.id.Send);
-        chatSendingWindow = (EditText) root.findViewById(R.id.your_message);
-        RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.message_view);
+        ImageButton send = root.findViewById(R.id.Send);
+        chatSendingWindow = root.findViewById(R.id.your_message);
+        RecyclerView recyclerView = root.findViewById(R.id.message_view);
 
         if (mTimer != null) {
             mTimer.cancel();
@@ -72,39 +71,45 @@ public class ChatFragment extends Fragment {
         // создаем адаптер
         DataAdapter adapter = new DataAdapter(getActivity().getApplicationContext(), message);
 
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mes = chatSendingWindow.getText().toString() + "\n";
-                try {
-                    Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(JsonPlaceHolderApi.HOST)
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
+        send.setOnClickListener(v -> {
+            mes = chatSendingWindow.getText().toString();
+            try {
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(JsonPlaceHolderApi.HOST)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
 
-                    jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+                jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-                    sendChatMessage();
+                sendChatMessage();
 
-                    Log.d("MyLog", "ЗАПРОС СФОРМИРОВАН");
+                Log.d("MyLog", "ЗАПРОС СФОРМИРОВАН");
 
-                } catch (Exception e) {
+            } catch (Exception e) {
 
-                    e.printStackTrace();
-                    Log.d("MyLog", "ОШИБКА ФОРМИРОВАНИЯ ЗАПРОСА");
+                e.printStackTrace();
+                Log.d("MyLog", "ОШИБКА ФОРМИРОВАНИЯ ЗАПРОСА");
 
-                }
-                setInitialData();
-                recyclerView.setAdapter(adapter);
-                chatSendingWindow.setText("");
             }
+            setMessage();
+            Parcelable recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
+            recyclerView.setAdapter(adapter);
+            recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+            chatSendingWindow.setText("");
         });
 
         return root;
     }
 
-    private void setInitialData() {
-        message.add(new Messages(mes + "   " + date.toString()));
+    // Пока что не нужно, дата выводится через адаптер
+    private void setMessage() {
+
+        String check = mes.replaceAll("\\s", "");
+        if (!check.isEmpty()) {
+            testUserBool = !testUserBool;
+            message.add(new Message(mes, "", !testUserBool, ""));
+        }
+
     }
 
 

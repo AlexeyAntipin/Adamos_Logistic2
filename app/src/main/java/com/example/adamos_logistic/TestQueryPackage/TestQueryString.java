@@ -1,5 +1,7 @@
 package com.example.adamos_logistic.TestQueryPackage;
 
+
+// Структура данных для тестового GET-запроса
 public class TestQueryString {
     private String test;
 

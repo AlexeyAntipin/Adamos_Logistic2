@@ -6,53 +6,110 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.adamos_logistic.Messages;
+import com.example.adamos_logistic.Message;
 import com.example.adamos_logistic.R;
 
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
-public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
+public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private LayoutInflater inflater;
-    private List<Messages> message;
+    private ArrayList<Message> messages;
+
+    private static int USER_MESSAGE = 1;
+    private static int SERVER_MESSAGE = 2;
 
 
-    public DataAdapter(Context context, List<Messages> message) {
-        this.message = message;
+    public DataAdapter(Context context, ArrayList<Message> messages) {
+        this.messages = messages;
         this.inflater = LayoutInflater.from(context);
     }
+
+    @NonNull
     @Override
-    public DataAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.list_item, parent, false);
-        return new ViewHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+        View view;
+        if (viewType == USER_MESSAGE) {
+            view = inflater.inflate(R.layout.user_message, parent, false);
+            return new UserViewHolder(view);
+        } else {
+            view = inflater.inflate(R.layout.server_message, parent, false);
+            return new ServerViewHolder(view);
+        }
+    }
+
+    // Узнаем тип сообщения
+    @Override
+    public int getItemViewType(int position) {
+        if (messages.get(position).isFrom_user())
+            return USER_MESSAGE;
+        else
+            return SERVER_MESSAGE;
     }
 
     @Override
-    public void onBindViewHolder(DataAdapter.ViewHolder holder, int position) {
-        Messages messages = message.get(position);
-        if(position % 2 == 0) {
-                holder.messageView.setText(message.get(position).getMessage());
-        }
-        else {
-                holder.messageView2.setText(message.get(position).getMessage());
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (getItemViewType(position) == USER_MESSAGE) {
+            ((UserViewHolder)holder).setUserMessage(messages.get(position).getMessage());
+        } else {
+            ((ServerViewHolder)holder).setServerMessage(messages.get(position).getMessage());
         }
     }
 
     @Override
     public int getItemCount() {
-        return message.size();
+        return messages.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        final TextView messageView;
-        final TextView messageView2;
+    // Разметка отправленного сообщения
+    class UserViewHolder extends RecyclerView.ViewHolder {
 
-        ViewHolder(View view){
-            super(view);
-            messageView = (TextView) view.findViewById(R.id.message);
-            messageView2 = (TextView) view.findViewById(R.id.message2);
+        private TextView userMessageBox;
+        private TextView userTimeBox;
+
+        UserViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            userMessageBox = itemView.findViewById(R.id.user_message_box);
+            userTimeBox = itemView.findViewById(R.id.user_time_box);
         }
+
+        private void setUserMessage(String message) {
+            userMessageBox.setText(message);
+            userTimeBox.setText(getMessageTime());
+        }
+    }
+
+    // Разметка пришедшего сообщения
+    class ServerViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView serverMessageBox;
+        private TextView serverTimeBox;
+
+        ServerViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            serverMessageBox = itemView.findViewById(R.id.server_message_box);
+            serverTimeBox = itemView.findViewById(R.id.server_time_box);
+        }
+
+        private void setServerMessage(String message) {
+            serverMessageBox.setText(message);
+            serverTimeBox.setText(getMessageTime());
+        }
+    }
+
+    // Получение текущего времени (Исправить на серверное время)
+    private String getMessageTime() {
+        Calendar calender = Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.GERMAN);
+        return simpleDateFormat.format(calender.getTime());
     }
 }

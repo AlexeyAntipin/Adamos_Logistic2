@@ -6,18 +6,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clipToPadding="false"
     android:focusableInTouchMode="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_margin="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="524dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_weight="8"
+        >
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/message_view"
-            android:layout_width="412dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-
             app:layoutManager="LinearLayoutManager" />
     </LinearLayout>
 
@@ -25,13 +27,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#fff"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_weight="1">
 
         <EditText
             android:id="@+id/your_message"
-            android:layout_width="361dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="12"
             android:ems="10"
             android:hint="Write a message"
             android:inputType="text"
@@ -41,7 +44,19 @@
         <ImageButton
             android:id="@+id/Send"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/ic_menu_settings"
+            android:padding="20dp"
+            android:scaleType="fitCenter" />
+
+        <ImageButton
+            android:layout_weight="1"
+            android:id="@+id/refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_marginHorizontal="10dp"
             android:background="@drawable/ic_send_black_24dp"
@@ -53,7 +68,7 @@
     <TextView
         android:id="@+id/check"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="2" />
 
 </LinearLayout>

@@ -1,7 +1,9 @@
 package com.example.adamos_logistic.Posts;
 
+import com.example.adamos_logistic.Message;
 import com.example.adamos_logistic.TestQueryPackage.TestQueryString;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +29,9 @@ public interface JsonPlaceHolderApi {
     // POST-запрос для отправки сообщения в чат
     @POST("adamos2/php/process.php?command=new_message")
     Call<PostChat> createPostChat(@Body PostChat postChat);
+
+    @GET("")
+    Call<ArrayList<Message>> getMessages(@Body Message message);
 
 
 
