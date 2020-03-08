@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.adamos_logistic.Messages;
+import com.example.adamos_logistic.Message;
 import com.example.adamos_logistic.R;
 
 import java.util.List;
@@ -16,21 +16,21 @@ import java.util.List;
 public class ForOrders extends RecyclerView.Adapter<ForOrders.ViewHolder> {
 
     private LayoutInflater inflater;
-    private List<Messages> message;
+    private List<Message> message;
 
-    public ForOrders(Context context, List<Messages> message) {
+    public ForOrders(Context context, List<Message> message) {
         this.message = message;
         this.inflater = LayoutInflater.from(context);
     }
     @Override
     public ForOrders.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.list_item, parent, false);
+        View view = inflater.inflate(R.layout.user_message, parent, false);
         return new ForOrders.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ForOrders.ViewHolder holder, int position) {
-        Messages messages = message.get(position);
+        Message messages = message.get(position);
             holder.messageView.setText(message.get(position).getMessage());
     }
 

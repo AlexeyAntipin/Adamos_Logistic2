@@ -1,12 +1,13 @@
 package com.example.adamos_logistic.ui.Chat;
 
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -14,14 +15,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adamos_logistic.Adapters.DataAdapter;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
-import com.example.adamos_logistic.Messages;
-import com.example.adamos_logistic.Posts.Post;
+import com.example.adamos_logistic.Message;
 import com.example.adamos_logistic.Posts.PostChat;
 import com.example.adamos_logistic.R;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -36,34 +34,29 @@ public class ChatFragment extends Fragment {
     private JsonPlaceHolderApi jsonPlaceHolderApi;
 
     private Timer mTimer;
-    private TimerTask mMyTimerTask;
 
-    private View root;
+    private EditText chatSendingWindow;
 
-    String mes;
+    private String mes;
 
-    Date date = new Date();
+    private boolean testUserBool = false;
 
-    List<Messages> message = new ArrayList<>();
+    private ArrayList<Message> message = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        root = inflater.inflate(R.layout.fragment_chat, container, false);
-        ImageButton send = (ImageButton) root.findViewById(R.id.Send);
-        EditText chatSendingWindow = (EditText) root.findViewById(R.id.your_message);
-        RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.message_view);
+        View root = inflater.inflate(R.layout.fragment_chat, container, false);
+        ImageButton send = root.findViewById(R.id.Send);
+        chatSendingWindow = root.findViewById(R.id.your_message);
+        RecyclerView recyclerView = root.findViewById(R.id.message_view);
 
         if (mTimer != null) {
             mTimer.cancel();
         }
 
-        // re-schedule timer here
-        // otherwise, IllegalStateException of
-        // "TimerTask is scheduled already"
-        // will be thrown
         mTimer = new Timer();
-        mMyTimerTask = new TimerTask() {
+        TimerTask mMyTimerTask = new TimerTask() {
             @Override
             public void run() {
                 System.out.println("hello");
@@ -78,65 +71,71 @@ public class ChatFragment extends Fragment {
         // создаем адаптер
         DataAdapter adapter = new DataAdapter(getActivity().getApplicationContext(), message);
 
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mes = chatSendingWindow.getText().toString() + "\n";
-                try {
-                    Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl("http://10.192.210.110/newMessage")
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
+        send.setOnClickListener(v -> {
+            mes = chatSendingWindow.getText().toString();
+            try {
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(JsonPlaceHolderApi.HOST)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
 
-                    jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-                    createPost();
-                } catch (Exception e) {
-                    //int permissionStatus = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS);
-                    //Toast.makeText(getApplicationContext(), permissionStatus.toString(), Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                    //Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
-                }
-                setInitialData();
-                recyclerView.setAdapter(adapter);
-                chatSendingWindow.setText("");
+                jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+
+                sendChatMessage();
+
+                Log.d("MyLog", "ЗАПРОС СФОРМИРОВАН");
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+                Log.d("MyLog", "ОШИБКА ФОРМИРОВАНИЯ ЗАПРОСА");
+
             }
+            setMessage();
+            Parcelable recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
+            recyclerView.setAdapter(adapter);
+            recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+            chatSendingWindow.setText("");
         });
 
         return root;
     }
 
-    private void setInitialData() {
-        message.add(new Messages(mes + "   " + date.toString()));
+    // Пока что не нужно, дата выводится через адаптер
+    private void setMessage() {
+
+        String check = mes.replaceAll("\\s", "");
+        if (!check.isEmpty()) {
+            testUserBool = !testUserBool;
+            message.add(new Message(mes, "", !testUserBool, ""));
+        }
+
     }
 
-    private void createPost() {
 
-        TextView check = (TextView) root.findViewById(R.id.check);
+    // Отправка сообщения чата
+    private void sendChatMessage() {
 
-        PostChat postChat = new PostChat("d", mes, false);
+        PostChat postChat = new PostChat(
+                "b25c961f1aae707d05509cf68fc3f177",
+                "7222f3a105ecc5fa3af58eb222dd4034",
+                mes,
+                "",
+                true);
 
-        Call<Post> call = jsonPlaceHolderApi.createPostChat(postChat);
+        Call<PostChat> call = jsonPlaceHolderApi.createPostChat(postChat);
 
-        call.enqueue(new Callback<Post>() {
+        call.enqueue(new Callback<PostChat>() {
             @Override
-            public void onResponse(Call<Post> call, Response<Post> response) {
-
-                if (!response.isSuccessful()) {
-                    //check.setText("Code: " + response.code() + " " + response.raw());
-                    return;
-                }
-
-                Post postResponse = response.body();
-                String content = "";
-
-                content += "SUCCESS: " + postResponse.getSUCCESS() + "\n\n";
-
-                check.setText(content);
+            public void onResponse(@NonNull Call<PostChat> call,
+                                   @NonNull Response<PostChat> response) {
+                Log.d("MyLog", "ЗАПРОС ОТПРАВЛЕН");
             }
 
             @Override
-            public void onFailure(Call<Post> call, Throwable t) {
-                check.setText(t.getMessage());
+            public void onFailure(@NonNull Call<PostChat> call,
+                                  @NonNull Throwable t) {
+                Log.d("MyLog", "ЗАПРОС НЕ ОТПРАВЛЕН");
             }
         });
     }
