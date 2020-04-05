@@ -50,7 +50,7 @@ public interface JsonPlaceHolderApi {
     Call<Post> createPost(@Body Post post);
 
     @POST("adamos/hs/MAPI/login")
-    Call<Post> createPostLogin(@Body PostLogin postLogim);
+    Call<Post> createPostLogin(@Body PostLogin postLogin);
 
 
     @FormUrlEncoded

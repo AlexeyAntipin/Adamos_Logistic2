@@ -1,5 +1,6 @@
 package com.example.adamos_logistic;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -55,7 +56,7 @@ public class Registration extends AppCompatActivity {
                     check.setText("");
                     try {
                         Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl("http://192.168.43.202/")
+                                .baseUrl(JsonPlaceHolderApi.HOST)
                                 .addConverterFactory(GsonConverterFactory.create())
                                 .build();
 
@@ -103,14 +104,19 @@ public class Registration extends AppCompatActivity {
                         e.printStackTrace();
                         //Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
                     }
-
+                    Intent i = new Intent(Registration.this, MainMenuActivity.class);
+                    startActivity(i);
                 }
             }
         };
         registration.setOnClickListener(listener);
     }
     private void createPost() {
-        Post post = new Post("PrOcenkoa", "Ivavna", "Ivavnovicha", "absdava", "jafnksjfdsfaasnafja", true);
+        Post post = new Post(SurName.getText().toString(),
+                name.getText().toString(),
+                SecondName.getText().toString(),
+                email.getText().toString(),
+                password.getText().toString(), true);
 
         Call<Post> call = jsonPlaceHolderApi.createPost(post);
 

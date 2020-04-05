@@ -6,6 +6,8 @@
     <TextView
         android:id="@+id/textViewOrders"
         android:layout_width="wrap_content"
-        android:layout_height="48dp" />
+        android:layout_height="48dp"
+        android:textColor="@color/colorBlueDark"
+        android:gravity="center"/>
 
 </LinearLayout>

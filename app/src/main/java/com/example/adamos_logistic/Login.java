@@ -51,7 +51,7 @@ public class Login extends AppCompatActivity {
                 //check.setText("");
                 try {
                     Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl("http://192.168.43.202/")
+                            .baseUrl(JsonPlaceHolderApi.HOST)
                             .addConverterFactory(GsonConverterFactory.create())
                             .build();
 
@@ -73,7 +73,8 @@ public class Login extends AppCompatActivity {
     }
 
     private void createPost() {
-        PostLogin postLogin = new PostLogin("absdava", "jafnksjfdsfaasnafja");
+        PostLogin postLogin = new PostLogin(email.getText().toString(),
+                password.getText().toString());
 
         Call<Post> call = jsonPlaceHolderApi.createPostLogin(postLogin);
 
