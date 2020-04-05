@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -81,4 +80,7 @@ public interface JsonPlaceHolderApi {
     @FormUrlEncoded
     @POST("adamos/hs/MAPI/newUser")
     Call<Post> createPost(@FieldMap Map<String, String> fields);
+
+    @GET("adamos/hs/MAPI/getOrders")
+    Call<GetOrders> forOneOrder();
 }
