@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:stretchColumns="1">
+    <TableRow>
+        <TextView
+            android:text="номер заказа"
+            android:padding="3dip" />
+        <TextView
+            android:text="название"
+            android:gravity="center"
+            android:padding="3dip" />
+        <TextView
+            android:text="дата"
+            android:gravity="end"
+            android:padding="3dip" />
+    </TableRow>
+
+    <TableRow android:layout_width="match_parent">
+        <TextView
+            android:text="вся остальная информация"
+            android:layout_span="3"
+            android:layout_width="wrap_content"
+            android:padding="3dip" />
+    </TableRow>
+</TableLayout>
