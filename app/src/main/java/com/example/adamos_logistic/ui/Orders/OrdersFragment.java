@@ -14,10 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.adamos_logistic.Adapters.ForOrders;
 import com.example.adamos_logistic.Order;
 import com.example.adamos_logistic.Posts.GetResponseBodyOrders;
+import com.example.adamos_logistic.Posts.GetResponseBodyOrdersList;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
 import com.example.adamos_logistic.R;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -27,10 +29,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class OrdersFragment extends Fragment {
-
-    private JsonPlaceHolderApi jsonPlaceHolderApi;
-
-    private String api_key = "37bca7fce88fc16f0b666c64cc82cc54";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -61,22 +59,28 @@ public class OrdersFragment extends Fragment {
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
+            JsonPlaceHolderApi jsonPlaceHolderApi;
+
+            String api_key = "37bca7fce88fc16f0b666c64cc82cc54";
+
             jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-            Call<List<GetResponseBodyOrders>> call = jsonPlaceHolderApi.getOrders(api_key);
+            Call<GetResponseBodyOrdersList> call = jsonPlaceHolderApi.getOrders(api_key);
 
-            call.enqueue(new Callback<List<GetResponseBodyOrders>>() {
+            call.enqueue(new Callback<GetResponseBodyOrdersList>() {
                 @Override
-                public void onResponse(Call<List<GetResponseBodyOrders>> call, Response<List<GetResponseBodyOrders>> response) {
+                public void onResponse(Call<GetResponseBodyOrdersList> call, Response<GetResponseBodyOrdersList> response) {
 
-                    List<GetResponseBodyOrders> getorders = response.body();
                     Log.d("MyLog", "Запрос сформирован");
+                    GetResponseBodyOrdersList getorders = response.body();
+
 
                 }
 
                 @Override
-                public void onFailure(Call<List<GetResponseBodyOrders>> call, Throwable t) {
-                    Log.d("MyLog", "Запрос не сформирован");
+                public void onFailure(Call<GetResponseBodyOrdersList> call, Throwable t) {
+                    //t.printStackTrace();
+                    Log.d("MyLog", t.toString());
                 }
             });
 

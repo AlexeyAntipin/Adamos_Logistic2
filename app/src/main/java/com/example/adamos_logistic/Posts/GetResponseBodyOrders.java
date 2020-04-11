@@ -14,10 +14,6 @@ public class GetResponseBodyOrders {
         this.orderAttributes = orderAttributes;
     }
 
-    public String get_name() {
-        return name;
-    }
-
     public String getName() {
         return name;
     }
