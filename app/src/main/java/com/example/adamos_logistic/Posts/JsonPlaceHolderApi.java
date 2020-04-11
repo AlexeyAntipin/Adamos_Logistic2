@@ -20,7 +20,6 @@ public interface JsonPlaceHolderApi {
 
     String HOST = "http://25.99.235.231/";
 
-
     // Тестовый GET запрос
     @GET("adamos2/php/process.php?command=test")
     Call<TestQueryString> getTestQuery();
@@ -86,6 +85,7 @@ public interface JsonPlaceHolderApi {
             @Query("api_key") String api_key
     );
 
+    @FormUrlEncoded
     @POST("adamos.v2.0/process.php?route=order/add")
     Call<AddResponseBodyOrders> add(
             @Field("api_key") String api_key,

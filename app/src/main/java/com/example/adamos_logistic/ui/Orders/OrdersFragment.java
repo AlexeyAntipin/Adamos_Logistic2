@@ -31,7 +31,8 @@ public class OrdersFragment extends Fragment {
 
     private JsonPlaceHolderApi jsonPlaceHolderApi;
 
-    private String api_key = "37bca7fce88fc16f0b666c64cc82cc54";
+    private String api_key = "37bca7fce88fc16f0b666c64cc82cc55";
+    private String name = "Sosu_xuy";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -52,10 +53,18 @@ public class OrdersFragment extends Fragment {
                 //recyclerView.setAdapter(adapter);
             }
         });
+        newOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addOrder();
+                //order.add(new Order("Активный заказ"));
+                //recyclerView.setAdapter(adapter);
+            }
+        });
         return root;
     }
 
-    public void addOrder() {
+    private void addOrder() {
         try {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(JsonPlaceHolderApi.HOST)
@@ -64,10 +73,21 @@ public class OrdersFragment extends Fragment {
 
             jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-            String api_key = "37bca7fce88fc16f0b666c64cc82cc55";
-            String name = "Sosu_xuy";
+            Call<AddResponseBodyOrders> call2 = jsonPlaceHolderApi.add(api_key, name);
 
-            Call<AddResponseBodyOrders> call = jsonPlaceHolderApi.add(api_key, name);
+            call2.enqueue(new Callback<AddResponseBodyOrders>() {
+                @Override
+                public void onResponse(Call<AddResponseBodyOrders> call2, Response<AddResponseBodyOrders> response) {
+
+                    Log.d("MyLog", "Запрос сформирован");
+
+                }
+
+                @Override
+                public void onFailure(Call<AddResponseBodyOrders> call2, Throwable t) {
+                    Log.d("MyLog", t.toString());
+                }
+            });
 
         } catch (Exception e) {
 
