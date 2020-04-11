@@ -6,16 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adamos_logistic.Adapters.ForOrders;
-import com.example.adamos_logistic.Message;
 import com.example.adamos_logistic.Order;
-import com.example.adamos_logistic.Posts.GetOrders;
+import com.example.adamos_logistic.Posts.GetResponseBodyOrders;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
 import com.example.adamos_logistic.R;
 
@@ -62,15 +60,15 @@ public class OrdersFragment extends Fragment {
 
             jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-            Call<GetOrders> call = jsonPlaceHolderApi.forOneOrder();
+            Call<GetResponseBodyOrders> call = jsonPlaceHolderApi.forOneOrder();
 
-            call.enqueue(new Callback<GetOrders>() {
+            call.enqueue(new Callback<GetResponseBodyOrders>() {
                 @Override
-                public void onResponse(Call<GetOrders> call, Response<GetOrders> response) {
+                public void onResponse(Call<GetResponseBodyOrders> call, Response<GetResponseBodyOrders> response) {
 
-                    List<GetOrders> getorders = (List<GetOrders>) response.body();
+                    List<GetResponseBodyOrders> getorders = (List<GetResponseBodyOrders>) response.body();
 
-                    for (GetOrders getOrder : getorders) {
+                    for (GetResponseBodyOrders getOrder : getorders) {
                         String content = "";
                         content += "Order ID: " + getOrder.get_order_ID() + "\n";
                         content += "Order info: " + getOrder.getOrderInfo() + "\n";
@@ -83,7 +81,7 @@ public class OrdersFragment extends Fragment {
                 }
 
                 @Override
-                public void onFailure(Call<GetOrders> call, Throwable t) {
+                public void onFailure(Call<GetResponseBodyOrders> call, Throwable t) {
 
                 }
             });

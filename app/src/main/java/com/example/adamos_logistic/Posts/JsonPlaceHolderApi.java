@@ -82,5 +82,5 @@ public interface JsonPlaceHolderApi {
     Call<Post> createPost(@FieldMap Map<String, String> fields);
 
     @GET("adamos/hs/MAPI/getOrders")
-    Call<GetOrders> forOneOrder();
+    Call<GetResponseBodyOrders> forOneOrder();
 }
