@@ -83,4 +83,10 @@ public interface JsonPlaceHolderApi {
 
     @GET("adamos/hs/MAPI/getOrders")
     Call<GetResponseBodyOrders> forOneOrder();
+
+    @POST("adamos.v2.0/process.php?route=order/add")
+    Call<AddResponseBodyOrders> add(
+            @Field("api_key") String api_key,
+            @Field("name") String name
+    );
 }

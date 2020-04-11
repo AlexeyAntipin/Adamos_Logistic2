@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adamos_logistic.Adapters.ForOrders;
 import com.example.adamos_logistic.Order;
+import com.example.adamos_logistic.Posts.AddResponseBodyOrders;
 import com.example.adamos_logistic.Posts.GetResponseBodyOrders;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
 import com.example.adamos_logistic.R;
@@ -49,6 +50,28 @@ public class OrdersFragment extends Fragment {
             }
         });
         return root;
+    }
+
+    public void addOrder() {
+        try {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(JsonPlaceHolderApi.HOST)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+
+            String api_key = "37bca7fce88fc16f0b666c64cc82cc55";
+            String name = "Sosu_xuy";
+
+            Call<AddResponseBodyOrders> call = jsonPlaceHolderApi.add(api_key, name);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            Log.d("MyLog", "ОШИБКА ФОРМИРОВАНИЯ ЗАПРОСА");
+
+        }
     }
 
     private void getHistoryOrders() {
