@@ -85,4 +85,10 @@ public interface JsonPlaceHolderApi {
     Call<List<GetResponseBodyOrders>> getOrders(
             @Query("api_key") String api_key
     );
+
+    @POST("adamos.v2.0/process.php?route=order/add")
+    Call<AddResponseBodyOrders> add(
+            @Field("api_key") String api_key,
+            @Field("name") String name
+    );
 }
