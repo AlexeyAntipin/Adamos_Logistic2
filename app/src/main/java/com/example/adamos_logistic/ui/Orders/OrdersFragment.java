@@ -73,7 +73,7 @@ public class OrdersFragment extends Fragment {
 
             jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-            Call<AddResponseBodyOrders> call2 = jsonPlaceHolderApi.add(api_key, name);
+            Call<AddResponseBodyOrders> call2 = jsonPlaceHolderApi.addOrder(api_key, name);
 
             call2.enqueue(new Callback<AddResponseBodyOrders>() {
                 @Override

@@ -2,6 +2,7 @@ package com.example.adamos_logistic;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.adamos_logistic.Posts.AddUser;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
 import com.example.adamos_logistic.Posts.Post;
 
@@ -37,6 +39,8 @@ public class Registration extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.WhoAreYou, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+        email = (EditText) findViewById(R.id.EMAIL);
+        name = (EditText) findViewById(R.id.NAME);
         check = (TextView) findViewById(R.id.check);
         password = (EditText) findViewById(R.id.PASSWORD);
         PassRight = (EditText) findViewById(R.id.PassRight);
@@ -62,47 +66,32 @@ public class Registration extends AppCompatActivity {
 
                         jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-                        //getPosts();
-                        //getComments();
-                        createPost();
+                        Call<AddUser> call2 = jsonPlaceHolderApi.addUser(
+                                email.getText().toString(),
+                                password.getText().toString(),
+                                name.getText().toString());
 
-                        /*Call<List<Post>> call = jsonPlaceHolderApi.getPosts();
-
-                        call.enqueue(new Callback<List<Post>>() {
+                        call2.enqueue(new Callback<AddUser>() {
                             @Override
-                            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+                            public void onResponse(Call<AddUser> call2, Response<AddUser> response) {
 
-                                if (!response.isSuccessful()) {
-                                    check.setText("Code: " + response.code());
-                                    return;
-                                }
+                                Log.d("MyLog", response.toString());
 
-                                List<Post> posts = response.body();
-
-                                for (Post post : posts) {
-                                    String content = "";
-                                    content += "ID: " + post.getId() + "\n";
-
-                                    check.append(content);
-                                }
                             }
 
-
                             @Override
-                            public void onFailure(Call<List<Post>> call, Throwable t) {
-                                check.setText(t.getMessage());
+                            public void onFailure(Call<AddUser> call2, Throwable t) {
+
+                                Log.d("MyLog", t.toString());
+
                             }
-
-
                         });
 
-                         */
-                    }
-                    catch(Exception e) {
-                        //int permissionStatus = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS);
-                        //Toast.makeText(getApplicationContext(), permissionStatus.toString(), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+
                         e.printStackTrace();
-                        //Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
+                        Log.d("MyLog", "ОШИБКА РЕГИСТРАЦИИ");
+
                     }
                     Intent i = new Intent(Registration.this, MainMenuActivity.class);
                     startActivity(i);
