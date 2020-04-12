@@ -44,7 +44,7 @@ public class OrdersFragment extends Fragment {
 
         List<Order> order = new ArrayList<>();
         ForOrders adapter = new ForOrders(getActivity().getApplicationContext(), order);
-        activeOrders.setOnClickListener(new View.OnClickListener() {
+        historyOrders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getHistoryOrders();
@@ -78,11 +78,12 @@ public class OrdersFragment extends Fragment {
 
                     Log.d("MyLog", "Запрос сформирован");
 
-                    GetResponseBodyOrdersList recievedOrdersList = response.body();
+                    //ordersList = response.body();
 
                     // ЛЕХА: получаем объект, который содержит список ордеров
-                    assert recievedOrdersList != null;
-                    ordersList = recievedOrdersList.getList();
+                    //assert recievedOrdersList != null;
+
+                    Log.d("MyLog", response.body().toString());
 
                 }
 
@@ -95,8 +96,7 @@ public class OrdersFragment extends Fragment {
 
             } catch (Exception e) {
 
-            e.printStackTrace();
-            Log.d("MyLog", "ОШИБКА ФОРМИРОВАНИЯ ЗАПРОСА");
+            Log.d("MyLog", e.toString());
 
         }
     }
