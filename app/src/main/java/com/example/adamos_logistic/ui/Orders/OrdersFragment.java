@@ -30,6 +30,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class OrdersFragment extends Fragment {
 
+    // ЛЕХА: список ордеров
+    private List<GetResponseBodyOrders> ordersList;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_orders, container, false);
@@ -67,18 +70,24 @@ public class OrdersFragment extends Fragment {
 
             Call<GetResponseBodyOrdersList> call = jsonPlaceHolderApi.getOrders(api_key);
 
+
+
             call.enqueue(new Callback<GetResponseBodyOrdersList>() {
                 @Override
-                public void onResponse(Call<GetResponseBodyOrdersList> call, Response<GetResponseBodyOrdersList> response) {
+                public void onResponse(@NonNull Call<GetResponseBodyOrdersList> call, @NonNull Response<GetResponseBodyOrdersList> response) {
 
                     Log.d("MyLog", "Запрос сформирован");
-                    GetResponseBodyOrdersList getorders = response.body();
 
+                    GetResponseBodyOrdersList recievedOrdersList = response.body();
+
+                    // ЛЕХА: получаем объект, который содержит список ордеров
+                    assert recievedOrdersList != null;
+                    ordersList = recievedOrdersList.getList();
 
                 }
 
                 @Override
-                public void onFailure(Call<GetResponseBodyOrdersList> call, Throwable t) {
+                public void onFailure(@NonNull Call<GetResponseBodyOrdersList> call, @NonNull Throwable t) {
                     //t.printStackTrace();
                     Log.d("MyLog", t.toString());
                 }
