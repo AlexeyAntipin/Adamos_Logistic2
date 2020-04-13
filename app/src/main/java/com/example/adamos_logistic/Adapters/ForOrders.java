@@ -6,9 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.adamos_logistic.Order;
+import com.example.adamos_logistic.Posts.GetResponseBodyOrders;
+import com.example.adamos_logistic.Posts.OrderGetResult;
 import com.example.adamos_logistic.R;
 
 import java.util.List;
@@ -16,21 +18,24 @@ import java.util.List;
 public class ForOrders extends RecyclerView.Adapter<ForOrders.ViewHolder> {
 
     private LayoutInflater inflater;
-    private List<Order> order;
+    private OrderGetResult order;
 
-    public ForOrders(Context context, List<Order> order) {
+    public ForOrders(Context context, OrderGetResult order) {
         this.order = order;
         this.inflater = LayoutInflater.from(context);
     }
+    @NonNull
     @Override
-    public ForOrders.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.list_item_for_orders, parent, false);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = inflater.inflate(R.layout.order_text_example, parent, false);
         return new ForOrders.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ForOrders.ViewHolder holder, int position) {
-        holder.orderView.setText(order.get(position).getOrder());
+        holder.order_name.setText(order.get(position).getName());
+        holder.time_created.setText(order.get(position).getTimeCreated());
+        holder.order_status.setText(order.get(position).getOrderStatus());
     }
 
     @Override
@@ -38,12 +43,16 @@ public class ForOrders extends RecyclerView.Adapter<ForOrders.ViewHolder> {
         return order.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        final TextView orderView;
+    class ViewHolder extends RecyclerView.ViewHolder {
+        final TextView order_name;
+        final TextView time_created;
+        final TextView order_status;
 
         ViewHolder(View view){
             super(view);
-            orderView = (TextView) view.findViewById(R.id.textViewOrders);
+            order_name = view.findViewById(R.id.order_name);
+            time_created = view.findViewById(R.id.time_created);
+            order_status = view.findViewById(R.id.order_status);
         }
     }
 }

@@ -9,17 +9,16 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adamos_logistic.Adapters.ForOrders;
-import com.example.adamos_logistic.Order;
+import com.example.adamos_logistic.Posts.ApiKey;
 import com.example.adamos_logistic.Posts.GetResponseBodyOrders;
-import com.example.adamos_logistic.Posts.GetResponseBodyOrdersList;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
+import com.example.adamos_logistic.Posts.OrderGetResult;
 import com.example.adamos_logistic.R;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -32,25 +31,23 @@ public class OrdersFragment extends Fragment {
 
     // ЛЕХА: список ордеров
     private List<GetResponseBodyOrders> ordersList;
+    private View root;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_orders, container, false);
+        root = inflater.inflate(R.layout.fragment_orders, container, false);
 
         Button activeOrders = (Button) root.findViewById(R.id.active_orders);
         Button historyOrders = (Button) root.findViewById(R.id.history_orders);
         Button newOrder = (Button) root.findViewById(R.id.new_order);
-        RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.orders);
 
-        List<Order> order = new ArrayList<>();
-        ForOrders adapter = new ForOrders(getActivity().getApplicationContext(), order);
         historyOrders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getHistoryOrders();
-                //order.add(new Order("Активный заказ"));
-                //recyclerView.setAdapter(adapter);
-            }
+                    getHistoryOrders();
+                    //Parcelable recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
+                    //recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+                }
         });
         return root;
     }
@@ -64,36 +61,32 @@ public class OrdersFragment extends Fragment {
 
             JsonPlaceHolderApi jsonPlaceHolderApi;
 
-            String api_key = "37bca7fce88fc16f0b666c64cc82cc54";
+            ApiKey api_key = new ApiKey("13086f47094f7e5916e161ac33b8fdec");
 
             jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-            Call<GetResponseBodyOrdersList> call = jsonPlaceHolderApi.getOrders(api_key);
+            Call<OrderGetResult> call = jsonPlaceHolderApi.getOrders(api_key);
 
 
 
-            call.enqueue(new Callback<GetResponseBodyOrdersList>() {
-                @Override
-                public void onResponse(@NonNull Call<GetResponseBodyOrdersList> call, @NonNull Response<GetResponseBodyOrdersList> response) {
+           call.enqueue(new Callback<OrderGetResult>() {
+               @Override
+               public void onResponse(Call<OrderGetResult> call, Response<OrderGetResult> response) {
+                   OrderGetResult orderResult = response.body();
+                   ForOrders adapter = new ForOrders(getActivity().getApplicationContext(), orderResult);
+                   try {
+                       RecyclerView recyclerView = root.findViewById(R.id.orders);
+                       recyclerView.setAdapter(adapter);
+                       recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+                   } catch (Exception e) {
+                       e.printStackTrace();
+                   }
+               }
+               @Override
+               public void onFailure(Call<OrderGetResult> call, Throwable t) {
 
-                    Log.d("MyLog", "Запрос сформирован");
-
-                    //ordersList = response.body();
-
-                    // ЛЕХА: получаем объект, который содержит список ордеров
-                    //assert recievedOrdersList != null;
-
-                    Log.d("MyLog", response.body().toString());
-
-                }
-
-                @Override
-                public void onFailure(@NonNull Call<GetResponseBodyOrdersList> call, @NonNull Throwable t) {
-                    //t.printStackTrace();
-                    Log.d("MyLog", t.toString());
-                }
-            });
-
+               }
+           });
             } catch (Exception e) {
 
             Log.d("MyLog", e.toString());

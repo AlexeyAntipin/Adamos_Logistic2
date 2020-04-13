@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -81,9 +82,8 @@ public interface JsonPlaceHolderApi {
     @POST("adamos/hs/MAPI/newUser")
     Call<Post> createPost(@FieldMap Map<String, String> fields);
 
-    @FormUrlEncoded
-    @POST("adamos.v2.0/process.php?route=order/get")
-    Call<GetResponseBodyOrdersList> getOrders(
-            @Field("api_key") String api_key
+    @POST("process.php?route=order/get")
+    Call<OrderGetResult> getOrders(
+            @Body ApiKey api_key
     );
 }

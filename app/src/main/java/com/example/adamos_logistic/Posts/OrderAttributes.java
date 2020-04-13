@@ -18,4 +18,28 @@ public class OrderAttributes {
         this.value = value;
         this.name = name;
     }
+
+    public int getAttribute_id() {
+        return attribute_id;
+    }
+
+    public int getAttribute_order_id() {
+        return attribute_order_id;
+    }
+
+    public int getAttribute_value_id() {
+        return attribute_value_id;
+    }
+
+    public int getOrder_id() {
+        return order_id;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

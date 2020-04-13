@@ -6,12 +6,12 @@ public class GetResponseBodyOrders {
 
     private String name;
     private String ERROR_ID;
-    private List<OrderAttributes> orderAttributes;
+    private List<OrderAttributes> ATTRIBUTES;
 
     public GetResponseBodyOrders(String name, String ERROR_ID, List<OrderAttributes> orderAttributes) {
         this.name = name;
         this.ERROR_ID = ERROR_ID;
-        this.orderAttributes = orderAttributes;
+        this.ATTRIBUTES = orderAttributes;
     }
 
     public String getName() {
@@ -21,4 +21,5 @@ public class GetResponseBodyOrders {
     public String getERROR_ID() {
         return ERROR_ID;
     }
+
 }
