@@ -15,6 +15,7 @@ import com.example.adamos_logistic.Posts.Post;
 import com.example.adamos_logistic.Posts.PostLogin;
 import com.example.adamos_logistic.Posts.PostLoginData;
 import com.example.adamos_logistic.Posts.ResponseLogin;
+import com.example.adamos_logistic.Posts.StoringParams;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,6 +28,7 @@ public class Login extends AppCompatActivity {
     EditText email, password;
     Button enter, registration;
     TextView check;
+    StoringParams params;
     private JsonPlaceHolderApi jsonPlaceHolderApi;
 
     @Override
@@ -38,6 +40,7 @@ public class Login extends AppCompatActivity {
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
         check = (TextView) findViewById(R.id.check);
+        params = new StoringParams();
 
         View.OnClickListener reg = new View.OnClickListener() {
             @Override
@@ -68,7 +71,12 @@ public class Login extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<ResponseLogin> call2, Response<ResponseLogin> response) {
 
-                            Log.d("MyLog", response.toString());
+                            ResponseLogin user = response.body();
+                            params.setApi_key(user.getApi_key());
+                            params.setRole(user.getRole());
+                            Log.d("MyLog", "success");
+                            System.out.println(params.api_key);
+                            System.out.println(params.role);
 
                         }
 

@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.adamos_logistic.Posts.AddUser;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
 import com.example.adamos_logistic.Posts.Post;
+import com.example.adamos_logistic.Posts.PostRegisterData;
+import com.example.adamos_logistic.Posts.StoringParams;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,6 +31,7 @@ public class Registration extends AppCompatActivity {
     Button registration;
     Spinner spinner;
     TextView check;
+    StoringParams params;
     private JsonPlaceHolderApi jsonPlaceHolderApi;
 
     @Override
@@ -45,6 +48,7 @@ public class Registration extends AppCompatActivity {
         password = (EditText) findViewById(R.id.PASSWORD);
         PassRight = (EditText) findViewById(R.id.PassRight);
         registration = (Button) findViewById(R.id.registr) ;
+        params = new StoringParams();
 
 
 
@@ -66,16 +70,19 @@ public class Registration extends AppCompatActivity {
 
                         jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-                        Call<AddUser> call2 = jsonPlaceHolderApi.addUser(
-                                email.getText().toString(),
-                                password.getText().toString(),
-                                name.getText().toString());
+                        PostRegisterData registerData = new PostRegisterData(email.getText().toString(), password.getText().toString(), name.getText().toString());
+
+                        Call<AddUser> call2 = jsonPlaceHolderApi.addUser(registerData);
 
                         call2.enqueue(new Callback<AddUser>() {
                             @Override
                             public void onResponse(Call<AddUser> call2, Response<AddUser> response) {
-
-                                Log.d("MyLog", response.toString());
+                                AddUser user = response.body();
+                                params.setApi_key(user.getApi_key());
+                                params.setOrder_id(user.getOrder_id());
+                                Log.d("MyLog", "success");
+                                System.out.println(params.api_key);
+                                System.out.println(params.order_id);
 
                             }
 
@@ -90,7 +97,7 @@ public class Registration extends AppCompatActivity {
                     } catch (Exception e) {
 
                         e.printStackTrace();
-                        Log.d("MyLog", "ОШИБКА РЕГИСТРАЦИИ");
+                        Log.d("MyLog", e.toString());
 
                     }
                     Intent i = new Intent(Registration.this, MainMenuActivity.class);

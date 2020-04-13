@@ -92,15 +92,12 @@ public interface JsonPlaceHolderApi {
             @Field("name") String name
     );
 
-    @FormUrlEncoded
-    @POST("adamos.v2.0/process.php?route=user/add")
+    @POST("process.php?route=user/add")
     Call<AddUser> addUser(
-            @Field("email") String email,
-            @Field("password") String password,
-            @Field("name") String name
+            @Body PostRegisterData registerData
     );
 
-    @POST("adamos.v2.0/process.php?route=user/login")
+    @POST("process.php?route=user/login")
     Call<ResponseLogin> checkUser(
             @Body PostLoginData loginData
     );

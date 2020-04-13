@@ -10,4 +10,12 @@ public class AddUser {
         this.order_id = order_id;
         this.ERROR_ID = ERROR_ID;
     }
+
+    public String getApi_key() {
+        return api_key;
+    }
+
+    public int getOrder_id() {
+        return order_id;
+    }
 }
