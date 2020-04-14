@@ -1,0 +1,54 @@
+package com.example.adamos_logistic.Adapters;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.adamos_logistic.Posts.GetResponseBodyOrders;
+import com.example.adamos_logistic.Posts.OrderAttributes;
+import com.example.adamos_logistic.R;
+
+import java.util.List;
+
+public class ForFullInformationAbourOrder extends RecyclerView.Adapter<ForFullInformationAbourOrder.ViewHolder> {
+    private LayoutInflater inflater;
+    private List<OrderAttributes> attributes;
+
+    public ForFullInformationAbourOrder(Context context, List<OrderAttributes> attributes) {
+        this.attributes = attributes;
+        this.inflater = LayoutInflater.from(context);
+    }
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = inflater.inflate(R.layout.full_information, parent, false);
+        return new ForFullInformationAbourOrder.ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(ForFullInformationAbourOrder.ViewHolder holder, int position) {
+        holder.name.setText(attributes.get(position).getName());
+        holder.attribute.setText(attributes.get(position).getOrderStatus());
+    }
+
+    @Override
+    public int getItemCount() {
+        return attributes.size();
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+        final TextView name;
+        final TextView attribute;
+
+        ViewHolder(View view){
+            super(view);
+            name = view.findViewById(R.id.name);
+            attribute = view.findViewById(R.id.attribute);
+        }
+    }
+}

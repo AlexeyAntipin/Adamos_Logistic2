@@ -1,5 +1,7 @@
 package com.example.adamos_logistic.ui.Orders;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,8 +18,8 @@ import com.example.adamos_logistic.Adapters.ForOrders;
 import com.example.adamos_logistic.Posts.ApiKey;
 import com.example.adamos_logistic.Posts.GetResponseBodyOrders;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
-import com.example.adamos_logistic.Posts.OrderGetResult;
 import com.example.adamos_logistic.R;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -29,17 +31,23 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class OrdersFragment extends Fragment {
 
+    SharedPreferences Settings;
+
     // ЛЕХА: список ордеров
     private List<GetResponseBodyOrders> ordersList;
     private View root;
+    private Context mContext;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_orders, container, false);
+        this.mContext = getContext();
 
         Button activeOrders = (Button) root.findViewById(R.id.active_orders);
         Button historyOrders = (Button) root.findViewById(R.id.history_orders);
         Button newOrder = (Button) root.findViewById(R.id.new_order);
+
+        Settings = mContext.getSharedPreferences("orders", Context.MODE_PRIVATE);
 
         historyOrders.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,14 +73,15 @@ public class OrdersFragment extends Fragment {
 
             jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-            Call<OrderGetResult> call = jsonPlaceHolderApi.getOrders(api_key);
+            Call<List<GetResponseBodyOrders>> call = jsonPlaceHolderApi.getOrders(api_key);
 
 
 
-           call.enqueue(new Callback<OrderGetResult>() {
+           call.enqueue(new Callback<List<GetResponseBodyOrders>>() {
                @Override
-               public void onResponse(Call<OrderGetResult> call, Response<OrderGetResult> response) {
-                   OrderGetResult orderResult = response.body();
+               public void onResponse(Call<List<GetResponseBodyOrders>> call, Response<List<GetResponseBodyOrders>> response) {
+                   List<GetResponseBodyOrders> orderResult = response.body();
+                   saveData(orderResult);
                    ForOrders adapter = new ForOrders(getActivity().getApplicationContext(), orderResult);
                    try {
                        RecyclerView recyclerView = root.findViewById(R.id.orders);
@@ -83,7 +92,7 @@ public class OrdersFragment extends Fragment {
                    }
                }
                @Override
-               public void onFailure(Call<OrderGetResult> call, Throwable t) {
+               public void onFailure(Call<List<GetResponseBodyOrders>> call, Throwable t) {
 
                }
            });
@@ -92,5 +101,13 @@ public class OrdersFragment extends Fragment {
             Log.d("MyLog", e.toString());
 
         }
+    }
+
+    public void saveData(List<GetResponseBodyOrders> orders) {
+        SharedPreferences.Editor editor = Settings.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(orders);
+        editor.putString("orders", json);
+        editor.apply();
     }
 }

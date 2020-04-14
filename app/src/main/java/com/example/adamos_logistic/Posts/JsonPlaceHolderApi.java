@@ -83,7 +83,7 @@ public interface JsonPlaceHolderApi {
     Call<Post> createPost(@FieldMap Map<String, String> fields);
 
     @POST("process.php?route=order/get")
-    Call<OrderGetResult> getOrders(
+    Call<List<GetResponseBodyOrders>> getOrders(
             @Body ApiKey api_key
     );
 }

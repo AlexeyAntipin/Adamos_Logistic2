@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adamos_logistic.Posts.GetResponseBodyOrders;
-import com.example.adamos_logistic.Posts.OrderGetResult;
 import com.example.adamos_logistic.R;
 
 import java.util.List;
@@ -18,10 +17,10 @@ import java.util.List;
 public class ForOrders extends RecyclerView.Adapter<ForOrders.ViewHolder> {
 
     private LayoutInflater inflater;
-    private OrderGetResult order;
+    private List<GetResponseBodyOrders> orders;
 
-    public ForOrders(Context context, OrderGetResult order) {
-        this.order = order;
+    public ForOrders(Context context, List<GetResponseBodyOrders> order) {
+        this.orders = order;
         this.inflater = LayoutInflater.from(context);
     }
     @NonNull
@@ -32,15 +31,15 @@ public class ForOrders extends RecyclerView.Adapter<ForOrders.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ForOrders.ViewHolder holder, int position) {
-        holder.order_name.setText(order.get(position).getName());
-        holder.time_created.setText(order.get(position).getTimeCreated());
-        holder.order_status.setText(order.get(position).getOrderStatus());
+        public void onBindViewHolder(ForOrders.ViewHolder holder, int position) {
+            holder.order_name.setText(orders.get(position).getName());
+            holder.time_created.setText(orders.get(position).getTimeCreated());
+            holder.order_status.setText(orders.get(position).getOrderStatus());
     }
 
     @Override
     public int getItemCount() {
-        return order.size();
+        return orders.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

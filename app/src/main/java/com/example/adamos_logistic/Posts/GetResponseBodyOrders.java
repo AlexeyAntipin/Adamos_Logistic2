@@ -22,4 +22,26 @@ public class GetResponseBodyOrders {
         return ERROR_ID;
     }
 
+    public String getOrderStatus() {
+        String str = "";
+        for (OrderAttributes orderAttributes1 : ATTRIBUTES) {
+            if (orderAttributes1.getName().equals("order_status")
+            )
+                str = orderAttributes1.getValue();
+        }
+        return str;
+    }
+
+    public String getTimeCreated() {
+        String str = "";
+        for (OrderAttributes orderAttributes1 : ATTRIBUTES) {
+            if (orderAttributes1.getName().equals("time_created"))
+                str = orderAttributes1.getValue();
+        }
+        return str;
+    }
+
+    public List<OrderAttributes> getATTRIBUTES() {
+        return ATTRIBUTES;
+    }
 }
