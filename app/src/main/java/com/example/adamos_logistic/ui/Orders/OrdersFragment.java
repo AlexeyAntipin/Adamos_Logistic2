@@ -13,13 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adamos_logistic.Adapters.ForOrders;
 import com.example.adamos_logistic.Order;
+import com.example.adamos_logistic.Posts.AddResponseBodyOrders;
 import com.example.adamos_logistic.Posts.GetResponseBodyOrders;
-import com.example.adamos_logistic.Posts.GetResponseBodyOrdersList;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
+import com.example.adamos_logistic.Posts.PostAddOrderData;
 import com.example.adamos_logistic.R;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -30,8 +30,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class OrdersFragment extends Fragment {
 
-    // ЛЕХА: список ордеров
-    private List<GetResponseBodyOrders> ordersList;
+    private JsonPlaceHolderApi jsonPlaceHolderApi;
+
+    private String api_key = "37bca7fce88fc16f0b666c64cc82cc55";
+    private String name = "Sosu_xuy";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -52,7 +54,52 @@ public class OrdersFragment extends Fragment {
                 //recyclerView.setAdapter(adapter);
             }
         });
+        newOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addOrder();
+                //order.add(new Order("Активный заказ"));
+                //recyclerView.setAdapter(adapter);
+            }
+        });
         return root;
+    }
+
+    private void addOrder() {
+        try {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(JsonPlaceHolderApi.HOST)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+
+            PostAddOrderData addOrderData = new PostAddOrderData("02d884ce32aa9b7927766864ec437ac6".toString(), "order1".toString());
+
+            Call<AddResponseBodyOrders> call2 = jsonPlaceHolderApi.addOrder(addOrderData);
+
+            call2.enqueue(new Callback<AddResponseBodyOrders>() {
+                @Override
+                public void onResponse(Call<AddResponseBodyOrders> call2, Response<AddResponseBodyOrders> response) {
+
+                    AddResponseBodyOrders order = response.body();
+                    System.out.println(order.getOrder_id());
+                    Log.d("MyLog", "success");
+
+                }
+
+                @Override
+                public void onFailure(Call<AddResponseBodyOrders> call2, Throwable t) {
+                    Log.d("MyLog", t.toString());
+                }
+            });
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            Log.d("MyLog", "ОШИБКА ФОРМИРОВАНИЯ ЗАПРОСА");
+
+        }
     }
 
     private void getHistoryOrders() {
@@ -62,34 +109,22 @@ public class OrdersFragment extends Fragment {
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
-            JsonPlaceHolderApi jsonPlaceHolderApi;
-
-            String api_key = "37bca7fce88fc16f0b666c64cc82cc54";
-
             jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-            Call<GetResponseBodyOrdersList> call = jsonPlaceHolderApi.getOrders(api_key);
+            Call<List<GetResponseBodyOrders>> call = jsonPlaceHolderApi.getOrders(api_key);
 
-
-
-            call.enqueue(new Callback<GetResponseBodyOrdersList>() {
+            call.enqueue(new Callback<List<GetResponseBodyOrders>>() {
                 @Override
-                public void onResponse(@NonNull Call<GetResponseBodyOrdersList> call, @NonNull Response<GetResponseBodyOrdersList> response) {
+                public void onResponse(Call<List<GetResponseBodyOrders>> call, Response<List<GetResponseBodyOrders>> response) {
 
+                    List<GetResponseBodyOrders> getorders = response.body();
                     Log.d("MyLog", "Запрос сформирован");
-
-                    GetResponseBodyOrdersList recievedOrdersList = response.body();
-
-                    // ЛЕХА: получаем объект, который содержит список ордеров
-                    assert recievedOrdersList != null;
-                    ordersList = recievedOrdersList.getList();
 
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<GetResponseBodyOrdersList> call, @NonNull Throwable t) {
-                    //t.printStackTrace();
-                    Log.d("MyLog", t.toString());
+                public void onFailure(Call<List<GetResponseBodyOrders>> call, Throwable t) {
+                    Log.d("MyLog", "Запрос не сформирован");
                 }
             });
 
