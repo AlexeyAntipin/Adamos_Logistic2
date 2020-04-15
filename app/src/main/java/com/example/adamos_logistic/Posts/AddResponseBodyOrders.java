@@ -8,4 +8,12 @@ public class AddResponseBodyOrders {
         this.order_id = order_id;
         this.ERROR_ID = ERROR_ID;
     }
+
+    public int getOrder_id() {
+        return order_id;
+    }
+
+    public String getERROR_ID() {
+        return ERROR_ID;
+    }
 }

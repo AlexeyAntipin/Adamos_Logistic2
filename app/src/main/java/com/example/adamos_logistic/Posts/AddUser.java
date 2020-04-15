@@ -18,4 +18,8 @@ public class AddUser {
     public int getOrder_id() {
         return order_id;
     }
+
+    public String getERROR_ID() {
+        return ERROR_ID;
+    }
 }

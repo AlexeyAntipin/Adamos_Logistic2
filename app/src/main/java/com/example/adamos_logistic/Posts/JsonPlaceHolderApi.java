@@ -85,11 +85,9 @@ public interface JsonPlaceHolderApi {
             @Query("api_key") String api_key
     );
 
-    @FormUrlEncoded
-    @POST("adamos.v2.0/process.php?route=order/add")
+    @POST("process.php?route=order/add")
     Call<AddResponseBodyOrders> addOrder(
-            @Field("api_key") String api_key,
-            @Field("name") String name
+            @Body PostAddOrderData addOrderData
     );
 
     @POST("process.php?route=user/add")

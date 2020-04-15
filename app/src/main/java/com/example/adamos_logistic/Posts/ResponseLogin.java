@@ -3,7 +3,7 @@ package com.example.adamos_logistic.Posts;
 public class ResponseLogin {
     private String api_key;
     private int role;
-    private String ERROR_ID;
+    public String ERROR_ID;
 
     public ResponseLogin(String api_key, int role, String ERROR_ID) {
         this.api_key = api_key;
@@ -17,5 +17,9 @@ public class ResponseLogin {
 
     public int getRole() {
         return role;
+    }
+
+    public String getERROR_ID() {
+        return ERROR_ID;
     }
 }

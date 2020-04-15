@@ -16,6 +16,7 @@ import com.example.adamos_logistic.Order;
 import com.example.adamos_logistic.Posts.AddResponseBodyOrders;
 import com.example.adamos_logistic.Posts.GetResponseBodyOrders;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
+import com.example.adamos_logistic.Posts.PostAddOrderData;
 import com.example.adamos_logistic.R;
 
 import java.util.ArrayList;
@@ -73,13 +74,17 @@ public class OrdersFragment extends Fragment {
 
             jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-            Call<AddResponseBodyOrders> call2 = jsonPlaceHolderApi.addOrder(api_key, name);
+            PostAddOrderData addOrderData = new PostAddOrderData("02d884ce32aa9b7927766864ec437ac6".toString(), "order1".toString());
+
+            Call<AddResponseBodyOrders> call2 = jsonPlaceHolderApi.addOrder(addOrderData);
 
             call2.enqueue(new Callback<AddResponseBodyOrders>() {
                 @Override
                 public void onResponse(Call<AddResponseBodyOrders> call2, Response<AddResponseBodyOrders> response) {
 
-                    Log.d("MyLog", "Запрос сформирован");
+                    AddResponseBodyOrders order = response.body();
+                    System.out.println(order.getOrder_id());
+                    Log.d("MyLog", "success");
 
                 }
 

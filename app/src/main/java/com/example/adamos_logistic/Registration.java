@@ -1,6 +1,7 @@
 package com.example.adamos_logistic;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -78,17 +79,29 @@ public class Registration extends AppCompatActivity {
                             @Override
                             public void onResponse(Call<AddUser> call2, Response<AddUser> response) {
                                 AddUser user = response.body();
-                                params.setApi_key(user.getApi_key());
-                                params.setOrder_id(user.getOrder_id());
+
+                                /*params.setApi_key(user.getApi_key());
+                                params.setOrder_id(user.getOrder_id());*/
+
+                                SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+                                SharedPreferences.Editor editor = pref.edit();
+                                editor.putString("api_key", user.getApi_key());
+                                editor.putInt("order_id", user.getOrder_id());
+                                editor.apply();
+
                                 Log.d("MyLog", "success");
-                                System.out.println(params.api_key);
-                                System.out.println(params.order_id);
+
+                                System.out.println(pref.getAll()); // вывод в консоль для отладки, убрать до продакшена
+
+                                Intent i = new Intent(Registration.this, MainMenuActivity.class);
+                                startActivity(i);
 
                             }
 
                             @Override
                             public void onFailure(Call<AddUser> call2, Throwable t) {
 
+                                check.setText("Ошибка сервера");
                                 Log.d("MyLog", t.toString());
 
                             }
@@ -96,12 +109,12 @@ public class Registration extends AppCompatActivity {
 
                     } catch (Exception e) {
 
+                        check.setText("Ошибка сервера");
                         e.printStackTrace();
                         Log.d("MyLog", e.toString());
 
                     }
-                    Intent i = new Intent(Registration.this, MainMenuActivity.class);
-                    startActivity(i);
+
                 }
             }
         };
