@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adamos_logistic.Adapters.ForOrders;
@@ -57,7 +58,7 @@ public class OrdersFragment extends Fragment {
         newOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addOrder();
+                goToAddOrderFragment();
                 //order.add(new Order("Активный заказ"));
                 //recyclerView.setAdapter(adapter);
             }
@@ -65,41 +66,18 @@ public class OrdersFragment extends Fragment {
         return root;
     }
 
+
+    private void goToAddOrderFragment() {
+        Fragment newFragment = new AddOrderFragment();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.nav_host_fragment, newFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+
     private void addOrder() {
-        try {
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(JsonPlaceHolderApi.HOST)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
 
-            jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-
-            PostAddOrderData addOrderData = new PostAddOrderData("02d884ce32aa9b7927766864ec437ac6".toString(), "order1".toString());
-
-            Call<AddResponseBodyOrders> call2 = jsonPlaceHolderApi.addOrder(addOrderData);
-
-            call2.enqueue(new Callback<AddResponseBodyOrders>() {
-                @Override
-                public void onResponse(Call<AddResponseBodyOrders> call2, Response<AddResponseBodyOrders> response) {
-
-                    AddResponseBodyOrders order = response.body();
-                    System.out.println(order.getOrder_id());
-                    Log.d("MyLog", "success");
-
-                }
-
-                @Override
-                public void onFailure(Call<AddResponseBodyOrders> call2, Throwable t) {
-                    Log.d("MyLog", t.toString());
-                }
-            });
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-            Log.d("MyLog", "ОШИБКА ФОРМИРОВАНИЯ ЗАПРОСА");
-
-        }
     }
 
     private void getHistoryOrders() {

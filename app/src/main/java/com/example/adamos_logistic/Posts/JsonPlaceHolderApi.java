@@ -81,7 +81,7 @@ public interface JsonPlaceHolderApi {
     Call<Post> createPost(@FieldMap Map<String, String> fields);
 
     @GET("adamos.v2.0/process.php?route=order/get")
-    Call<GetResponseBodyOrdersList> getOrders(
+    Call<List<GetResponseBodyOrders>> getOrders(
             @Query("api_key") String api_key
     );
 

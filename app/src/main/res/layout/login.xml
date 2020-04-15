@@ -54,6 +54,12 @@
             android:layout_height="wrap_content"
             android:text="Регистрация" />
 
+        <Button
+            android:id="@+id/debugButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="DEBUG" />
+
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
