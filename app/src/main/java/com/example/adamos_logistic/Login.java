@@ -41,6 +41,7 @@ public class Login extends AppCompatActivity {
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
         check = (TextView) findViewById(R.id.check);
+
         params = new StoringParams();
 
         View.OnClickListener reg = new View.OnClickListener() {

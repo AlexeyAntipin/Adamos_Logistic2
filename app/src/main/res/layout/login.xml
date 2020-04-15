@@ -55,5 +55,6 @@
             android:text="Регистрация" />
 
 
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
