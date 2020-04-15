@@ -16,6 +16,7 @@ import com.example.adamos_logistic.Posts.AddResponseBodyOrders;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
 import com.example.adamos_logistic.Posts.PostAddOrderData;
 import com.example.adamos_logistic.R;
+import com.google.android.material.snackbar.Snackbar;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,14 +51,14 @@ public class AddOrderFragment extends Fragment {
 
         addOrderButton.setOnClickListener(v -> {
             String orderName = orderNameView.getText().toString();
-            addNewOrder(orderName);
+            addNewOrder(orderName, root);
         });
 
         return root;
     }
 
 
-    private void addNewOrder(String orderName) {
+    private void addNewOrder(String orderName, View root) {
         try {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(JsonPlaceHolderApi.HOST)
@@ -82,19 +83,30 @@ public class AddOrderFragment extends Fragment {
                     System.out.println(order.getOrder_id());
                     Log.d("MyLog", "success");
 
+                    orderNameView.setText("");
+
+                    Snackbar.make(root, "Заказ создан!", Snackbar.LENGTH_LONG)
+                            .show();
+
                 }
 
                 @Override
                 public void onFailure(Call<AddResponseBodyOrders> call2, Throwable t) {
                     Log.d("MyLog", t.toString());
+
+                    orderNameView.setText("");
+
+                    Snackbar.make(root, "Ошибка создания заказа!", Snackbar.LENGTH_SHORT)
+                            .show();
                 }
             });
 
         } catch (Exception e) {
 
             e.printStackTrace();
+            Snackbar.make(root, "Ошибка создания заказа!", Snackbar.LENGTH_SHORT)
+                    .show();
             Log.d("MyLog", "ОШИБКА ФОРМИРОВАНИЯ ЗАПРОСА");
-
         }
     }
 
