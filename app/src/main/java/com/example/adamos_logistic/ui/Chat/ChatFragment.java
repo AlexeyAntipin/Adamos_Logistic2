@@ -16,7 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.adamos_logistic.Adapters.DataAdapter;
 import com.example.adamos_logistic.Message;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
+import com.example.adamos_logistic.Posts.PostAddMessage;
 import com.example.adamos_logistic.Posts.PostChat;
+import com.example.adamos_logistic.Posts.ResponseNewMessage;
 import com.example.adamos_logistic.R;
 
 import java.util.ArrayList;
@@ -81,14 +83,39 @@ public class ChatFragment extends Fragment {
 
                 jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-                sendChatMessage();
+                PostAddMessage messageData = new PostAddMessage("1ff0c335ba8b4b4057928e3796a07222", 840, mes, 0);
 
-                Log.d("MyLog", "ЗАПРОС СФОРМИРОВАН");
+                Call<ResponseNewMessage> call2 = jsonPlaceHolderApi.addMessage(messageData);
+
+                call2.enqueue(new Callback<ResponseNewMessage>() {
+                    @Override
+                    public void onResponse(Call<ResponseNewMessage> call2, Response<ResponseNewMessage> response) {
+                        ResponseNewMessage message = response.body();
+
+                        /*SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.putString("api_key", user.getApi_key());
+                        editor.putInt("order_id", user.getOrder_id());
+                        editor.apply();*/
+
+                        Log.d("MyLog", "success");
+                        sendChatMessage();
+
+                        //System.out.println(pref.getAll()); // вывод в консоль для отладки, убрать до продакшена
+
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseNewMessage> call, Throwable t) {
+                        Log.d("MyLog", t.toString());
+                    }
+                });
 
             } catch (Exception e) {
 
                 e.printStackTrace();
-                Log.d("MyLog", "ОШИБКА ФОРМИРОВАНИЯ ЗАПРОСА");
+                Log.d("MyLog", e.toString());
 
             }
             setMessage();

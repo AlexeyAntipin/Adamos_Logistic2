@@ -99,4 +99,9 @@ public interface JsonPlaceHolderApi {
     Call<ResponseLogin> checkUser(
             @Body PostLoginData loginData
     );
+
+    @POST("process.php?route=message/add")
+    Call<ResponseNewMessage> addMessage(
+            @Body PostAddMessage messageData
+    );
 }
