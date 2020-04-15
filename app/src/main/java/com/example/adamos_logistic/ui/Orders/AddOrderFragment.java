@@ -1,17 +1,16 @@
 package com.example.adamos_logistic.ui.Orders;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.adamos_logistic.Posts.AddResponseBodyOrders;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
@@ -69,7 +68,7 @@ public class AddOrderFragment extends Fragment {
 
             //TODO: ВАНЯ: излвлечение api_key из SharedPreferences
             PostAddOrderData addOrderData =
-                    new PostAddOrderData("02d884ce32aa9b7927766864ec437ac6",
+                    new PostAddOrderData("1ff0c335ba8b4b4057928e3796a07222",
                             orderName);
 
             Call<AddResponseBodyOrders> call2 = jsonPlaceHolderApi.addOrder(addOrderData);
