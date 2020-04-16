@@ -15,15 +15,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adamos_logistic.Adapters.DataAdapter;
 import com.example.adamos_logistic.Message;
+import com.example.adamos_logistic.Posts.GetMessages;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
+import com.example.adamos_logistic.Posts.Order_id;
 import com.example.adamos_logistic.Posts.PostAddMessage;
-import com.example.adamos_logistic.Posts.PostChat;
 import com.example.adamos_logistic.Posts.ResponseNewMessage;
 import com.example.adamos_logistic.R;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,7 +54,7 @@ public class ChatFragment extends Fragment {
         chatSendingWindow = root.findViewById(R.id.your_message);
         RecyclerView recyclerView = root.findViewById(R.id.message_view);
 
-        if (mTimer != null) {
+        /*if (mTimer != null) {
             mTimer.cancel();
         }
 
@@ -66,7 +67,49 @@ public class ChatFragment extends Fragment {
         };
         //mMyTimerTask = new TimerTask();
 
-        mTimer.schedule(mMyTimerTask, 1000, 5000);
+        mTimer.schedule(mMyTimerTask, 1000, 5000);*/
+        try {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(JsonPlaceHolderApi.HOST)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+
+            Order_id order_id = new Order_id("1ff0c335ba8b4b4057928e3796a07222", 840);
+
+            Call<List<GetMessages>> call = jsonPlaceHolderApi.getMessages(order_id);
+
+            call.enqueue(new Callback<List<GetMessages>>() {
+                @Override
+                public void onResponse(Call<List<GetMessages>> call, Response<List<GetMessages>> response) {
+                    List<GetMessages> messages = response.body();
+
+                    System.out.println(messages);
+                    GetMessages[] myArray = new GetMessages[messages.size()];
+                    messages.toArray(myArray);
+
+                    for(int i=0; i<myArray.length; i++){
+                        System.out.println(myArray[i].getUser_id() + " " +myArray[i].getValue());
+                    }
+                    //Log.d("MyLog", "success");
+
+                }
+
+                @Override
+                public void onFailure(Call<List<GetMessages>> call, Throwable t) {
+
+                    Log.d("MyLog", t.toString());
+
+                }
+            });
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            Log.d("MyLog", "ОШИБКА ВХОДА");
+
+        }
 
         super.onCreate(savedInstanceState);
 
@@ -90,19 +133,9 @@ public class ChatFragment extends Fragment {
                 call2.enqueue(new Callback<ResponseNewMessage>() {
                     @Override
                     public void onResponse(Call<ResponseNewMessage> call2, Response<ResponseNewMessage> response) {
+
                         ResponseNewMessage message = response.body();
-
-                        /*SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
-                        SharedPreferences.Editor editor = pref.edit();
-                        editor.putString("api_key", user.getApi_key());
-                        editor.putInt("order_id", user.getOrder_id());
-                        editor.apply();*/
-
                         Log.d("MyLog", "success");
-                        sendChatMessage();
-
-                        //System.out.println(pref.getAll()); // вывод в консоль для отладки, убрать до продакшена
-
 
                     }
 
@@ -138,33 +171,4 @@ public class ChatFragment extends Fragment {
         }
 
     }
-
-
-    // Отправка сообщения чата
-    private void sendChatMessage() {
-
-        PostChat postChat = new PostChat(
-                "b25c961f1aae707d05509cf68fc3f177",
-                "7222f3a105ecc5fa3af58eb222dd4034",
-                mes,
-                "",
-                true);
-
-        Call<PostChat> call = jsonPlaceHolderApi.createPostChat(postChat);
-
-        call.enqueue(new Callback<PostChat>() {
-            @Override
-            public void onResponse(@NonNull Call<PostChat> call,
-                                   @NonNull Response<PostChat> response) {
-                Log.d("MyLog", "ЗАПРОС ОТПРАВЛЕН");
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<PostChat> call,
-                                  @NonNull Throwable t) {
-                Log.d("MyLog", "ЗАПРОС НЕ ОТПРАВЛЕН");
-            }
-        });
-    }
-
 }
