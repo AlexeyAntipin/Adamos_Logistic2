@@ -32,8 +32,10 @@ public class ForFullInformationAbourOrder extends RecyclerView.Adapter<ForFullIn
 
     @Override
     public void onBindViewHolder(ForFullInformationAbourOrder.ViewHolder holder, int position) {
-        holder.name.setText(attributes.get(position).getName());
-        holder.attribute.setText(attributes.get(position).getOrderStatus());
+        holder.name.setText(attributes.get(position).getAttribute_description());
+        if (attributes.get(position).getType() == 20)
+        holder.attribute.setText(attributes.get(position).getDescription());
+        else holder.attribute.setText(attributes.get(position).getValue());
     }
 
     @Override

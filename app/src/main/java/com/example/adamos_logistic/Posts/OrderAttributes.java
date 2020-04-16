@@ -10,9 +10,11 @@ public class OrderAttributes {
     private String value;
     private String name;
     private String description;
+    private String attribute_description;
 
     public OrderAttributes(int attribute_id, int attribute_order_id, int type,
-                           int attribute_value_id, int order_id, String value, String name, String description) {
+                           int attribute_value_id, int order_id, String value, String name,
+                           String description, String attribute_description) {
         this.attribute_id = attribute_id;
         this.attribute_order_id = attribute_order_id;
         this.attribute_value_id = attribute_value_id;
@@ -21,6 +23,7 @@ public class OrderAttributes {
         this.value = value;
         this.name = name;
         this.description = description;
+        this.attribute_description = attribute_description;
     }
 
     public int getAttribute_id() {
@@ -53,5 +56,9 @@ public class OrderAttributes {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getAttribute_description() {
+        return attribute_description;
     }
 }
