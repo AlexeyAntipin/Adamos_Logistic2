@@ -18,8 +18,7 @@ import retrofit2.http.Query;
 
 public interface JsonPlaceHolderApi {
 
-    String HOST = "http://192.168.43.202/";
-
+    String HOST = "http://25.99.235.231/";
 
     // Тестовый GET запрос
     @GET("adamos2/php/process.php?command=test")
@@ -81,6 +80,34 @@ public interface JsonPlaceHolderApi {
     @POST("adamos/hs/MAPI/newUser")
     Call<Post> createPost(@FieldMap Map<String, String> fields);
 
-    @GET("adamos/hs/MAPI/getOrders")
-    Call<GetResponseBodyOrders> forOneOrder();
+    @GET("adamos.v2.0/process.php?route=order/get")
+    Call<List<GetResponseBodyOrders>> getOrders(
+            @Query("api_key") String api_key
+    );
+
+    @GET("adamos.v2.0/process.php?route=message/get")
+    Call<List<GetResponseBodyMessages>> getMessages(
+            @Query("api_key") String api_key
+    );
+
+
+    @POST("process.php?route=order/add")
+    Call<AddResponseBodyOrders> addOrder(
+            @Body PostAddOrderData addOrderData
+    );
+
+    @POST("process.php?route=user/add")
+    Call<AddUser> addUser(
+            @Body PostRegisterData registerData
+    );
+
+    @POST("process.php?route=user/login")
+    Call<ResponseLogin> checkUser(
+            @Body PostLoginData loginData
+    );
+
+    @POST("process.php?route=message/add")
+    Call<ResponseNewMessage> addMessage(
+            @Body PostAddMessage messageData
+    );
 }

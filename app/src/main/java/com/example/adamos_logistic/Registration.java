@@ -1,7 +1,9 @@
 package com.example.adamos_logistic;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -12,8 +14,11 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.adamos_logistic.Posts.AddUser;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
 import com.example.adamos_logistic.Posts.Post;
+import com.example.adamos_logistic.Posts.PostRegisterData;
+import com.example.adamos_logistic.Posts.StoringParams;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,6 +32,7 @@ public class Registration extends AppCompatActivity {
     Button registration;
     Spinner spinner;
     TextView check;
+    StoringParams params;
     private JsonPlaceHolderApi jsonPlaceHolderApi;
 
     @Override
@@ -37,10 +43,13 @@ public class Registration extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.WhoAreYou, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+        email = (EditText) findViewById(R.id.EMAIL);
+        name = (EditText) findViewById(R.id.NAME);
         check = (TextView) findViewById(R.id.check);
         password = (EditText) findViewById(R.id.PASSWORD);
         PassRight = (EditText) findViewById(R.id.PassRight);
         registration = (Button) findViewById(R.id.registr) ;
+        params = new StoringParams();
 
 
 
@@ -62,50 +71,50 @@ public class Registration extends AppCompatActivity {
 
                         jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-                        //getPosts();
-                        //getComments();
-                        createPost();
+                        PostRegisterData registerData = new PostRegisterData(email.getText().toString(), password.getText().toString(), name.getText().toString());
 
-                        /*Call<List<Post>> call = jsonPlaceHolderApi.getPosts();
+                        Call<AddUser> call2 = jsonPlaceHolderApi.addUser(registerData);
 
-                        call.enqueue(new Callback<List<Post>>() {
+                        call2.enqueue(new Callback<AddUser>() {
                             @Override
-                            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+                            public void onResponse(Call<AddUser> call2, Response<AddUser> response) {
+                                AddUser user = response.body();
 
-                                if (!response.isSuccessful()) {
-                                    check.setText("Code: " + response.code());
-                                    return;
-                                }
+                                /*params.setApi_key(user.getApi_key());
+                                params.setOrder_id(user.getOrder_id());*/
 
-                                List<Post> posts = response.body();
+                                SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+                                SharedPreferences.Editor editor = pref.edit();
+                                editor.putString("api_key", user.getApi_key());
+                                editor.putInt("order_id", user.getOrder_id());
+                                editor.apply();
 
-                                for (Post post : posts) {
-                                    String content = "";
-                                    content += "ID: " + post.getId() + "\n";
+                                Log.d("MyLog", "success");
 
-                                    check.append(content);
-                                }
+                                System.out.println(pref.getAll()); // вывод в консоль для отладки, убрать до продакшена
+
+                                Intent i = new Intent(Registration.this, MainMenuActivity.class);
+                                startActivity(i);
+
                             }
 
-
                             @Override
-                            public void onFailure(Call<List<Post>> call, Throwable t) {
-                                check.setText(t.getMessage());
+                            public void onFailure(Call<AddUser> call2, Throwable t) {
+
+                                check.setText("Ошибка сервера");
+                                Log.d("MyLog", t.toString());
+
                             }
-
-
                         });
 
-                         */
-                    }
-                    catch(Exception e) {
-                        //int permissionStatus = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS);
-                        //Toast.makeText(getApplicationContext(), permissionStatus.toString(), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+
+                        check.setText("Ошибка сервера");
                         e.printStackTrace();
-                        //Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
+                        Log.d("MyLog", e.toString());
+
                     }
-                    Intent i = new Intent(Registration.this, MainMenuActivity.class);
-                    startActivity(i);
+
                 }
             }
         };

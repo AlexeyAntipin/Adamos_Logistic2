@@ -9,12 +9,15 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adamos_logistic.Adapters.ForOrders;
 import com.example.adamos_logistic.Order;
+import com.example.adamos_logistic.Posts.AddResponseBodyOrders;
 import com.example.adamos_logistic.Posts.GetResponseBodyOrders;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
+import com.example.adamos_logistic.Posts.PostAddOrderData;
 import com.example.adamos_logistic.R;
 
 import java.util.ArrayList;
@@ -30,6 +33,9 @@ public class OrdersFragment extends Fragment {
 
     private JsonPlaceHolderApi jsonPlaceHolderApi;
 
+    private String api_key = "37bca7fce88fc16f0b666c64cc82cc55";
+    private String name = "Sosu_xuy";
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_orders, container, false);
@@ -44,11 +50,34 @@ public class OrdersFragment extends Fragment {
         activeOrders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                order.add(new Order("Активный заказ"));
-                recyclerView.setAdapter(adapter);
+                getHistoryOrders();
+                //order.add(new Order("Активный заказ"));
+                //recyclerView.setAdapter(adapter);
+            }
+        });
+        newOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToAddOrderFragment();
+                //order.add(new Order("Активный заказ"));
+                //recyclerView.setAdapter(adapter);
             }
         });
         return root;
+    }
+
+
+    private void goToAddOrderFragment() {
+        Fragment newFragment = new AddOrderFragment();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.nav_host_fragment, newFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+
+    private void addOrder() {
+
     }
 
     private void getHistoryOrders() {
@@ -60,29 +89,20 @@ public class OrdersFragment extends Fragment {
 
             jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-            Call<GetResponseBodyOrders> call = jsonPlaceHolderApi.forOneOrder();
+            Call<List<GetResponseBodyOrders>> call = jsonPlaceHolderApi.getOrders(api_key);
 
-            call.enqueue(new Callback<GetResponseBodyOrders>() {
+            call.enqueue(new Callback<List<GetResponseBodyOrders>>() {
                 @Override
-                public void onResponse(Call<GetResponseBodyOrders> call, Response<GetResponseBodyOrders> response) {
+                public void onResponse(Call<List<GetResponseBodyOrders>> call, Response<List<GetResponseBodyOrders>> response) {
 
-                    List<GetResponseBodyOrders> getorders = (List<GetResponseBodyOrders>) response.body();
+                    List<GetResponseBodyOrders> getorders = response.body();
+                    Log.d("MyLog", "Запрос сформирован");
 
-                    for (GetResponseBodyOrders getOrder : getorders) {
-                        String content = "";
-                        content += "Order ID: " + getOrder.get_order_ID() + "\n";
-                        content += "Order info: " + getOrder.getOrderInfo() + "\n";
-                        content += "Date:: " + getOrder.get_date() + "\n";
-                        content += "Name: " + getOrder.get_name() + "\n\n";
-
-                        Log.d("MyLog", "ЗАПРОС СФОРМИРОВАН");
-
-                    }
                 }
 
                 @Override
-                public void onFailure(Call<GetResponseBodyOrders> call, Throwable t) {
-
+                public void onFailure(Call<List<GetResponseBodyOrders>> call, Throwable t) {
+                    Log.d("MyLog", "Запрос не сформирован");
                 }
             });
 
