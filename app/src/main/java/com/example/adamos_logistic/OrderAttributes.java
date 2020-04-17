@@ -1,4 +1,4 @@
-package com.example.adamos_logistic.Posts;
+package com.example.adamos_logistic;
 
 public class OrderAttributes {
 

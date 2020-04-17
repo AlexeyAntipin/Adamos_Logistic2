@@ -1,24 +1,18 @@
 package com.example.adamos_logistic.Adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.adamos_logistic.FullInformationFragment;
-import com.example.adamos_logistic.Posts.GetResponseBodyOrders;
+import com.example.adamos_logistic.GetResponseBodyOrders;
 import com.example.adamos_logistic.R;
-import com.example.adamos_logistic.ui.Orders.OrdersFragment;
 
 import java.util.List;
-
-import retrofit2.Callback;
 
 public class ForOrders extends RecyclerView.Adapter<ForOrders.ViewHolder> {
 

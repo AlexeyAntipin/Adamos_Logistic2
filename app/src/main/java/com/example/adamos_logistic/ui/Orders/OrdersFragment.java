@@ -1,34 +1,27 @@
 package com.example.adamos_logistic.ui.Orders;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adamos_logistic.Adapters.ForOrders;
 import com.example.adamos_logistic.FullInformationFragment;
-import com.example.adamos_logistic.Posts.ApiKey;
-import com.example.adamos_logistic.Posts.GetResponseBodyOrders;
+import com.example.adamos_logistic.ApiKey;
+import com.example.adamos_logistic.GetResponseBodyOrders;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
 import com.example.adamos_logistic.R;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -60,11 +53,13 @@ public class OrdersFragment extends Fragment implements ForOrders.OnItemListener
         settings = mContext.getSharedPreferences("orders", Context.MODE_PRIVATE);
         mSettings = mContext.getSharedPreferences("position", Context.MODE_PRIVATE);
 
+        getHistoryOrders();
+        saveData(ordersList);
+
         historyOrders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                     getHistoryOrders();
-
                 }
         });
         return root;
@@ -128,9 +123,6 @@ public class OrdersFragment extends Fragment implements ForOrders.OnItemListener
         ed.putInt("position", position);
         ed.apply();
         ordersList.get(position);
-        //Log.d("MyLog", "changed");
-        //Intent intent = new Intent(getActivity(), FullInformationFragment.class);
-        //getActivity().getApplicationContext().startActivity(intent);
         getFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
                 new FullInformationFragment()).addToBackStack(null).commit();
     }

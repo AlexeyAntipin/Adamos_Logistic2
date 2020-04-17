@@ -1,5 +1,7 @@
 package com.example.adamos_logistic.Posts;
 
+import com.example.adamos_logistic.ApiKey;
+import com.example.adamos_logistic.GetResponseBodyOrders;
 import com.example.adamos_logistic.Message;
 import com.example.adamos_logistic.TestQueryPackage.TestQueryString;
 
@@ -7,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;

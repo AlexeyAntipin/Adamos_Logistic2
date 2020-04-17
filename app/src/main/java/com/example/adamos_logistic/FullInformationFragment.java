@@ -2,7 +2,6 @@ package com.example.adamos_logistic;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,18 +12,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.adamos_logistic.Adapters.ForFullInformationAbourOrder;
-import com.example.adamos_logistic.Posts.GetResponseBodyOrders;
-import com.example.adamos_logistic.Posts.OrderAttributes;
+import com.example.adamos_logistic.ui.Orders.OrdersFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class FullInformationFragment extends Fragment {
 
@@ -52,6 +50,8 @@ public class FullInformationFragment extends Fragment {
         TextView order_status = root.findViewById(R.id.order_status);
         TextView order_time_created = root.findViewById(R.id.order_time_created);
 
+        Button backButton = root.findViewById(R.id.backButton);
+
         order = orders.get(position);
         attributes = order.getATTRIBUTES();
 
@@ -63,6 +63,14 @@ public class FullInformationFragment extends Fragment {
         RecyclerView recyclerView = root.findViewById(R.id.attributes);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                        new OrdersFragment()).commit();
+            }
+        });
 
         return root;
     }

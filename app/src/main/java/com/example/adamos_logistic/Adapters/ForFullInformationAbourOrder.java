@@ -9,8 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.adamos_logistic.Posts.GetResponseBodyOrders;
-import com.example.adamos_logistic.Posts.OrderAttributes;
+import com.example.adamos_logistic.OrderAttributes;
 import com.example.adamos_logistic.R;
 
 import java.util.List;

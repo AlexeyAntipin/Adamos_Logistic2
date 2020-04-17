@@ -1,4 +1,6 @@
-package com.example.adamos_logistic.Posts;
+package com.example.adamos_logistic;
+
+import com.example.adamos_logistic.GetResponseBodyOrders;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.adamos_logistic.Posts;
+package com.example.adamos_logistic;
 
 import java.util.List;
 
