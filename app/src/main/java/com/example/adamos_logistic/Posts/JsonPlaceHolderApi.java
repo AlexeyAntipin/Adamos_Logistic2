@@ -1,11 +1,11 @@
 package com.example.adamos_logistic.Posts;
 
+
 import com.example.adamos_logistic.ApiKey;
 import com.example.adamos_logistic.GetResponseBodyOrders;
 import com.example.adamos_logistic.Message;
 import com.example.adamos_logistic.TestQueryPackage.TestQueryString;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +22,6 @@ public interface JsonPlaceHolderApi {
 
     String HOST = "http://25.99.235.231/";
 
-
     // Тестовый GET запрос
     @GET("adamos2/php/process.php?command=test")
     Call<TestQueryString> getTestQuery();
@@ -30,11 +29,6 @@ public interface JsonPlaceHolderApi {
     // POST-запрос для отправки сообщения в чат
     @POST("adamos2/php/process.php?command=new_message")
     Call<PostChat> createPostChat(@Body PostChat postChat);
-
-    @GET("")
-    Call<ArrayList<Message>> getMessages(@Body Message message);
-
-
 
     // Неразобранные запросы
 
@@ -83,8 +77,35 @@ public interface JsonPlaceHolderApi {
     @POST("adamos/hs/MAPI/newUser")
     Call<Post> createPost(@FieldMap Map<String, String> fields);
 
+
     @POST("process.php?route=order/get")
     Call<List<GetResponseBodyOrders>> getOrders(
             @Body ApiKey api_key
+    );
+
+    @POST("process.php?route=message/get")
+    Call<List<GetMessages>> getMessages(
+            @Body Order_id order_id
+    );
+
+
+    @POST("process.php?route=order/add")
+    Call<AddResponseBodyOrders> addOrder(
+            @Body PostAddOrderData addOrderData
+    );
+
+    @POST("process.php?route=user/add")
+    Call<AddUser> addUser(
+            @Body PostRegisterData registerData
+    );
+
+    @POST("process.php?route=user/login")
+    Call<ResponseLogin> checkUser(
+            @Body PostLoginData loginData
+    );
+
+    @POST("process.php?route=message/add")
+    Call<ResponseNewMessage> addMessage(
+            @Body PostAddMessage messageData
     );
 }

@@ -13,6 +13,8 @@
 
         <EditText
             android:id="@+id/email"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="250dp"
@@ -22,27 +24,42 @@
 
         <EditText
             android:id="@+id/password"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Пароль"
             android:inputType="numberPassword" />
+        <TextView
+            android:id="@+id/check"
+            android:textAlignment="center"
+            android:textColor="@color/red"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/enter"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Вход" />
 
         <Button
             android:id="@+id/registr"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Регистрация" />
 
-        <TextView
-            android:id="@+id/check"
+        <Button
+            android:id="@+id/button3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="Button" />
+
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
