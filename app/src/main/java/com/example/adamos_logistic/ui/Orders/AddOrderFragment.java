@@ -100,7 +100,6 @@ public class AddOrderFragment extends Fragment {
                                        @NonNull Response<AddResponseBodyOrders> response) {
 
                     AddResponseBodyOrders order = response.body();
-                    System.out.println(order.getOrder_id());
                     Log.d("MyLog", "success");
 
                     hideAddingInProgressMessage();

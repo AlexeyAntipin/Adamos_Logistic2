@@ -15,9 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adamos_logistic.Adapters.ForOrders;
-import com.example.adamos_logistic.Order;
 import com.example.adamos_logistic.Posts.AddResponseBodyOrders;
-import com.example.adamos_logistic.Posts.GetResponseBodyOrders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.adamos_logistic.FullInformationFragment;
@@ -39,13 +37,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class OrdersFragment extends Fragment implements ForOrders.OnItemListener {
 
-    SharedPreferences settings, mSettings;
+    SharedPreferences settings, mSettings, apiKey;
 
     private List<GetResponseBodyOrders> ordersList;
     private View root;
     private Context mContext;
     private ForOrders adapter;
     OrdersFragment ordersFragment;
+    private String api_key = "";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -59,6 +58,10 @@ public class OrdersFragment extends Fragment implements ForOrders.OnItemListener
 
         settings = mContext.getSharedPreferences("orders", Context.MODE_PRIVATE);
         mSettings = mContext.getSharedPreferences("position", Context.MODE_PRIVATE);
+        apiKey = mContext.getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+        if(apiKey.contains("api_key"))
+            api_key = apiKey.getString("api_key", null);
+
 
         getHistoryOrders();
         saveData(ordersList);
@@ -103,11 +106,12 @@ public class OrdersFragment extends Fragment implements ForOrders.OnItemListener
 
             JsonPlaceHolderApi jsonPlaceHolderApi;
 
-            ApiKey api_key = new ApiKey("1ff0c335ba8b4b4057928e3796a07222");
+
+            ApiKey api = new ApiKey(api_key);
 
             jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-            Call<List<GetResponseBodyOrders>> call = jsonPlaceHolderApi.getOrders(api_key);
+            Call<List<GetResponseBodyOrders>> call = jsonPlaceHolderApi.getOrders(api);
 
 
 
