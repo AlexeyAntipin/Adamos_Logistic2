@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -26,12 +28,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AddOrderFragment extends Fragment {
 
+    private TextView statusTextView, resultTextView;
     private EditText orderNameView;
     private Button returnBackButton, addOrderButton;
+    private ProgressBar progressBar;
 
-    public AddOrderFragment() {
-
-    }
+    public AddOrderFragment() { }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,21 +46,39 @@ public class AddOrderFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_add_order, container, false);
 
         orderNameView = root.findViewById(R.id.order_name_editText);
+
+        statusTextView = root.findViewById(R.id.progress_textView);
+        statusTextView.setVisibility(View.INVISIBLE);
+        resultTextView = root.findViewById(R.id.result_textView);
+        resultTextView.setVisibility(View.INVISIBLE);
+
         returnBackButton = root.findViewById(R.id.return_button);
         addOrderButton = root.findViewById(R.id.add_order_button);
+
+        progressBar = root.findViewById(R.id.status_progressBar);
+        progressBar.setVisibility(View.INVISIBLE);
+
 
         returnBackButton.setOnClickListener(v -> returnToOrdersFragment());
 
         addOrderButton.setOnClickListener(v -> {
             String orderName = orderNameView.getText().toString();
-            addNewOrder(orderName, root);
+
+            if (!orderName.isEmpty()) {
+                hideResultTextView();
+                showAddingInProgressMessage();
+                tryAddNewOrder(orderName, root);
+            } else {
+                showNoOrderNameMessage();
+            }
+
         });
 
         return root;
     }
 
 
-    private void addNewOrder(String orderName, View root) {
+    private void tryAddNewOrder(String orderName, View root) {
         try {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(JsonPlaceHolderApi.HOST)
@@ -83,31 +103,61 @@ public class AddOrderFragment extends Fragment {
                     System.out.println(order.getOrder_id());
                     Log.d("MyLog", "success");
 
+                    hideAddingInProgressMessage();
+                    showSuccessfulAddingMessage();
                     orderNameView.setText("");
-
-                    Snackbar.make(root, "Заказ создан!", Snackbar.LENGTH_LONG)
-                            .show();
-
                 }
 
                 @Override
-                public void onFailure(Call<AddResponseBodyOrders> call2, Throwable t) {
+                public void onFailure(@NonNull Call<AddResponseBodyOrders> call2,
+                                      @NonNull Throwable t) {
+
                     Log.d("MyLog", t.toString());
+                    Log.d("MyLog", "ОШИБКА: выход в onFailure");
 
-                    orderNameView.setText("");
-
-                    Snackbar.make(root, "Ошибка создания заказа!", Snackbar.LENGTH_SHORT)
-                            .show();
+                    hideAddingInProgressMessage();
+                    showFailedAddingMessage();
                 }
             });
 
         } catch (Exception e) {
 
             e.printStackTrace();
-            Snackbar.make(root, "Ошибка создания заказа!", Snackbar.LENGTH_SHORT)
-                    .show();
-            Log.d("MyLog", "ОШИБКА ФОРМИРОВАНИЯ ЗАПРОСА");
+            Log.d("MyLog",  e.toString());
+            Log.d("MyLog", "ОШИБКА: вывалилось в catch");
+            hideAddingInProgressMessage();
+            showFailedAddingMessage();
         }
+    }
+
+
+    private void showNoOrderNameMessage() {
+        resultTextView.setVisibility(View.VISIBLE);
+        resultTextView.setText(R.string.status_no_order_name);
+    }
+
+    private void hideResultTextView() {
+        resultTextView.setVisibility(View.INVISIBLE);
+    }
+
+    private void showAddingInProgressMessage() {
+        progressBar.setVisibility(View.VISIBLE);
+        statusTextView.setVisibility(View.VISIBLE);
+    }
+
+    private void hideAddingInProgressMessage() {
+        progressBar.setVisibility(View.INVISIBLE);
+        statusTextView.setVisibility(View.INVISIBLE);
+    }
+
+    private void showSuccessfulAddingMessage() {
+        resultTextView.setText(R.string.status_adding_success);
+        resultTextView.setVisibility(View.VISIBLE);
+    }
+
+    private void showFailedAddingMessage() {
+        resultTextView.setText(R.string.status_adding_failed);
+        resultTextView.setVisibility(View.VISIBLE);
     }
 
     private void returnToOrdersFragment() {
