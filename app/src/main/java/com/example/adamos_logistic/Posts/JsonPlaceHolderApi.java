@@ -1,5 +1,9 @@
 package com.example.adamos_logistic.Posts;
 
+
+import com.example.adamos_logistic.ApiKey;
+import com.example.adamos_logistic.GetResponseBodyOrders;
+import com.example.adamos_logistic.Message;
 import com.example.adamos_logistic.TestQueryPackage.TestQueryString;
 
 import java.util.List;
@@ -73,9 +77,10 @@ public interface JsonPlaceHolderApi {
     @POST("adamos/hs/MAPI/newUser")
     Call<Post> createPost(@FieldMap Map<String, String> fields);
 
-    @GET("adamos.v2.0/process.php?route=order/get")
+
+    @POST("process.php?route=order/get")
     Call<List<GetResponseBodyOrders>> getOrders(
-            @Query("api_key") String api_key
+            @Body ApiKey api_key
     );
 
     @POST("process.php?route=message/get")

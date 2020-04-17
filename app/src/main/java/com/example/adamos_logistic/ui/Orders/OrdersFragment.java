@@ -1,5 +1,7 @@
 package com.example.adamos_logistic.ui.Orders;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,9 +18,15 @@ import com.example.adamos_logistic.Adapters.ForOrders;
 import com.example.adamos_logistic.Order;
 import com.example.adamos_logistic.Posts.AddResponseBodyOrders;
 import com.example.adamos_logistic.Posts.GetResponseBodyOrders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.example.adamos_logistic.FullInformationFragment;
+import com.example.adamos_logistic.ApiKey;
+import com.example.adamos_logistic.GetResponseBodyOrders;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
 import com.example.adamos_logistic.Posts.PostAddOrderData;
 import com.example.adamos_logistic.R;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,31 +37,37 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class OrdersFragment extends Fragment {
+public class OrdersFragment extends Fragment implements ForOrders.OnItemListener {
 
-    private JsonPlaceHolderApi jsonPlaceHolderApi;
+    SharedPreferences settings, mSettings;
 
-    private String api_key = "37bca7fce88fc16f0b666c64cc82cc55";
-    private String name = "Sosu_xuy";
+    private List<GetResponseBodyOrders> ordersList;
+    private View root;
+    private Context mContext;
+    private ForOrders adapter;
+    OrdersFragment ordersFragment;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_orders, container, false);
+        root = inflater.inflate(R.layout.fragment_orders, container, false);
+        this.mContext = getContext();
+        ordersFragment = this;
 
-        Button activeOrders = (Button) root.findViewById(R.id.active_orders);
-        Button historyOrders = (Button) root.findViewById(R.id.history_orders);
-        Button newOrder = (Button) root.findViewById(R.id.new_order);
-        RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.orders);
+        Button activeOrders = root.findViewById(R.id.active_orders);
+        Button historyOrders = root.findViewById(R.id.history_orders);
+        Button newOrder = root.findViewById(R.id.new_order);
 
-        List<Order> order = new ArrayList<>();
-        ForOrders adapter = new ForOrders(getActivity().getApplicationContext(), order);
-        activeOrders.setOnClickListener(new View.OnClickListener() {
+        settings = mContext.getSharedPreferences("orders", Context.MODE_PRIVATE);
+        mSettings = mContext.getSharedPreferences("position", Context.MODE_PRIVATE);
+
+        getHistoryOrders();
+        saveData(ordersList);
+
+        historyOrders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getHistoryOrders();
-                //order.add(new Order("Активный заказ"));
-                //recyclerView.setAdapter(adapter);
-            }
+                    getHistoryOrders();
+                }
         });
         newOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,30 +101,58 @@ public class OrdersFragment extends Fragment {
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
+            JsonPlaceHolderApi jsonPlaceHolderApi;
+
+            ApiKey api_key = new ApiKey("1ff0c335ba8b4b4057928e3796a07222");
+
             jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
             Call<List<GetResponseBodyOrders>> call = jsonPlaceHolderApi.getOrders(api_key);
 
-            call.enqueue(new Callback<List<GetResponseBodyOrders>>() {
-                @Override
-                public void onResponse(Call<List<GetResponseBodyOrders>> call, Response<List<GetResponseBodyOrders>> response) {
 
-                    List<GetResponseBodyOrders> getorders = response.body();
-                    Log.d("MyLog", "Запрос сформирован");
 
-                }
+           call.enqueue(new Callback<List<GetResponseBodyOrders>>() {
+               @Override
+               public void onResponse(Call<List<GetResponseBodyOrders>> call, Response<List<GetResponseBodyOrders>> response) {
+                   List<GetResponseBodyOrders> orderResult = response.body();
+                   saveData(orderResult);
+                   ordersList = orderResult;
+                   adapter = new ForOrders(getActivity().getApplicationContext(), orderResult, ordersFragment);
+                   try {
+                       RecyclerView recyclerView = root.findViewById(R.id.orders);
+                       recyclerView.setAdapter(adapter);
+                       recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+                   } catch (Exception e) {
+                       e.printStackTrace();
+                   }
+               }
+               @Override
+               public void onFailure(Call<List<GetResponseBodyOrders>> call, Throwable t) {
 
-                @Override
-                public void onFailure(Call<List<GetResponseBodyOrders>> call, Throwable t) {
-                    Log.d("MyLog", "Запрос не сформирован");
-                }
-            });
-
+               }
+           });
             } catch (Exception e) {
 
-            e.printStackTrace();
-            Log.d("MyLog", "ОШИБКА ФОРМИРОВАНИЯ ЗАПРОСА");
+            Log.d("MyLog", e.toString());
 
         }
+    }
+
+    public void saveData(List<GetResponseBodyOrders> orders) {
+        SharedPreferences.Editor editor = settings.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(orders);
+        editor.putString("orders", json);
+        editor.apply();
+    }
+
+    @Override
+    public void onItemClick(int position){
+        SharedPreferences.Editor ed = mSettings.edit();
+        ed.putInt("position", position);
+        ed.apply();
+        ordersList.get(position);
+        getFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                new FullInformationFragment()).addToBackStack(null).commit();
     }
 }

@@ -28,4 +28,5 @@
     <string name="status_adding_failed">Ошибка при добавлении!</string>
     <string name="status_adding_success">Заказ создан успешно!</string>
     <string name="status_no_order_name">Введите название заказа!</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
