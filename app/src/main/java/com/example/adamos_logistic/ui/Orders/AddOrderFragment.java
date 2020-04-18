@@ -18,7 +18,8 @@ import com.example.adamos_logistic.Posts.AddResponseBodyOrders;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
 import com.example.adamos_logistic.Posts.PostAddOrderData;
 import com.example.adamos_logistic.R;
-import com.google.android.material.snackbar.Snackbar;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -89,17 +90,23 @@ public class AddOrderFragment extends Fragment {
 
             //TODO: ВАНЯ: излвлечение api_key из SharedPreferences
             PostAddOrderData addOrderData =
-                    new PostAddOrderData("1ff0c335ba8b4b4057928e3796a07222",
-                            orderName);
+                    new PostAddOrderData("1ff0c335ba8b4b4057928e3796a07222", 1);
 
-            Call<AddResponseBodyOrders> call2 = jsonPlaceHolderApi.addOrder(addOrderData);
+            Call<List<AddResponseBodyOrders>> call2 = jsonPlaceHolderApi.addOrder(addOrderData);
 
-            call2.enqueue(new Callback<AddResponseBodyOrders>() {
+            call2.enqueue(new Callback<List<AddResponseBodyOrders>>() {
                 @Override
-                public void onResponse(@NonNull Call<AddResponseBodyOrders> call2,
-                                       @NonNull Response<AddResponseBodyOrders> response) {
+                public void onResponse(@NonNull Call<List<AddResponseBodyOrders>> call2,
+                                       @NonNull Response<List<AddResponseBodyOrders>> response) {
 
-                    AddResponseBodyOrders order = response.body();
+                    List<AddResponseBodyOrders> order = response.body();
+
+                    AddResponseBodyOrders[] myArray = new AddResponseBodyOrders[order.size()];
+                    order.toArray(myArray);
+
+                    for(int i=0; i<myArray.length; i++){
+                        System.out.println(myArray[i].getAttribute_name() + " " +myArray[i].getAttribute_description() + " " +myArray[i].getAttribute_type());
+                    }
                     Log.d("MyLog", "success");
 
                     hideAddingInProgressMessage();
@@ -108,7 +115,7 @@ public class AddOrderFragment extends Fragment {
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<AddResponseBodyOrders> call2,
+                public void onFailure(@NonNull Call<List<AddResponseBodyOrders>> call2,
                                       @NonNull Throwable t) {
 
                     Log.d("MyLog", t.toString());
