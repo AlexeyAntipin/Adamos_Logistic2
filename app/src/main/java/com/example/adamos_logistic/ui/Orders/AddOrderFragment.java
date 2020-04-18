@@ -1,5 +1,7 @@
 package com.example.adamos_logistic.ui.Orders;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +20,8 @@ import com.example.adamos_logistic.Posts.AddResponseBodyOrders;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
 import com.example.adamos_logistic.Posts.PostAddOrderData;
 import com.example.adamos_logistic.R;
-import com.google.android.material.snackbar.Snackbar;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,6 +30,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AddOrderFragment extends Fragment {
+
+    private String api_key = "";
+    SharedPreferences apiKey;
+    private Context mContext;
 
     private TextView statusTextView, resultTextView;
     private EditText orderNameView;
@@ -44,6 +51,8 @@ public class AddOrderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_add_order, container, false);
+
+        mContext = getContext();
 
         orderNameView = root.findViewById(R.id.order_name_editText);
 
@@ -87,19 +96,27 @@ public class AddOrderFragment extends Fragment {
 
             JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-            //TODO: ВАНЯ: излвлечение api_key из SharedPreferences
+            apiKey = mContext.getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+            if(apiKey.contains("api_key"))
+                api_key = apiKey.getString("api_key", null);
             PostAddOrderData addOrderData =
-                    new PostAddOrderData("1ff0c335ba8b4b4057928e3796a07222",
-                            orderName);
+                    new PostAddOrderData(api_key, 1);
 
-            Call<AddResponseBodyOrders> call2 = jsonPlaceHolderApi.addOrder(addOrderData);
+            Call<List<AddResponseBodyOrders>> call2 = jsonPlaceHolderApi.addOrder(addOrderData);
 
-            call2.enqueue(new Callback<AddResponseBodyOrders>() {
+            call2.enqueue(new Callback<List<AddResponseBodyOrders>>() {
                 @Override
-                public void onResponse(@NonNull Call<AddResponseBodyOrders> call2,
-                                       @NonNull Response<AddResponseBodyOrders> response) {
+                public void onResponse(@NonNull Call<List<AddResponseBodyOrders>> call2,
+                                       @NonNull Response<List<AddResponseBodyOrders>> response) {
 
-                    AddResponseBodyOrders order = response.body();
+                    List<AddResponseBodyOrders> order = response.body();
+
+                    AddResponseBodyOrders[] myArray = new AddResponseBodyOrders[order.size()];
+                    order.toArray(myArray);
+
+                    for(int i=0; i<myArray.length; i++){
+                        System.out.println(myArray[i].getAttribute_name() + " " +myArray[i].getAttribute_description() + " " +myArray[i].getAttribute_type());
+                    }
                     Log.d("MyLog", "success");
 
                     hideAddingInProgressMessage();
@@ -108,7 +125,7 @@ public class AddOrderFragment extends Fragment {
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<AddResponseBodyOrders> call2,
+                public void onFailure(@NonNull Call<List<AddResponseBodyOrders>> call2,
                                       @NonNull Throwable t) {
 
                     Log.d("MyLog", t.toString());

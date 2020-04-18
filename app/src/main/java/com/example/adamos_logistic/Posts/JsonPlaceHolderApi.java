@@ -3,7 +3,6 @@ package com.example.adamos_logistic.Posts;
 
 import com.example.adamos_logistic.ApiKey;
 import com.example.adamos_logistic.GetResponseBodyOrders;
-import com.example.adamos_logistic.Message;
 import com.example.adamos_logistic.TestQueryPackage.TestQueryString;
 
 import java.util.List;
@@ -90,7 +89,7 @@ public interface JsonPlaceHolderApi {
 
 
     @POST("process.php?route=order/add")
-    Call<AddResponseBodyOrders> addOrder(
+    Call<List<AddResponseBodyOrders>> addOrder(
             @Body PostAddOrderData addOrderData
     );
 
