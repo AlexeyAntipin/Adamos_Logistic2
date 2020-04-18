@@ -1,5 +1,7 @@
 package com.example.adamos_logistic.ui.Orders;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +31,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AddOrderFragment extends Fragment {
 
+    private String api_key = "";
+    SharedPreferences apiKey;
+    private Context mContext;
+
     private TextView statusTextView, resultTextView;
     private EditText orderNameView;
     private Button returnBackButton, addOrderButton;
@@ -45,6 +51,8 @@ public class AddOrderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_add_order, container, false);
+
+        mContext = getContext();
 
         orderNameView = root.findViewById(R.id.order_name_editText);
 
@@ -88,9 +96,11 @@ public class AddOrderFragment extends Fragment {
 
             JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-            //TODO: ВАНЯ: излвлечение api_key из SharedPreferences
+            apiKey = mContext.getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+            if(apiKey.contains("api_key"))
+                api_key = apiKey.getString("api_key", null);
             PostAddOrderData addOrderData =
-                    new PostAddOrderData("1ff0c335ba8b4b4057928e3796a07222", 1);
+                    new PostAddOrderData(api_key, 1);
 
             Call<List<AddResponseBodyOrders>> call2 = jsonPlaceHolderApi.addOrder(addOrderData);
 
