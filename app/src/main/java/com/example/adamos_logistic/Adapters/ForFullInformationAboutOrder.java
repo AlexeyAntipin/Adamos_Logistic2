@@ -14,11 +14,11 @@ import com.example.adamos_logistic.R;
 
 import java.util.List;
 
-public class ForFullInformationAbourOrder extends RecyclerView.Adapter<ForFullInformationAbourOrder.ViewHolder> {
+public class ForFullInformationAboutOrder extends RecyclerView.Adapter<ForFullInformationAboutOrder.ViewHolder> {
     private LayoutInflater inflater;
     private List<OrderAttributes> attributes;
 
-    public ForFullInformationAbourOrder(Context context, List<OrderAttributes> attributes) {
+    public ForFullInformationAboutOrder(Context context, List<OrderAttributes> attributes) {
         this.attributes = attributes;
         this.inflater = LayoutInflater.from(context);
     }
@@ -26,11 +26,11 @@ public class ForFullInformationAbourOrder extends RecyclerView.Adapter<ForFullIn
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.full_information, parent, false);
-        return new ForFullInformationAbourOrder.ViewHolder(view);
+        return new ForFullInformationAboutOrder.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ForFullInformationAbourOrder.ViewHolder holder, int position) {
+    public void onBindViewHolder(ForFullInformationAboutOrder.ViewHolder holder, int position) {
         holder.name.setText(attributes.get(position).getAttribute_description());
         if (attributes.get(position).getType() == 20)
         holder.attribute.setText(attributes.get(position).getDescription());
