@@ -9,26 +9,25 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.adamos_logistic.Message;
+import com.example.adamos_logistic.Posts.GetMessages;
 import com.example.adamos_logistic.R;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Locale;
+import java.util.List;
 
-public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private LayoutInflater inflater;
-    private ArrayList<Message> messages;
+    private List<GetMessages> messages;
+    private int user_id;
 
     private static int USER_MESSAGE = 1;
     private static int SERVER_MESSAGE = 2;
 
 
-    public DataAdapter(Context context, ArrayList<Message> messages) {
+    public MessageAdapter(Context context, List<GetMessages> messages, int user_id) {
         this.messages = messages;
         this.inflater = LayoutInflater.from(context);
+        this.user_id = user_id;
     }
 
     @NonNull
@@ -48,7 +47,7 @@ public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // Узнаем тип сообщения
     @Override
     public int getItemViewType(int position) {
-        if (messages.get(position).isFrom_user())
+        if (user_id == messages.get(position).getUser_id())
             return USER_MESSAGE;
         else
             return SERVER_MESSAGE;
@@ -57,9 +56,9 @@ public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == USER_MESSAGE) {
-            ((UserViewHolder)holder).setUserMessage(messages.get(position).getMessage());
+            ((UserViewHolder)holder).setUserMessage(messages.get(position).getValue(), getMessageTime(position));
         } else {
-            ((ServerViewHolder)holder).setServerMessage(messages.get(position).getMessage());
+            ((ServerViewHolder)holder).setServerMessage(messages.get(position).getValue(), getMessageTime(position));
         }
     }
 
@@ -81,9 +80,9 @@ public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             userTimeBox = itemView.findViewById(R.id.user_time_box);
         }
 
-        private void setUserMessage(String message) {
+        private void setUserMessage(String message, String time) {
             userMessageBox.setText(message);
-            userTimeBox.setText(getMessageTime());
+            userTimeBox.setText(time);
         }
     }
 
@@ -100,16 +99,14 @@ public class DataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             serverTimeBox = itemView.findViewById(R.id.server_time_box);
         }
 
-        private void setServerMessage(String message) {
+        private void setServerMessage(String message, String time) {
             serverMessageBox.setText(message);
-            serverTimeBox.setText(getMessageTime());
+            serverTimeBox.setText(time);
         }
     }
 
     // Получение текущего времени (Исправить на серверное время)
-    private String getMessageTime() {
-        Calendar calender = Calendar.getInstance();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.GERMAN);
-        return simpleDateFormat.format(calender.getTime());
+    private String getMessageTime(int position) {
+        return messages.get(position).getTime();
     }
 }

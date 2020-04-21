@@ -107,4 +107,9 @@ public interface JsonPlaceHolderApi {
     Call<ResponseNewMessage> addMessage(
             @Body PostAddMessage messageData
     );
+
+    @POST("process.php?route=user/info")
+    Call<UserInfo> getUserInfo(
+            @Body ApiKey api_key
+    );
 }
