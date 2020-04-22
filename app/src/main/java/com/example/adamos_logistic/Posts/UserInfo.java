@@ -1,32 +1,31 @@
 package com.example.adamos_logistic.Posts;
 
 public class UserInfo {
-
-    private String role;
+    private int role;
     private String avatar;
     private String name;
     private int id;
 
-    public UserInfo(String role, String avatar, String name, int id) {
-            this.role = role;
-            this.avatar = avatar;
-            this.name = name;
-            this.id = id;
-            }
+    public UserInfo(int role, String avatar, String name, int id) {
+        this.role = role;
+        this.name = name;
+        this.avatar = avatar;
+        this.id = id;
+    }
 
-    public String getRole() {
-            return role;
-            }
-
-    public String getAvatar() {
-            return avatar;
-            }
+    public int getRole() {
+        return role;
+    }
 
     public String getName() {
-            return name;
-            }
+        return name;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
 
     public int getId() {
-            return id;
+        return id;
     }
 }
