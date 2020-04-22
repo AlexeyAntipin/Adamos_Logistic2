@@ -109,7 +109,7 @@ public interface JsonPlaceHolderApi {
     );
 
     @POST("process.php?route=user/info")
-    Call<UserInfo> getUserInfo(
+    Call<UserInfo> getUserInfo (
             @Body ApiKey api_key
     );
 }

@@ -29,6 +29,7 @@ import com.example.adamos_logistic.R;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
+import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,7 +39,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ChatFragment extends Fragment {
 
-    UserInfo user_info;
+    UserInfo userInfo;
+
+    String api_key;
 
     List<GetMessages> messages;
 
@@ -62,20 +65,18 @@ public class ChatFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         mContext = getContext();
+        apiKey = mContext.getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+        if(apiKey.contains("api_key"))
+            api_key = apiKey.getString("api_key", null);
 
         View root = inflater.inflate(R.layout.fragment_chat, container, false);
         ImageButton send = root.findViewById(R.id.Send);
         chatSendingWindow = root.findViewById(R.id.your_message);
         RecyclerView recyclerView = root.findViewById(R.id.message_view);
 
-        apiKey = mContext.getSharedPreferences("MyPref", Context.MODE_PRIVATE);
-        ApiKey api_key = null;
-        if(apiKey.contains("api_key"))
-            api_key = new ApiKey(apiKey.getString("api_key", null));
-
         getUserInfo(api_key);
 
-        /*if (mTimer != null) {
+        if (mTimer != null) {
             mTimer.cancel();
         }
 
@@ -88,12 +89,13 @@ public class ChatFragment extends Fragment {
         };
         //mMyTimerTask = new TimerTask();
 
-        mTimer.schedule(mMyTimerTask, 1000, 5000);*/
+        mTimer.schedule(mMyTimerTask, 1000);
 
-        getMessages(api_key);
+        ApiKey apiKey = new ApiKey(api_key);
+        getMessages(apiKey);
 
         super.onCreate(savedInstanceState);
-        adapter = new MessageAdapter(getActivity().getApplicationContext(), messages, user_info.getId());
+        adapter = new MessageAdapter(getActivity().getApplicationContext(), messages, userInfo.getId());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
 
@@ -190,7 +192,7 @@ public class ChatFragment extends Fragment {
         }
     }
 
-    private void getUserInfo(ApiKey api_key) {
+    private void getUserInfo(String api_key) {
 
         try {
             Retrofit retrofit = new Retrofit.Builder()
@@ -198,35 +200,25 @@ public class ChatFragment extends Fragment {
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
-            jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-
-            Call<UserInfo> callUserInfo = jsonPlaceHolderApi.getUserInfo(api_key);
-
-            callUserInfo.enqueue(new Callback<UserInfo>() {
+            JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+            ApiKey apiKey = new ApiKey(api_key);
+            Call<UserInfo> call = jsonPlaceHolderApi.getUserInfo(apiKey);
+            call.enqueue(new Callback<UserInfo>() {
                 @Override
-                public void onResponse(@NonNull Call<UserInfo> callUserInfo, @NonNull Response<UserInfo> response) {
-                    user_info = response.body();
-
-                    Log.d("MyLog", "success");
-                    System.out.println("success");
-
+                public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
+                    userInfo = response.body();
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<UserInfo> callUserInfo, @NonNull Throwable t) {
-
+                public void onFailure(Call<UserInfo> call, Throwable t) {
                     Log.d("MyLog", t.toString());
-                    System.out.println("onfailure");
-
+                    Log.d("MyLog", "Выход в onFailure");
                 }
             });
 
-        } catch (Exception e) {
-
-            e.printStackTrace();
-            Log.d("MyLog", "ОШИБКА ВХОДА");
-            System.out.println("Fail");
-
+        } catch(Exception e) {
+            Log.d("MyLog", e.toString());
+            Log.d("MyLog", "Выход в catch");
         }
     }
 }
