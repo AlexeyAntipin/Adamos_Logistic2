@@ -9,18 +9,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.adamos_logistic.Adapters.ForNewOrder;
+import com.example.adamos_logistic.ApiKey;
 import com.example.adamos_logistic.Posts.AddResponseBodyOrders;
+import com.example.adamos_logistic.Posts.AllAttributesFromUser;
+import com.example.adamos_logistic.Posts.AttributesFromUser;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
-import com.example.adamos_logistic.Posts.PostAddOrderData;
+import com.example.adamos_logistic.Posts.OrderAddInfo;
+import com.example.adamos_logistic.Posts.Order_id;
+import com.example.adamos_logistic.Posts.Step;
 import com.example.adamos_logistic.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -34,13 +42,15 @@ public class AddOrderFragment extends Fragment {
     private String api_key = "";
     SharedPreferences apiKey;
     private Context mContext;
-
-    private TextView statusTextView, resultTextView;
-    private EditText orderNameView;
-    private Button returnBackButton, addOrderButton;
-    private ProgressBar progressBar;
-
-    public AddOrderFragment() { }
+    private Order_id orderId;
+    private List<OrderAddInfo> info;
+    private int order_id;
+    private List<AddResponseBodyOrders> addResponseBodyOrders;
+    private List<AttributesFromUser> ATTRIBUTES = new ArrayList<>();
+    private int i = 0;
+    View root;
+    TextView step, category_name;
+    Button next, back;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,44 +60,27 @@ public class AddOrderFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_add_order, container, false);
+        root = inflater.inflate(R.layout.fragment_new_order, container, false);
 
         mContext = getContext();
 
-        orderNameView = root.findViewById(R.id.order_name_editText);
-
-        statusTextView = root.findViewById(R.id.progress_textView);
-        statusTextView.setVisibility(View.INVISIBLE);
-        resultTextView = root.findViewById(R.id.result_textView);
-        resultTextView.setVisibility(View.INVISIBLE);
-
-        returnBackButton = root.findViewById(R.id.return_button);
-        addOrderButton = root.findViewById(R.id.add_order_button);
-
-        progressBar = root.findViewById(R.id.status_progressBar);
-        progressBar.setVisibility(View.INVISIBLE);
+        step = root.findViewById(R.id.step);
+        category_name = root.findViewById(R.id.category_name);
+        next = root.findViewById(R.id.next);
+        back = root.findViewById(R.id.back);
 
 
-        returnBackButton.setOnClickListener(v -> returnToOrdersFragment());
+        apiKey = mContext.getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+        if(apiKey.contains("api_key"))
+            api_key = apiKey.getString("api_key", null);
 
-        addOrderButton.setOnClickListener(v -> {
-            String orderName = orderNameView.getText().toString();
-
-            if (!orderName.isEmpty()) {
-                hideResultTextView();
-                showAddingInProgressMessage();
-                tryAddNewOrder(orderName, root);
-            } else {
-                showNoOrderNameMessage();
-            }
-
-        });
+        addNewOrder();
+        addOrderInfo();
 
         return root;
     }
 
-
-    private void tryAddNewOrder(String orderName, View root) {
+    private void addNewOrder() {
         try {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(JsonPlaceHolderApi.HOST)
@@ -95,85 +88,195 @@ public class AddOrderFragment extends Fragment {
                     .build();
 
             JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-
-            apiKey = mContext.getSharedPreferences("MyPref", Context.MODE_PRIVATE);
-            if(apiKey.contains("api_key"))
-                api_key = apiKey.getString("api_key", null);
-            PostAddOrderData addOrderData =
-                    new PostAddOrderData(api_key, 1);
-
-            Call<List<AddResponseBodyOrders>> call2 = jsonPlaceHolderApi.addOrder(addOrderData);
-
-            call2.enqueue(new Callback<List<AddResponseBodyOrders>>() {
+            ApiKey api = new ApiKey(api_key);
+            Call<Order_id> call = jsonPlaceHolderApi.addOrder(api);
+            call.enqueue(new Callback<Order_id>() {
                 @Override
-                public void onResponse(@NonNull Call<List<AddResponseBodyOrders>> call2,
-                                       @NonNull Response<List<AddResponseBodyOrders>> response) {
-
-                    List<AddResponseBodyOrders> order = response.body();
-
-                    AddResponseBodyOrders[] myArray = new AddResponseBodyOrders[order.size()];
-                    order.toArray(myArray);
-
-                    for(int i=0; i<myArray.length; i++){
-                        System.out.println(myArray[i].getAttribute_name() + " " +myArray[i].getAttribute_description() + " " +myArray[i].getAttribute_type());
-                    }
-                    Log.d("MyLog", "success");
-
-                    hideAddingInProgressMessage();
-                    showSuccessfulAddingMessage();
-                    orderNameView.setText("");
+                public void onResponse(Call<Order_id> call, Response<Order_id> response) {
+                    orderId = response.body();
+                    order_id = orderId.getOrder_id();
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<List<AddResponseBodyOrders>> call2,
-                                      @NonNull Throwable t) {
-
+                public void onFailure(Call<Order_id> call, Throwable t) {
                     Log.d("MyLog", t.toString());
                     Log.d("MyLog", "ОШИБКА: выход в onFailure");
-
-                    hideAddingInProgressMessage();
-                    showFailedAddingMessage();
                 }
             });
-
-        } catch (Exception e) {
-
+        }catch (Exception e) {
             e.printStackTrace();
             Log.d("MyLog",  e.toString());
             Log.d("MyLog", "ОШИБКА: вывалилось в catch");
-            hideAddingInProgressMessage();
-            showFailedAddingMessage();
         }
     }
 
+    private void addOrderInfo() {
+        try {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(JsonPlaceHolderApi.HOST)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
 
-    private void showNoOrderNameMessage() {
-        resultTextView.setVisibility(View.VISIBLE);
-        resultTextView.setText(R.string.status_no_order_name);
+            JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+            ApiKey api = new ApiKey(api_key);
+            Call<List<OrderAddInfo>> call = jsonPlaceHolderApi.addOrderInfo(api);
+            call.enqueue(new Callback<List<OrderAddInfo>>() {
+                @Override
+                public void onResponse(Call<List<OrderAddInfo>> call, Response<List<OrderAddInfo>> response) {
+                    info = response.body();
+                    category_name.setText(info.get(i).getName());
+                    try {
+                        Retrofit retrofit = new Retrofit.Builder()
+                                .baseUrl(JsonPlaceHolderApi.HOST)
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .build();
+
+                        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+                        Step step = new Step(api_key, info.get(i).getNumber());
+                        Call<List<AddResponseBodyOrders>> call2 = jsonPlaceHolderApi.addStep(step);
+                        call2.enqueue(new Callback<List<AddResponseBodyOrders>>() {
+                            @Override
+                            public void onResponse(Call<List<AddResponseBodyOrders>> call,
+                                                   Response<List<AddResponseBodyOrders>> response) {
+                                addResponseBodyOrders = response.body();
+                                ForNewOrder adapter = new ForNewOrder(getActivity().getApplicationContext(), addResponseBodyOrders);
+                                RecyclerView recyclerView = root.findViewById(R.id.attributes);
+                                recyclerView.setAdapter(adapter);
+                                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+                                next.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        for (int j = 0; j < addResponseBodyOrders.size(); j++) {
+                                            View view = recyclerView.getChildAt(j);
+                                            EditText attribute_from_user = view.findViewById(R.id.attribute_from_user);
+                                            String value = attribute_from_user.getText().toString();
+                                            String attribute_name = addResponseBodyOrders.get(j).getAttribute_name();
+                                            AttributesFromUser attribute = new AttributesFromUser(order_id, attribute_name, value);
+                                            ATTRIBUTES.add(attribute);
+                                        }
+                                        try {
+                                            Retrofit retrofit = new Retrofit.Builder()
+                                                    .baseUrl(JsonPlaceHolderApi.HOST)
+                                                    .addConverterFactory(GsonConverterFactory.create())
+                                                    .build();
+
+                                            JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+                                            AllAttributesFromUser allAttributesFromUser = new AllAttributesFromUser(api_key, ATTRIBUTES);
+                                            Call<Integer> call2 = jsonPlaceHolderApi.attributeAdd(allAttributesFromUser);
+                                            call2.enqueue(new Callback<Integer>() {
+                                                @Override
+                                                public void onResponse(Call<Integer> call, Response<Integer> response) {
+
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<Integer> call, Throwable t) {
+
+                                                }
+                                            });
+                                        }catch (Exception e) {
+                                            e.printStackTrace();
+                                            Log.d("MyLog",  e.toString());
+                                            Log.d("MyLog", "ОШИБКА: вывалилось в catch");
+                                        }
+                                        ATTRIBUTES.clear();
+                                        if (i < info.size()-1) {
+                                            i++;
+                                            category_name.setText(info.get(i).getName());
+                                            try {
+                                                Retrofit retrofit = new Retrofit.Builder()
+                                                        .baseUrl(JsonPlaceHolderApi.HOST)
+                                                        .addConverterFactory(GsonConverterFactory.create())
+                                                        .build();
+
+                                                JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+                                                Step step = new Step(api_key, info.get(i).getNumber());
+                                                Call<List<AddResponseBodyOrders>> call = jsonPlaceHolderApi.addStep(step);
+                                                call.enqueue(new Callback<List<AddResponseBodyOrders>>() {
+                                                    @Override
+                                                    public void onResponse(Call<List<AddResponseBodyOrders>> call,
+                                                                           Response<List<AddResponseBodyOrders>> response) {
+                                                        addResponseBodyOrders.clear();
+                                                        addResponseBodyOrders = response.body();
+                                                        ForNewOrder adapter2 = new ForNewOrder(getActivity().getApplicationContext(), addResponseBodyOrders);
+                                                        recyclerView.setAdapter(adapter2);
+                                                        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<List<AddResponseBodyOrders>> call, Throwable t) {
+                                                        Log.d("MyLog", t.toString());
+                                                        Log.d("MyLog", "ОШИБКА: выход в onFailure");
+                                                    }
+                                                });
+                                            }catch (Exception e) {
+                                                e.printStackTrace();
+                                                Log.d("MyLog",  e.toString());
+                                                Log.d("MyLog", "ОШИБКА: вывалилось в catch");
+                                            }
+                                        }
+                                        else {
+                                            Toast.makeText(getActivity().getApplicationContext(), "Заказ успешно сформирован", Toast.LENGTH_LONG).show();
+                                            returnToOrdersFragment();
+                                        }
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<AddResponseBodyOrders>> call, Throwable t) {
+                                Log.d("MyLog", t.toString());
+                                Log.d("MyLog", "ОШИБКА: выход в onFailure");
+                            }
+                        });
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                        Log.d("MyLog",  e.toString());
+                        Log.d("MyLog", "ОШИБКА: вывалилось в catch");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<OrderAddInfo>> call, Throwable t) {
+                    Log.d("MyLog", t.toString());
+                    Log.d("MyLog", "ОШИБКА: выход в onFailure");
+                }
+            });
+        }catch (Exception e) {
+            e.printStackTrace();
+            Log.d("MyLog",  e.toString());
+            Log.d("MyLog", "ОШИБКА: вывалилось в catch");
+        }
     }
 
-    private void hideResultTextView() {
-        resultTextView.setVisibility(View.INVISIBLE);
-    }
+    private void addOrderStep(int number) {
+        try {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(JsonPlaceHolderApi.HOST)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
 
-    private void showAddingInProgressMessage() {
-        progressBar.setVisibility(View.VISIBLE);
-        statusTextView.setVisibility(View.VISIBLE);
-    }
+            JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+            Step step = new Step(api_key, number);
+            Call<List<AddResponseBodyOrders>> call = jsonPlaceHolderApi.addStep(step);
+            call.enqueue(new Callback<List<AddResponseBodyOrders>>() {
+                @Override
+                public void onResponse(Call<List<AddResponseBodyOrders>> call,
+                                       Response<List<AddResponseBodyOrders>> response) {
+                    addResponseBodyOrders = response.body();
+                }
 
-    private void hideAddingInProgressMessage() {
-        progressBar.setVisibility(View.INVISIBLE);
-        statusTextView.setVisibility(View.INVISIBLE);
-    }
-
-    private void showSuccessfulAddingMessage() {
-        resultTextView.setText(R.string.status_adding_success);
-        resultTextView.setVisibility(View.VISIBLE);
-    }
-
-    private void showFailedAddingMessage() {
-        resultTextView.setText(R.string.status_adding_failed);
-        resultTextView.setVisibility(View.VISIBLE);
+                @Override
+                public void onFailure(Call<List<AddResponseBodyOrders>> call, Throwable t) {
+                    Log.d("MyLog", t.toString());
+                    Log.d("MyLog", "ОШИБКА: выход в onFailure");
+                }
+            });
+        }catch (Exception e) {
+            e.printStackTrace();
+            Log.d("MyLog",  e.toString());
+            Log.d("MyLog", "ОШИБКА: вывалилось в catch");
+        }
     }
 
     private void returnToOrdersFragment() {

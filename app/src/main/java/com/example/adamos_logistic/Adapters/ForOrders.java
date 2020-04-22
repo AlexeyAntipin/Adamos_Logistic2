@@ -70,6 +70,6 @@ public class ForOrders extends RecyclerView.Adapter<ForOrders.ViewHolder> {
     }
 
     public interface OnItemListener {
-        void onItemClick(int position);
+            void onItemClick(int position);
     }
 }

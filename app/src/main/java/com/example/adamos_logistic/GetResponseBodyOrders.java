@@ -27,7 +27,8 @@ public class GetResponseBodyOrders {
         for (OrderAttributes orderAttributes1 : ATTRIBUTES) {
             if (orderAttributes1.getName().equals("order_status")
             )
-                str = orderAttributes1.getValue();
+                if (orderAttributes1.getType() == 20) str = orderAttributes1.getDescription();
+                else str = orderAttributes1.getValue();
         }
         return str;
     }
@@ -44,4 +45,6 @@ public class GetResponseBodyOrders {
     public List<OrderAttributes> getATTRIBUTES() {
         return ATTRIBUTES;
     }
+
+
 }
