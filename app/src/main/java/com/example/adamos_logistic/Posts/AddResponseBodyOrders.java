@@ -1,15 +1,20 @@
 package com.example.adamos_logistic.Posts;
 
+import java.util.List;
+
 public class AddResponseBodyOrders {
     private String attribute_name;
     private String attribute_description;
-    private String attribute_type;
+    private int attribute_type;
+    private List<Values> VALUES;
     private String ERROR_ID;
 
-    public AddResponseBodyOrders(String attribute_name, String attribute_description, String attribute_type, String ERROR_ID) {
+    public AddResponseBodyOrders(String attribute_name, String attribute_description,
+                                 int attribute_type, List<Values> VALUES, String ERROR_ID) {
         this.attribute_name = attribute_name;
         this.attribute_description = attribute_description;
         this.attribute_type = attribute_type;
+        this.VALUES = VALUES;
         this.ERROR_ID = ERROR_ID;
     }
 
@@ -21,7 +26,7 @@ public class AddResponseBodyOrders {
         return attribute_description;
     }
 
-    public String getAttribute_type() {
+    public int getAttribute_type() {
         return attribute_type;
     }
 

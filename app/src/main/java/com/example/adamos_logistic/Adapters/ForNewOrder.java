@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -34,6 +35,10 @@ public class ForNewOrder extends RecyclerView.Adapter<ForNewOrder.ViewHolder> {
     @Override
     public void onBindViewHolder(ForNewOrder.ViewHolder holder, int position) {
         holder.attribute_name.setText(attributes.get(position).getAttribute_description());
+        if (attributes.get(position).getAttribute_type() == 20) {
+            holder.attribute_from_user.setVisibility(View.GONE);
+        }
+        else holder.spinner_for_user.setVisibility(View.GONE);
     }
 
     @Override
@@ -44,11 +49,13 @@ public class ForNewOrder extends RecyclerView.Adapter<ForNewOrder.ViewHolder> {
     class ViewHolder extends RecyclerView.ViewHolder {
         final TextView attribute_name;
         final EditText attribute_from_user;
+        final Spinner spinner_for_user;
 
         ViewHolder(View view){
             super(view);
             attribute_name = view.findViewById(R.id.attribute_name);
             attribute_from_user = view.findViewById(R.id.attribute_from_user);
+            spinner_for_user = view.findViewById(R.id.spinner_for_user);
         }
     }
 }
