@@ -123,4 +123,9 @@ public interface JsonPlaceHolderApi {
     Call<Integer> attributeAdd (
             @Body AllAttributesFromUser allAttributesFromUser
     );
+
+    @POST("process.php?route=user/info")
+    Call<UserInfo> getUserInfo (
+            @Body ApiKey api_key
+    );
 }

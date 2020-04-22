@@ -45,7 +45,6 @@ public class AddOrderFragment extends Fragment {
     private Order_id orderId;
     private List<OrderAddInfo> info;
     private int order_id;
-    private OrderAddInfo a;
     private List<AddResponseBodyOrders> addResponseBodyOrders;
     private List<AttributesFromUser> ATTRIBUTES = new ArrayList<>();
     private int i = 0;
@@ -147,7 +146,7 @@ public class AddOrderFragment extends Fragment {
                                 next.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        for (int j = 0; j < addResponseBodyOrders.size() - 1; j++) {
+                                        for (int j = 0; j < addResponseBodyOrders.size(); j++) {
                                             View view = recyclerView.getChildAt(j);
                                             EditText attribute_from_user = view.findViewById(R.id.attribute_from_user);
                                             String value = attribute_from_user.getText().toString();
