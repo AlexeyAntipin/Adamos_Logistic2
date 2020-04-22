@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adamos_logistic.Adapters.ForOrders;
 import com.example.adamos_logistic.ApiKey;
-import com.example.adamos_logistic.FullInformationFragment;
 import com.example.adamos_logistic.GetResponseBodyOrders;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
 import com.example.adamos_logistic.R;
@@ -87,6 +86,7 @@ public class OrdersFragment extends Fragment implements ForOrders.OnItemListener
         transaction.addToBackStack(null);
         transaction.commit();
     }
+    
 
     private void getHistoryOrders() {
         try {
@@ -103,8 +103,6 @@ public class OrdersFragment extends Fragment implements ForOrders.OnItemListener
             jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
             Call<List<GetResponseBodyOrders>> call = jsonPlaceHolderApi.getOrders(api);
-
-
 
            call.enqueue(new Callback<List<GetResponseBodyOrders>>() {
                @Override
