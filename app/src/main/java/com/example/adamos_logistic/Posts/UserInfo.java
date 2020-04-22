@@ -1,7 +1,6 @@
 package com.example.adamos_logistic.Posts;
 
 public class UserInfo {
-
     private String role;
     private String avatar;
     private String name;
