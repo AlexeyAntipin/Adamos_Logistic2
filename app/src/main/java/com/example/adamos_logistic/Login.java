@@ -28,7 +28,6 @@ public class Login extends AppCompatActivity {
 
     EditText email, password;
     Button enter, registration;
-    Button button3;
     TextView check;
     StoringParams params;
     private JsonPlaceHolderApi jsonPlaceHolderApi;
@@ -42,7 +41,6 @@ public class Login extends AppCompatActivity {
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
         check = (TextView) findViewById(R.id.check);
-        button3 = findViewById(R.id.button3);
 
         params = new StoringParams();
 
@@ -117,15 +115,6 @@ public class Login extends AppCompatActivity {
             }
         };
         enter.setOnClickListener(login);
-
-        button3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Login.this, MainMenuActivity.class);
-                startActivity(i);
-            }
-        });
-
     }
 
     private void createPost() {

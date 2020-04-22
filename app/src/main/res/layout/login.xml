@@ -6,60 +6,108 @@
     android:layout_height="match_parent"
     tools:context=".Login">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/email"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+        <ImageView
+            android:id="@+id/logo_imageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="250dp"
+            android:layout_marginStart="64dp"
+            android:layout_marginEnd="64dp"
+            android:layout_marginBottom="16dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
+            app:layout_constraintBottom_toTopOf="@id/email"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:srcCompat="@drawable/main_adamos_logo" />
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/colorMain"
             android:ems="10"
             android:hint="E-mail"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            app:layout_constraintBottom_toTopOf="@id/password"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.6"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <EditText
             android:id="@+id/password"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="@color/colorMain"
             android:ems="10"
             android:hint="Пароль"
-            android:inputType="numberPassword" />
-        <TextView
-            android:id="@+id/check"
-            android:textAlignment="center"
-            android:textColor="@color/red"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:inputType="numberPassword"
+            app:layout_constraintBottom_toTopOf="@id/enter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/email"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <Button
             android:id="@+id/enter"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Вход" />
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/enter_button_text"
+            android:textSize="16sp"
+            android:theme="@style/MainButtonTheme"
+            app:layout_constraintBottom_toTopOf="@id/registr"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/password"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <Button
             android:id="@+id/registr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:text="@string/register_button_text"
+            android:textSize="16sp"
+            android:theme="@style/MainButtonTheme"
+            app:layout_constraintBottom_toTopOf="@id/check"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/enter"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/check"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Регистрация" />
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:textAlignment="center"
+            android:textColor="@color/red"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/registr"
+            app:layout_constraintVertical_chainStyle="packed" />
 
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Button" />
 
-
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
