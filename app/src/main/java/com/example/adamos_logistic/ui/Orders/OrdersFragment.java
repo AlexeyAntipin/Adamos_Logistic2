@@ -12,21 +12,17 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adamos_logistic.Adapters.ForOrders;
-import com.example.adamos_logistic.Posts.AddResponseBodyOrders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-import com.example.adamos_logistic.FullInformationFragment;
 import com.example.adamos_logistic.ApiKey;
+import com.example.adamos_logistic.FullInformationFragment;
 import com.example.adamos_logistic.GetResponseBodyOrders;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
-import com.example.adamos_logistic.Posts.PostAddOrderData;
 import com.example.adamos_logistic.R;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -90,11 +86,6 @@ public class OrdersFragment extends Fragment implements ForOrders.OnItemListener
         transaction.replace(R.id.nav_host_fragment, newFragment);
         transaction.addToBackStack(null);
         transaction.commit();
-    }
-
-
-    private void addOrder() {
-
     }
 
     private void getHistoryOrders() {

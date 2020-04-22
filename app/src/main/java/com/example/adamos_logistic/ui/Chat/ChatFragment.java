@@ -29,7 +29,6 @@ import com.example.adamos_logistic.R;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,6 +42,8 @@ public class ChatFragment extends Fragment {
 
     String api_key;
 
+    int lastFirstVisiblePosition;
+
     List<GetMessages> messages;
 
     SharedPreferences apiKey;
@@ -54,6 +55,8 @@ public class ChatFragment extends Fragment {
     private Timer mTimer;
 
     private EditText chatSendingWindow;
+
+    RecyclerView recyclerView;
 
     private String mes;
 
@@ -72,34 +75,15 @@ public class ChatFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_chat, container, false);
         ImageButton send = root.findViewById(R.id.Send);
         chatSendingWindow = root.findViewById(R.id.your_message);
-        RecyclerView recyclerView = root.findViewById(R.id.message_view);
+        recyclerView = root.findViewById(R.id.message_view);
+        super.onCreate(savedInstanceState);
 
         getUserInfo(api_key);
 
-        if (mTimer != null) {
-            mTimer.cancel();
-        }
-
-        mTimer = new Timer();
-        TimerTask mMyTimerTask = new TimerTask() {
-            @Override
-            public void run() {
-                System.out.println("hello");
-            }
-        };
-        //mMyTimerTask = new TimerTask();
-
-        mTimer.schedule(mMyTimerTask, 1000);
-
         ApiKey apiKey = new ApiKey(api_key);
-        getMessages(apiKey);
-
-        super.onCreate(savedInstanceState);
-        adapter = new MessageAdapter(getActivity().getApplicationContext(), messages, userInfo.getId());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
 
         send.setOnClickListener(v -> {
+            lastFirstVisiblePosition = ((LinearLayoutManager)recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
             mes = chatSendingWindow.getText().toString();
             try {
                 Retrofit retrofit = new Retrofit.Builder()
@@ -109,7 +93,7 @@ public class ChatFragment extends Fragment {
 
                 jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-                PostAddMessage messageData = new PostAddMessage("1ff0c335ba8b4b4057928e3796a07222", 840, mes, 0);
+                PostAddMessage messageData = new PostAddMessage(api_key, 8427, mes, 0);
 
                 Call<ResponseNewMessage> callAdd = jsonPlaceHolderApi.addMessage(messageData);
 
@@ -119,6 +103,10 @@ public class ChatFragment extends Fragment {
 
                         ResponseNewMessage message = response.body();
                         Log.d("MyLog", "success");
+                        chatSendingWindow.setText("");
+
+                        getMessages(apiKey);
+
 
                     }
 
@@ -158,7 +146,7 @@ public class ChatFragment extends Fragment {
 
             jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-            Order_id order_id = new Order_id(api_key.getApi_key(), 840);
+            Order_id order_id = new Order_id(api_key.getApi_key(), 8427);
 
             Call<List<GetMessages>> callMessages = jsonPlaceHolderApi.getMessages(order_id);
 
@@ -171,6 +159,11 @@ public class ChatFragment extends Fragment {
                     for (int i = 0; i < messages.size(); i++) {
                         Log.d("MyLog", messages.get(i).toString());
                     }
+
+                    adapter = new MessageAdapter(getActivity().getApplicationContext(), messages, userInfo.getId());
+                    recyclerView.setAdapter(adapter);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+                    ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPosition(lastFirstVisiblePosition);
 
                     //Log.d("MyLog", "success");
 
@@ -207,6 +200,7 @@ public class ChatFragment extends Fragment {
                 @Override
                 public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
                     userInfo = response.body();
+                    getMessages(apiKey);
                 }
 
                 @Override
