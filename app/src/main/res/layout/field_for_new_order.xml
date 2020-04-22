@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,7 +7,7 @@
     android:layout_marginTop="4dp">
 
     <TextView
-        android:id="@+id/order_name"
+        android:id="@+id/attribute_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -18,25 +17,24 @@
         app:layout_constraintTop_toTopOf="parent"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/time_created"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/order_name" />
 
-    <TextView
-        android:id="@+id/order_status"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/attribute_from_user"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@id/order_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/order_name" />
+        android:layout_marginStart="8dp"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/attribute_name" />
+
+    <Spinner
+        android:id="@+id/spinner_for_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/attribute_name"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

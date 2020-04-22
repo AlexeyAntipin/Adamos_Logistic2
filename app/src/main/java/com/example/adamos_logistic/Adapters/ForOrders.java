@@ -6,9 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.adamos_logistic.Order;
+import com.example.adamos_logistic.GetResponseBodyOrders;
 import com.example.adamos_logistic.R;
 
 import java.util.List;
@@ -16,34 +17,59 @@ import java.util.List;
 public class ForOrders extends RecyclerView.Adapter<ForOrders.ViewHolder> {
 
     private LayoutInflater inflater;
-    private List<Order> order;
+    private List<GetResponseBodyOrders> orders;
+    private  OnItemListener mOnItemListener;
 
-    public ForOrders(Context context, List<Order> order) {
-        this.order = order;
+    public ForOrders(Context context, List<GetResponseBodyOrders> order, OnItemListener onItemListener) {
+        this.orders = order;
         this.inflater = LayoutInflater.from(context);
+        this.mOnItemListener = onItemListener;
     }
+
+    @NonNull
     @Override
-    public ForOrders.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.list_item_for_orders, parent, false);
-        return new ForOrders.ViewHolder(view);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = inflater.inflate(R.layout.order_text_example, parent, false);
+        return new ForOrders.ViewHolder(view, mOnItemListener);
     }
+
 
     @Override
     public void onBindViewHolder(ForOrders.ViewHolder holder, int position) {
-        holder.orderView.setText(order.get(position).getOrder());
+        holder.order_name.setText(orders.get(position).getName());
+        holder.time_created.setText(orders.get(position).getTimeCreated());
+        holder.order_status.setText(orders.get(position).getOrderStatus());
     }
 
     @Override
     public int getItemCount() {
-        return order.size();
+        return orders.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        final TextView orderView;
+    class ViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener{
+        final TextView order_name;
+        final TextView time_created;
+        final TextView order_status;
 
-        ViewHolder(View view){
+        OnItemListener onItemListener;
+
+        ViewHolder(View view, OnItemListener onItemListener) {
             super(view);
-            orderView = (TextView) view.findViewById(R.id.textViewOrders);
+            order_name = view.findViewById(R.id.order_name);
+            time_created = view.findViewById(R.id.time_created);
+            order_status = view.findViewById(R.id.order_status);
+            this.onItemListener = onItemListener;
+
+            view.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            onItemListener.onItemClick(getAdapterPosition());
+        }
+    }
+
+    public interface OnItemListener {
+            void onItemClick(int position);
     }
 }

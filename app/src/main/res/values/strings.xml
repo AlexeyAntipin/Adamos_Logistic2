@@ -18,4 +18,15 @@
     <string name="menu_settings">Настройки и помощь</string>
     <string name="menu_contacts">Контакты</string>
     <string name="menu_logout">Выйти</string>
+
+    <!--AddOrderFragment-->
+    <string name="instruction_text">Введите название заказа:</string>
+    <string name="add_order_edit_text_hint">Имя заказа</string>
+    <string name="add_order_button">Добавить заказ</string>
+    <string name="leave_add_order_screen_button">Назад</string>
+    <string name="status_adding_new_order">Добавление заказа…</string>
+    <string name="status_adding_failed">Ошибка при добавлении!</string>
+    <string name="status_adding_success">Заказ создан успешно!</string>
+    <string name="status_no_order_name">Введите название заказа!</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
