@@ -38,7 +38,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ChatFragment extends Fragment {
 
-    UserInfo user_info;
+    UserInfo userInfo;
+
+    String api_key;
+
+    int lastFirstVisiblePosition;
 
     List<GetMessages> messages;
 
@@ -52,6 +56,8 @@ public class ChatFragment extends Fragment {
 
     private EditText chatSendingWindow;
 
+    RecyclerView recyclerView;
+
     private String mes;
 
     private boolean testUserBool = false;
@@ -62,42 +68,22 @@ public class ChatFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         mContext = getContext();
+        apiKey = mContext.getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+        if(apiKey.contains("api_key"))
+            api_key = apiKey.getString("api_key", null);
 
         View root = inflater.inflate(R.layout.fragment_chat, container, false);
         ImageButton send = root.findViewById(R.id.Send);
         chatSendingWindow = root.findViewById(R.id.your_message);
-        RecyclerView recyclerView = root.findViewById(R.id.message_view);
-
-        apiKey = mContext.getSharedPreferences("MyPref", Context.MODE_PRIVATE);
-        ApiKey api_key = null;
-        if(apiKey.contains("api_key"))
-            api_key = new ApiKey(apiKey.getString("api_key", null));
+        recyclerView = root.findViewById(R.id.message_view);
+        super.onCreate(savedInstanceState);
 
         getUserInfo(api_key);
 
-        /*if (mTimer != null) {
-            mTimer.cancel();
-        }
-
-        mTimer = new Timer();
-        TimerTask mMyTimerTask = new TimerTask() {
-            @Override
-            public void run() {
-                System.out.println("hello");
-            }
-        };
-        //mMyTimerTask = new TimerTask();
-
-        mTimer.schedule(mMyTimerTask, 1000, 5000);*/
-
-        getMessages(api_key);
-
-        super.onCreate(savedInstanceState);
-        adapter = new MessageAdapter(getActivity().getApplicationContext(), messages, user_info.getId());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+        ApiKey apiKey = new ApiKey(api_key);
 
         send.setOnClickListener(v -> {
+            lastFirstVisiblePosition = ((LinearLayoutManager)recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
             mes = chatSendingWindow.getText().toString();
             try {
                 Retrofit retrofit = new Retrofit.Builder()
@@ -107,7 +93,7 @@ public class ChatFragment extends Fragment {
 
                 jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-                PostAddMessage messageData = new PostAddMessage("1ff0c335ba8b4b4057928e3796a07222", 840, mes, 0);
+                PostAddMessage messageData = new PostAddMessage(api_key, 8427, mes, 0);
 
                 Call<ResponseNewMessage> callAdd = jsonPlaceHolderApi.addMessage(messageData);
 
@@ -117,6 +103,10 @@ public class ChatFragment extends Fragment {
 
                         ResponseNewMessage message = response.body();
                         Log.d("MyLog", "success");
+                        chatSendingWindow.setText("");
+
+                        getMessages(apiKey);
+
 
                     }
 
@@ -156,7 +146,7 @@ public class ChatFragment extends Fragment {
 
             jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-            Order_id order_id = new Order_id(api_key.getApi_key(), 840);
+            Order_id order_id = new Order_id(api_key.getApi_key(), 8427);
 
             Call<List<GetMessages>> callMessages = jsonPlaceHolderApi.getMessages(order_id);
 
@@ -169,6 +159,11 @@ public class ChatFragment extends Fragment {
                     for (int i = 0; i < messages.size(); i++) {
                         Log.d("MyLog", messages.get(i).toString());
                     }
+
+                    adapter = new MessageAdapter(getActivity().getApplicationContext(), messages, userInfo.getId());
+                    recyclerView.setAdapter(adapter);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+                    ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPosition(lastFirstVisiblePosition);
 
                     //Log.d("MyLog", "success");
 
@@ -190,7 +185,7 @@ public class ChatFragment extends Fragment {
         }
     }
 
-    private void getUserInfo(ApiKey api_key) {
+    private void getUserInfo(String api_key) {
 
         try {
             Retrofit retrofit = new Retrofit.Builder()
@@ -198,35 +193,26 @@ public class ChatFragment extends Fragment {
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
-            jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-
-            Call<UserInfo> callUserInfo = jsonPlaceHolderApi.getUserInfo(api_key);
-
-            callUserInfo.enqueue(new Callback<UserInfo>() {
+            JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+            ApiKey apiKey = new ApiKey(api_key);
+            Call<UserInfo> call = jsonPlaceHolderApi.getUserInfo(apiKey);
+            call.enqueue(new Callback<UserInfo>() {
                 @Override
-                public void onResponse(@NonNull Call<UserInfo> callUserInfo, @NonNull Response<UserInfo> response) {
-                    user_info = response.body();
-
-                    Log.d("MyLog", "success");
-                    System.out.println("success");
-
+                public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
+                    userInfo = response.body();
+                    getMessages(apiKey);
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<UserInfo> callUserInfo, @NonNull Throwable t) {
-
+                public void onFailure(Call<UserInfo> call, Throwable t) {
                     Log.d("MyLog", t.toString());
-                    System.out.println("onfailure");
-
+                    Log.d("MyLog", "Выход в onFailure");
                 }
             });
 
-        } catch (Exception e) {
-
-            e.printStackTrace();
-            Log.d("MyLog", "ОШИБКА ВХОДА");
-            System.out.println("Fail");
-
+        } catch(Exception e) {
+            Log.d("MyLog", e.toString());
+            Log.d("MyLog", "Выход в catch");
         }
     }
 }

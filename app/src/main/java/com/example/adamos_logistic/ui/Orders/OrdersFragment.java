@@ -12,12 +12,10 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adamos_logistic.Adapters.ForOrders;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.example.adamos_logistic.ApiKey;
 import com.example.adamos_logistic.GetResponseBodyOrders;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
@@ -88,11 +86,7 @@ public class OrdersFragment extends Fragment implements ForOrders.OnItemListener
         transaction.addToBackStack(null);
         transaction.commit();
     }
-
-
-    private void addOrder() {
-
-    }
+    
 
     private void getHistoryOrders() {
         try {
