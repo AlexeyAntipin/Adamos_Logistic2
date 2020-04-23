@@ -34,4 +34,5 @@
 
     <string name="enter_button_text">Вход</string>
     <string name="register_button_text">Регистрация</string>
+    <string name="enter_wo_login_button_text">Вход без\nлогина</string>
 </resources>

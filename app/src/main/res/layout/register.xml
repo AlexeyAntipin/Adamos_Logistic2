@@ -67,7 +67,7 @@
             android:layout_height="wrap_content" />
 
         <Button
-            android:id="@+id/registr"
+            android:id="@+id/button_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Зарегистрироваться" />
@@ -77,7 +77,7 @@
             android:layout_height="match_parent">-->
 
         <TextView
-            android:id="@+id/check"
+            android:id="@+id/button_check"
             android:layout_width="match_parent"
             android:layout_height="105dp"
             android:textColor="#000"

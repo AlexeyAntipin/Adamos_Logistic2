@@ -16,7 +16,6 @@ import com.example.adamos_logistic.Posts.Post;
 import com.example.adamos_logistic.Posts.PostLogin;
 import com.example.adamos_logistic.Posts.PostLoginData;
 import com.example.adamos_logistic.Posts.ResponseLogin;
-import com.example.adamos_logistic.Posts.StoringParams;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,23 +25,24 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Login extends AppCompatActivity {
 
-    EditText email, password;
-    Button enter, registration;
-    TextView check;
-    StoringParams params;
+    EditText editTextEmail, editTextPassword;
+    Button buttonEnter, buttonRegistration, buttonEnterWithoutLogin;
+    TextView textViewCheck;
     private JsonPlaceHolderApi jsonPlaceHolderApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-        enter = (Button) findViewById(R.id.enter);
-        registration = (Button) findViewById(R.id.registr);
-        email = (EditText) findViewById(R.id.email);
-        password = (EditText) findViewById(R.id.password);
-        check = (TextView) findViewById(R.id.check);
+        buttonEnter = findViewById(R.id.button_enter);
+        buttonRegistration = findViewById(R.id.button_register);
+        buttonEnterWithoutLogin = findViewById(R.id.button_enter_without_login);
 
-        params = new StoringParams();
+        editTextEmail = findViewById(R.id.editText_email);
+        editTextPassword = findViewById(R.id.editText_password);
+
+        textViewCheck = findViewById(R.id.button_check);
+
 
         View.OnClickListener reg = new View.OnClickListener() {
             @Override
@@ -52,7 +52,7 @@ public class Login extends AppCompatActivity {
                 startActivity(i);
             }
         };
-        registration.setOnClickListener(reg);
+        buttonRegistration.setOnClickListener(reg);
         View.OnClickListener login = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,7 +65,7 @@ public class Login extends AppCompatActivity {
 
                     jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-                    PostLoginData login2 = new PostLoginData(email.getText().toString(), password.getText().toString());
+                    PostLoginData login2 = new PostLoginData(editTextEmail.getText().toString(), editTextPassword.getText().toString());
 
                     Call<ResponseLogin> call2 = jsonPlaceHolderApi.checkUser(login2);
 
@@ -90,7 +90,7 @@ public class Login extends AppCompatActivity {
                                 Intent i = new Intent(Login.this, MainMenuActivity.class);
                                 startActivity(i);
                             } else {
-                                check.setText("Неверно введен логин или пароль");
+                                textViewCheck.setText("Неверно введен логин или пароль");
                             }
 
                         }
@@ -98,7 +98,7 @@ public class Login extends AppCompatActivity {
                         @Override
                         public void onFailure(Call<ResponseLogin> call2, Throwable t) {
 
-                            check.setText("Ошибка сервера");
+                            textViewCheck.setText("Ошибка сервера");
                             Log.d("MyLog", t.toString());
 
                         }
@@ -106,7 +106,7 @@ public class Login extends AppCompatActivity {
 
                 } catch (Exception e) {
 
-                    check.setText("Ошибка сервера");
+                    textViewCheck.setText("Ошибка сервера");
                     e.printStackTrace();
                     Log.d("MyLog", "ОШИБКА ВХОДА");
 
@@ -114,12 +114,21 @@ public class Login extends AppCompatActivity {
 
             }
         };
-        enter.setOnClickListener(login);
+        buttonEnter.setOnClickListener(login);
+
+        buttonEnterWithoutLogin.setOnClickListener(v -> {
+            SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putString("api_key", "1ff0c335ba8b4b4057928e3796a07222");
+            editor.apply();
+            Intent i = new Intent(Login.this, MainMenuActivity.class);
+            startActivity(i);
+        });
     }
 
     private void createPost() {
-        PostLogin postLogin = new PostLogin(email.getText().toString(),
-                password.getText().toString());
+        PostLogin postLogin = new PostLogin(editTextEmail.getText().toString(),
+                editTextPassword.getText().toString());
 
         Call<Post> call = jsonPlaceHolderApi.createPostLogin(postLogin);
 
@@ -140,12 +149,12 @@ public class Login extends AppCompatActivity {
                 content += "ORDER_ID: " + postResponse.getORDER_ID() + "\n";
                 content += "ERROR: " + postResponse.getERROR() + "\n\n";
 
-                check.setText(content);
+                textViewCheck.setText(content);
             }
 
             @Override
             public void onFailure(Call<Post> call, Throwable t) {
-                check.setText(t.getMessage());
+                textViewCheck.setText(t.getMessage());
             }
         });
     }
