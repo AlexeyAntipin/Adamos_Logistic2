@@ -86,7 +86,7 @@ public class OrdersFragment extends Fragment implements ForOrders.OnItemListener
         transaction.addToBackStack(null);
         transaction.commit();
     }
-    
+
 
     private void getHistoryOrders() {
         try {
