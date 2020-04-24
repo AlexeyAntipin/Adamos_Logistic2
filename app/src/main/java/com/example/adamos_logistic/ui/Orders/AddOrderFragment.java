@@ -7,11 +7,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,6 +30,7 @@ import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
 import com.example.adamos_logistic.Posts.OrderAddInfo;
 import com.example.adamos_logistic.Posts.Order_id;
 import com.example.adamos_logistic.Posts.Step;
+import com.example.adamos_logistic.Posts.Values;
 import com.example.adamos_logistic.R;
 
 import java.util.ArrayList;
@@ -40,6 +45,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class AddOrderFragment extends Fragment {
 
     private String api_key = "";
+    private String value = "";
     SharedPreferences apiKey;
     private Context mContext;
     private Order_id orderId;
@@ -48,6 +54,7 @@ public class AddOrderFragment extends Fragment {
     private List<AddResponseBodyOrders> addResponseBodyOrders;
     private List<AttributesFromUser> ATTRIBUTES = new ArrayList<>();
     private int i = 0;
+    private int pos = 0;
     View root;
     TextView step, category_name;
     Button next, back;
@@ -148,11 +155,40 @@ public class AddOrderFragment extends Fragment {
                                     public void onClick(View v) {
                                         for (int j = 0; j < addResponseBodyOrders.size(); j++) {
                                             View view = recyclerView.getChildAt(j);
-                                            EditText attribute_from_user = view.findViewById(R.id.attribute_from_user);
-                                            String value = attribute_from_user.getText().toString();
-                                            String attribute_name = addResponseBodyOrders.get(j).getAttribute_name();
-                                            AttributesFromUser attribute = new AttributesFromUser(order_id, attribute_name, value);
-                                            ATTRIBUTES.add(attribute);
+                                            if (view != null) {
+                                                if (addResponseBodyOrders.get(j).getAttribute_type() == 20) {
+                                                    Spinner spinner_for_user = view.findViewById(R.id.spinner_for_user);
+                                                    spinner_for_user.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                        @Override
+                                                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                                            pos = position;
+                                                        }
+
+                                                        @Override
+                                                        public void onNothingSelected(AdapterView<?> parent) {
+
+                                                        }
+                                                    });
+                                                    List<Values> values = addResponseBodyOrders.get(j).getVALUES();
+                                                    value = values.get(pos).getValue();
+                                                } else if (addResponseBodyOrders.get(j).getAttribute_type() == 10) {
+                                                    CalendarView calendarView = view.findViewById(R.id.choose_date);
+                                                    calendarView.setOnDateChangeListener((view1, year, month, dayOfMonth) -> {
+                                                        int mYear = year;
+                                                        int mMonth = month;
+                                                        int mDay = dayOfMonth;
+                                                        value = new StringBuilder().append(mYear)
+                                                                .append("-").append(mMonth)
+                                                                .append("-").append(mDay).toString();
+                                                    });
+                                                } else if (addResponseBodyOrders.get(j).getAttribute_type() == 0) {
+                                                    EditText attribute_from_user = view.findViewById(R.id.attribute_from_user);
+                                                    value = attribute_from_user.getText().toString();
+                                                }
+                                                String attribute_name = addResponseBodyOrders.get(j).getAttribute_name();
+                                                AttributesFromUser attribute = new AttributesFromUser(order_id, attribute_name, value);
+                                                ATTRIBUTES.add(attribute);
+                                            }
                                         }
                                         try {
                                             Retrofit retrofit = new Retrofit.Builder()
@@ -161,6 +197,9 @@ public class AddOrderFragment extends Fragment {
                                                     .build();
 
                                             JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+                                            for (int k = 0; k < ATTRIBUTES.size(); k++) {
+                                                Log.d("MyLog", ATTRIBUTES.get(k).getAttribute_name());
+                                            }
                                             AllAttributesFromUser allAttributesFromUser = new AllAttributesFromUser(api_key, ATTRIBUTES);
                                             Call<Integer> call2 = jsonPlaceHolderApi.attributeAdd(allAttributesFromUser);
                                             call2.enqueue(new Callback<Integer>() {

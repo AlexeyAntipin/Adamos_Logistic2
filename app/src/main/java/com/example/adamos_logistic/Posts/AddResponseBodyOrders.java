@@ -33,4 +33,8 @@ public class AddResponseBodyOrders {
     public String getERROR_ID() {
         return ERROR_ID;
     }
+
+    public List<Values> getVALUES() {
+        return VALUES;
+    }
 }
