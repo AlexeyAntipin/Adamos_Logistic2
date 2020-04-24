@@ -46,8 +46,8 @@ public class FullInformationFragment extends Fragment {
         if(mSettings.contains("position"))
             position = mSettings.getInt("position", 0);
 
-        TextView order_name = root.findViewById(R.id.order_name);
-        TextView order_status = root.findViewById(R.id.order_status);
+        TextView order_name = root.findViewById(R.id.textView_order_name);
+        TextView order_status = root.findViewById(R.id.textView_order_status);
         TextView order_time_created = root.findViewById(R.id.order_time_created);
 
         Button backButton = root.findViewById(R.id.backButton);

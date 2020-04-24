@@ -24,11 +24,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.adamos_logistic.FullInformationFragment;
 import com.example.adamos_logistic.ApiKey;
 import com.example.adamos_logistic.GetResponseBodyOrders;
+import com.example.adamos_logistic.OrderAttributes;
 import com.example.adamos_logistic.Posts.JsonPlaceHolderApi;
 import com.example.adamos_logistic.R;
 import com.google.gson.Gson;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -62,10 +64,6 @@ public class OrdersFragment extends Fragment implements ForOrders.OnItemListener
         switch (item.getItemId()) {
             case R.id.action_refresh:
                 getHistoryOrders();
-                break;
-
-            case R.id.action_checkable:
-
                 break;
             default:
                 break;
@@ -160,12 +158,44 @@ public class OrdersFragment extends Fragment implements ForOrders.OnItemListener
                    } catch (Exception e) {
                        e.printStackTrace();
                        Log.d("MyLog", e.toString());
+
                    }
                }
                @Override
                public void onFailure(@NonNull Call<List<GetResponseBodyOrders>> call,
                                      @NonNull Throwable t) {
                    Log.d("MyLog", t.toString());
+                   // TODO: убрать создание тестовых заказов
+                   List<GetResponseBodyOrders> gs = new ArrayList<>();
+
+                   List<OrderAttributes> l1 = new ArrayList<>();
+                   OrderAttributes a1 = new OrderAttributes(0, 0, 0,
+                           0, 0, "Отгружен", "order_status", "", "");
+                   OrderAttributes a2 = new OrderAttributes(0, 0, 0,
+                           0, 0, "2020-04-24 14:88", "time_created", "", "");
+                   l1.add(a1);
+                   l1.add(a2);
+                   GetResponseBodyOrders g1 = new GetResponseBodyOrders("Длинное название заказа", "", l1);
+                   gs.add(g1);
+
+                   for (int i = 0; i < 10; i++) {
+                       List<OrderAttributes> l2 = new ArrayList<>();
+                       OrderAttributes a3 = new OrderAttributes(0, 0, 0,
+                               0, 0, "Ожидает обработку", "order_status", "", "");
+                       OrderAttributes a4 = new OrderAttributes(0, 0, 0,
+                               0, 0, "2020-04-24 14:88", "time_created", "", "");
+                       l2.add(a3);
+                       l2.add(a4);
+                       GetResponseBodyOrders g2 = new GetResponseBodyOrders("Заказ #21382", "", l2);
+                       gs.add(g2);
+                   }
+                   ordersList = gs;
+                   saveData(gs);
+                   adapter = new ForOrders(getActivity().getApplicationContext(), gs, ordersFragment);
+                   RecyclerView recyclerView = root.findViewById(R.id.orders);
+                   recyclerView.setAdapter(adapter);
+                   recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+
                }
            });
             } catch (Exception e) {
