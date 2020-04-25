@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -37,6 +39,12 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ChatFragment extends Fragment {
+
+    public int orderId = 0;
+
+    public ChatFragment(int OrderId) {
+        orderId = OrderId;
+    }
 
     UserInfo userInfo;
 
@@ -93,7 +101,7 @@ public class ChatFragment extends Fragment {
 
                 jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-                PostAddMessage messageData = new PostAddMessage(api_key, 8427, mes, 0);
+                PostAddMessage messageData = new PostAddMessage(api_key, orderId, mes, 0);
 
                 Call<ResponseNewMessage> callAdd = jsonPlaceHolderApi.addMessage(messageData);
 
@@ -146,7 +154,7 @@ public class ChatFragment extends Fragment {
 
             jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-            Order_id order_id = new Order_id(api_key.getApi_key(), 8427);
+            Order_id order_id = new Order_id(api_key.getApi_key(), orderId);
 
             Call<List<GetMessages>> callMessages = jsonPlaceHolderApi.getMessages(order_id);
 

@@ -36,7 +36,8 @@ public class ForOrders extends RecyclerView.Adapter<ForOrders.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ForOrders.ViewHolder holder, int position) {
-        holder.order_name.setText(orders.get(position).getName());
+        String shortName = makeShorterString(orders.get(position).getName());
+        holder.order_name.setText(shortName);
         holder.time_created.setText(orders.get(position).getTimeCreated());
         holder.order_status.setText(orders.get(position).getOrderStatus());
     }
@@ -55,9 +56,9 @@ public class ForOrders extends RecyclerView.Adapter<ForOrders.ViewHolder> {
 
         ViewHolder(View view, OnItemListener onItemListener) {
             super(view);
-            order_name = view.findViewById(R.id.order_name);
-            time_created = view.findViewById(R.id.time_created);
-            order_status = view.findViewById(R.id.order_status);
+            order_name = view.findViewById(R.id.textView_order_name);
+            time_created = view.findViewById(R.id.textView_order_time_created);
+            order_status = view.findViewById(R.id.textView_order_status);
             this.onItemListener = onItemListener;
 
             view.setOnClickListener(this);
@@ -67,6 +68,18 @@ public class ForOrders extends RecyclerView.Adapter<ForOrders.ViewHolder> {
         public void onClick(View v) {
             onItemListener.onItemClick(getAdapterPosition());
         }
+    }
+
+    // Делает строчку короче для корректного отображения
+    private String makeShorterString(String input) {
+        String output;
+        if (input.length() > 14) {
+            output = input.substring(0, 13) + "…";
+        } else {
+            output = input;
+        }
+
+        return output;
     }
 
     public interface OnItemListener {

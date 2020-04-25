@@ -29,6 +29,7 @@ public class ForFullInformationAboutOrder extends RecyclerView.Adapter<ForFullIn
         return new ForFullInformationAboutOrder.ViewHolder(view);
     }
 
+    // TODO: убрать дублирование атрибутов времени заказа и статуса
     @Override
     public void onBindViewHolder(ForFullInformationAboutOrder.ViewHolder holder, int position) {
         holder.name.setText(attributes.get(position).getAttribute_description());

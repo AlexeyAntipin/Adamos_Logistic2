@@ -4,6 +4,8 @@
         <item>Заказчик</item>
         <item>Исполнитель</item>
     </string-array>
+    <string-array name="AttributeForNewOrder">
+    </string-array>
     <string name="title_activity_main_menu">MainMenuActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -29,4 +31,17 @@
     <string name="status_adding_success">Заказ создан успешно!</string>
     <string name="status_no_order_name">Введите название заказа!</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+
+    <string name="enter_button_text">Вход</string>
+    <string name="register_button_text">Регистрация</string>
+    <string name="enter_wo_login_button_text">Вход без\nлогина</string>
+    <string name="orders_menu_active">Только активные</string>
+    <string name="todo">TODO</string>
+    <string name="test_status">Активен</string>
+    <string name="test_order_name">Имя заказа</string>
+    <string name="test_time">14:88</string>
+    <string name="text_open_chat">Открыть чат</string>
+    <string name="text_full_info">Полная информация:</string>
 </resources>

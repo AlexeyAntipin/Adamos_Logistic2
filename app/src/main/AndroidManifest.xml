@@ -19,7 +19,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".SwipeMenu" />
         <activity android:name=".MainMenu" />
-        <activity android:name=".Login">
+        <activity android:name=".Login"
+            android:theme="@style/AppTheme.OnlyStatusBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

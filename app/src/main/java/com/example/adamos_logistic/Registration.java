@@ -45,10 +45,10 @@ public class Registration extends AppCompatActivity {
         spinner.setAdapter(adapter);
         email = (EditText) findViewById(R.id.EMAIL);
         name = (EditText) findViewById(R.id.NAME);
-        check = (TextView) findViewById(R.id.check);
+        check = (TextView) findViewById(R.id.button_check);
         password = (EditText) findViewById(R.id.PASSWORD);
         PassRight = (EditText) findViewById(R.id.PassRight);
-        registration = (Button) findViewById(R.id.registr) ;
+        registration = (Button) findViewById(R.id.button_register) ;
         params = new StoringParams();
 
 
@@ -57,11 +57,11 @@ public class Registration extends AppCompatActivity {
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v.getId() == R.id.registr && !password.getText().toString().equals(PassRight.getText().toString())) {
+                if (v.getId() == R.id.button_register && !password.getText().toString().equals(PassRight.getText().toString())) {
                     //Toast.makeText(getApplicationContext(), "Пароли не совпадают", Toast.LENGTH_LONG).show();
                     check.setText("Пароли не совпадают");
                 }
-                else if (v.getId() == R.id.registr && password.getText().toString().equals(PassRight.getText().toString())) {
+                else if (v.getId() == R.id.button_register && password.getText().toString().equals(PassRight.getText().toString())) {
                     check.setText("");
                     try {
                         Retrofit retrofit = new Retrofit.Builder()
