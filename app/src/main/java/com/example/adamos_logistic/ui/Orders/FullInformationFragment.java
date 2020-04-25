@@ -53,7 +53,7 @@ public class FullInformationFragment extends Fragment {
         TextView order_time_created = root.findViewById(R.id.order_time_created);
 
         Button backButton = root.findViewById(R.id.backButton);
-        Button chatButton = root.findViewById(R.id.chatButton);
+        Button chatButton = root.findViewById(R.id.button_open_chat);
 
         order = orders.get(position);
         attributes = order.getATTRIBUTES();

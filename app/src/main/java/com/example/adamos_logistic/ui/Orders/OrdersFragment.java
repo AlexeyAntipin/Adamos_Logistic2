@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adamos_logistic.Adapters.ForOrders;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import com.example.adamos_logistic.FullInformationFragment;
+import com.example.adamos_logistic.ui.Orders.FullInformationFragment;
 import com.example.adamos_logistic.ApiKey;
 import com.example.adamos_logistic.GetResponseBodyOrders;
 import com.example.adamos_logistic.OrderAttributes;
