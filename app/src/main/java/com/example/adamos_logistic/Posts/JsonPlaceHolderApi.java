@@ -89,8 +89,9 @@ public interface JsonPlaceHolderApi {
 
 
     @POST("process.php?route=order/add")
-    Call<List<AddResponseBodyOrders>> addOrder(
-            @Body PostAddOrderData addOrderData
+    Call<Order_id> addOrder(
+            //@Body PostAddOrderData addOrderData
+            @Body ApiKey apiKey
     );
 
     @POST("process.php?route=user/add")
@@ -108,8 +109,23 @@ public interface JsonPlaceHolderApi {
             @Body PostAddMessage messageData
     );
 
+    @POST("process.php?route=order/add/info")
+    Call<List<OrderAddInfo>> addOrderInfo (
+            @Body ApiKey api_key
+    );
+
+    @POST("process.php?route=order/add/step")
+    Call<List<AddResponseBodyOrders>> addStep (
+            @Body Step step
+    );
+
+    @POST("process.php?route=order/attribute/add")
+    Call<Integer> attributeAdd (
+            @Body AllAttributesFromUser allAttributesFromUser
+    );
+
     @POST("process.php?route=user/info")
-    Call<UserInfo> getUserInfo(
+    Call<UserInfo> getUserInfo (
             @Body ApiKey api_key
     );
 }

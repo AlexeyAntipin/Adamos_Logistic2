@@ -15,12 +15,11 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adamos_logistic.Adapters.ForOrders;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.example.adamos_logistic.FullInformationFragment;
 import com.example.adamos_logistic.ApiKey;
 import com.example.adamos_logistic.GetResponseBodyOrders;
@@ -30,7 +29,6 @@ import com.example.adamos_logistic.R;
 import com.google.gson.Gson;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -123,10 +121,6 @@ public class OrdersFragment extends Fragment implements ForOrders.OnItemListener
     }
 
 
-    private void addOrder() {
-
-    }
-
     private void getHistoryOrders() {
         try {
             Retrofit retrofit = new Retrofit.Builder()
@@ -142,8 +136,6 @@ public class OrdersFragment extends Fragment implements ForOrders.OnItemListener
             jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
             Call<List<GetResponseBodyOrders>> call = jsonPlaceHolderApi.getOrders(api);
-
-
 
            call.enqueue(new Callback<List<GetResponseBodyOrders>>() {
                @Override

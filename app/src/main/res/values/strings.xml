@@ -4,6 +4,8 @@
         <item>Заказчик</item>
         <item>Исполнитель</item>
     </string-array>
+    <string-array name="AttributeForNewOrder">
+    </string-array>
     <string name="title_activity_main_menu">MainMenuActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
