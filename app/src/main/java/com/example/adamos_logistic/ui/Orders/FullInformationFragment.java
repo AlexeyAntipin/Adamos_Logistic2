@@ -3,22 +3,22 @@ package com.example.adamos_logistic.ui.Orders;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.adamos_logistic.Adapters.ForFullInformationAboutOrder;
 import com.example.adamos_logistic.GetResponseBodyOrders;
 import com.example.adamos_logistic.OrderAttributes;
 import com.example.adamos_logistic.R;
+import com.example.adamos_logistic.ui.Chat.ChatFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -53,6 +53,7 @@ public class FullInformationFragment extends Fragment {
         TextView order_time_created = root.findViewById(R.id.order_time_created);
 
         Button backButton = root.findViewById(R.id.backButton);
+        Button chatButton = root.findViewById(R.id.chatButton);
 
         order = orders.get(position);
         attributes = order.getATTRIBUTES();
@@ -71,6 +72,14 @@ public class FullInformationFragment extends Fragment {
             public void onClick(View v) {
                 getFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
                         new OrdersFragment()).commit();
+            }
+        });
+
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                        new ChatFragment(order.getOrder_id())).commit();
             }
         });
 
