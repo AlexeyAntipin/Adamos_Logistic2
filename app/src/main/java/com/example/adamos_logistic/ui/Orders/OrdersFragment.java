@@ -65,6 +65,7 @@ public class OrdersFragment extends Fragment implements ForOrders.OnItemListener
             case R.id.action_refresh:
                 getHistoryOrders();
                 break;
+            case R.id.drawer_layout:
             default:
                 break;
         }
@@ -170,11 +171,23 @@ public class OrdersFragment extends Fragment implements ForOrders.OnItemListener
 
                    List<OrderAttributes> l1 = new ArrayList<>();
                    OrderAttributes a1 = new OrderAttributes(0, 0, 0,
-                           0, 0, "Отгружен", "order_status", "", "");
+                           0, 0, "Отгружен", "order_status", "", "Статус заказа");
                    OrderAttributes a2 = new OrderAttributes(0, 0, 0,
-                           0, 0, "2020-04-24 14:88", "time_created", "", "");
+                           0, 0, "2020-04-24 14:88", "time_created", "", "Время заказа");
+                   OrderAttributes a6 = new OrderAttributes(0, 0, 0,
+                           0, 0, "Цистерна", "sd", "", "Тип груза");
+                   OrderAttributes a7 = new OrderAttributes(0, 0, 0,
+                           0, 0, "USD", "d", "", "Валюта");
                    l1.add(a1);
                    l1.add(a2);
+                   l1.add(a6);
+                   l1.add(a7);
+
+                   for (int i = 0; i < 7; i++) {
+                       OrderAttributes a5 = new OrderAttributes(0, 0, 0,
+                               0, 0, "Значение", "s", "", "Название атрибута");
+                       l1.add(a5);
+                   }
                    GetResponseBodyOrders g1 = new GetResponseBodyOrders("Длинное название заказа", "", l1);
                    gs.add(g1);
 

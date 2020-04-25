@@ -40,4 +40,6 @@
     <string name="test_status">Активен</string>
     <string name="test_order_name">Имя заказа</string>
     <string name="test_time">14:88</string>
+    <string name="text_open_chat">Открыть чат</string>
+    <string name="text_full_info">Полная информация:</string>
 </resources>
