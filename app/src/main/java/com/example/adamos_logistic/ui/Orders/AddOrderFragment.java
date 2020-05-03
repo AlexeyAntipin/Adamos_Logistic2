@@ -23,6 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adamos_logistic.Adapters.ForNewOrder;
 import com.example.adamos_logistic.ApiKey;
+import com.example.adamos_logistic.ForSaveInNewOrder;
+import com.example.adamos_logistic.GetResponseBodyOrders;
 import com.example.adamos_logistic.Posts.AddResponseBodyOrders;
 import com.example.adamos_logistic.Posts.AllAttributesFromUser;
 import com.example.adamos_logistic.Posts.AttributesFromUser;
@@ -32,7 +34,10 @@ import com.example.adamos_logistic.Posts.Order_id;
 import com.example.adamos_logistic.Posts.Step;
 import com.example.adamos_logistic.Posts.Values;
 import com.example.adamos_logistic.R;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,8 +58,10 @@ public class AddOrderFragment extends Fragment {
     private int order_id;
     private List<AddResponseBodyOrders> addResponseBodyOrders;
     private List<AttributesFromUser> ATTRIBUTES = new ArrayList<>();
+    private List<List<AddResponseBodyOrders>> forSP = new ArrayList<>();
     private int i = 0;
     private int pos = 0;
+    private List<ForSaveInNewOrder> save;
     View root;
     TextView step, category_name;
     Button next, back;
@@ -146,13 +153,30 @@ public class AddOrderFragment extends Fragment {
                             public void onResponse(Call<List<AddResponseBodyOrders>> call,
                                                    Response<List<AddResponseBodyOrders>> response) {
                                 addResponseBodyOrders = response.body();
+                                forSP.add(addResponseBodyOrders);
+                                SharedPreferences Attributes = mContext.getSharedPreferences("Attributes" + String.valueOf(i), Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = Attributes.edit();
+                                Gson gson = new Gson();
+                                String json = gson.toJson(addResponseBodyOrders);
+                                editor.putString("Attributes" + String.valueOf(i), json);
+                                editor.apply();
                                 ForNewOrder adapter = new ForNewOrder(getActivity().getApplicationContext(), addResponseBodyOrders);
                                 RecyclerView recyclerView = root.findViewById(R.id.attributes);
                                 recyclerView.setAdapter(adapter);
                                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+
                                 next.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
+                                        SharedPreferences saveAttributes = mContext.getSharedPreferences("saveAttributes", Context.MODE_PRIVATE);
+                                        Gson gson = new Gson();
+                                        String json = saveAttributes.getString("saveAttributes", null);
+                                        Type type = new TypeToken<ArrayList<ForSaveInNewOrder>>() {}.getType();
+                                        save = gson.fromJson(json, type);
+
+                                        if (save == null) {
+                                            save = new ArrayList<>();
+                                        }
                                         for (int j = 0; j < addResponseBodyOrders.size(); j++) {
                                             View view = recyclerView.getChildAt(j);
                                             if (view != null) {
@@ -184,6 +208,17 @@ public class AddOrderFragment extends Fragment {
                                                 } else if (addResponseBodyOrders.get(j).getAttribute_type() == 0) {
                                                     EditText attribute_from_user = view.findViewById(R.id.attribute_from_user);
                                                     value = attribute_from_user.getText().toString();
+                                                }
+                                                String attribute_name = addResponseBodyOrders.get(j).getAttribute_name();
+                                                AttributesFromUser attribute = new AttributesFromUser(order_id, attribute_name, value);
+                                                ATTRIBUTES.add(attribute);
+                                            }
+                                            else {
+                                                for (ForSaveInNewOrder forSaveInNewOrders : save) {
+                                                    if (j == forSaveInNewOrders.getPosition()) {
+                                                        value = forSaveInNewOrders.getAttribute_name();
+                                                        break;
+                                                    }
                                                 }
                                                 String attribute_name = addResponseBodyOrders.get(j).getAttribute_name();
                                                 AttributesFromUser attribute = new AttributesFromUser(order_id, attribute_name, value);
@@ -237,6 +272,13 @@ public class AddOrderFragment extends Fragment {
                                                                            Response<List<AddResponseBodyOrders>> response) {
                                                         addResponseBodyOrders.clear();
                                                         addResponseBodyOrders = response.body();
+                                                        forSP.add(addResponseBodyOrders);
+                                                        SharedPreferences Attributes = mContext.getSharedPreferences("Attributes" + String.valueOf(i), Context.MODE_PRIVATE);
+                                                        SharedPreferences.Editor editor = Attributes.edit();
+                                                        Gson gson = new Gson();
+                                                        String json = gson.toJson(addResponseBodyOrders);
+                                                        editor.putString("Attributes" + String.valueOf(i), json);
+                                                        editor.apply();
                                                         ForNewOrder adapter2 = new ForNewOrder(getActivity().getApplicationContext(), addResponseBodyOrders);
                                                         recyclerView.setAdapter(adapter2);
                                                         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
@@ -323,5 +365,9 @@ public class AddOrderFragment extends Fragment {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.nav_host_fragment, newFragment);
         transaction.commit();
+    }
+
+    public int getI() {
+        return i;
     }
 }
